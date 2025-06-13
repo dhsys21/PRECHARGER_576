@@ -3,6 +3,7 @@
 #ifndef FormRemeasureH
 #define FormRemeasureH
 //---------------------------------------------------------------------------
+#include "DEFINE.h"
 #include <Classes.hpp>
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
@@ -81,14 +82,15 @@ __published:	// IDE-managed Components
 private:	// User declarations
 void __fastcall DrawChannelTitle(AnsiString type);
 	void __fastcall MakePanel(AnsiString type);
-	void __fastcall MakeUIPanel();
+	void __fastcall MakeUIPanel(AnsiString type);
 	void __fastcall SetOption(TPanel *pnl, int nx, int ny, int nw, int nh, int index);
 	void __fastcall SetUIOption(TPanel *pnl, int nx, int ny, int nw, int nh, int index);
 	void __fastcall RefreshForm();
 
 	TColor clLine, clLast, clSelect;
 	int mode;
-
+    int pnl_nw;
+    int pnl_nh;
 
 public:		// User declarations
 	int *acc_remeasure;
@@ -96,10 +98,10 @@ public:		// User declarations
 
 	int *acc_cnt;
 
-	TPanel *pre[400];
-	TPanel *pch[400];
-    TPanel *pUIx[20];
-	TPanel *pUIy[20];
+	TPanel *pre[MAXCHANNEL];
+	TPanel *pch[MAXCHANNEL];
+    TPanel *pUIx[LINECOUNT];
+	TPanel *pUIy[LINECOUNT];
 	int stage;
 
 	__fastcall TRemeasureForm(TComponent* Owner);

@@ -3,6 +3,7 @@
 #ifndef FormMeasureInfoH
 #define FormMeasureInfoH
 //---------------------------------------------------------------------------
+#include "DEFINE.h"
 #include <Classes.hpp>
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
@@ -141,10 +142,10 @@ private:	// User declarations
 	void __fastcall SetUIOption(TPanel *pnl, int nx, int ny, int nw, int nh, int index);
 
 public:		// User declarations
-	TPanel *pvolt[400];
-	TPanel *pcurr[400];
-	TPanel *pUIx[20];
-	TPanel *pUIy[20];
+	TPanel *pvolt[MAXCHANNEL];
+	TPanel *pcurr[MAXCHANNEL];
+	TPanel *pUIx[LINECOUNT];
+	TPanel *pUIy[LINECOUNT];
 
 	int stage;
     int nStep;

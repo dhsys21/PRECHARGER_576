@@ -21,7 +21,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 
 	try
 	{
-		const char ProgMutex[] = "BT_PreCharger";
+		const char ProgMutex[] = "PreCharger";
 
 		if((Mutex = OpenMutexA(MUTEX_ALL_ACCESS, false, ProgMutex)) == NULL)
 			Mutex = CreateMutexA(NULL, true, ProgMutex);

@@ -48,7 +48,7 @@
     <PropertyGroup Condition="'$(Base)'!=''">
         <ILINK_LibraryPath>Keysight_dll\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <IncludePath>Keysight_dll\;$(IncludePath)</IncludePath>
-        <AllPackageLibs>rtl.lib;vcl.lib;vclx.lib;vcldb.lib;dbrtl.lib;Tee.lib;vclimg.lib;adortl.lib;soaprtl.lib;xmlrtl.lib;inet.lib;DbxCommonDriver.lib;dsnap.lib;vclactnband.lib;VclSmp.lib;TMSVCLUIPackPkgExDXE10.lib;TMSVCLUIPackPkgDXE10.lib;TMSSmoothControlsPackPkgDXE10.lib</AllPackageLibs>
+        <AllPackageLibs>rtl.lib;vcl.lib;vclx.lib;vcldb.lib;dbrtl.lib;Tee.lib;vclimg.lib;adortl.lib;soaprtl.lib;xmlrtl.lib;inet.lib;DbxCommonDriver.lib;dsnap.lib;vclactnband.lib;VclSmp.lib;TMSSmoothControlsPackPkgDXE10.lib</AllPackageLibs>
         <SanitizedProjectName>PreCharger_576</SanitizedProjectName>
         <ProjectType>CppVCLApplication</ProjectType>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
@@ -108,7 +108,7 @@
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <UsePackages>false</UsePackages>
         <DynamicRTL>false</DynamicRTL>
-        <LinkPackageStatics>rtl.lib;vcl.lib;vclx.lib;vcldb.lib;dbrtl.lib;Tee.lib;vclimg.lib;adortl.lib;soaprtl.lib;xmlrtl.lib;inet.lib;DbxCommonDriver.lib;dsnap.lib;vclactnband.lib;VclSmp.lib;TMSVCLUIPackPkgExDXE10.lib;TMSVCLUIPackPkgDXE10.lib;TMSSmoothControlsPackPkgDXE10.lib</LinkPackageStatics>
+        <LinkPackageStatics>rtl.lib;vcl.lib;vclx.lib;vcldb.lib;dbrtl.lib;Tee.lib;vclimg.lib;adortl.lib;soaprtl.lib;xmlrtl.lib;inet.lib;DbxCommonDriver.lib;dsnap.lib;vclactnband.lib;VclSmp.lib;TMSSmoothControlsPackPkgDXE10.lib</LinkPackageStatics>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Icon_MainIcon>PreCharger_Icon.ico</Icon_MainIcon>
         <VerInfo_Keys>CompanyName=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName);ProductName=$(MSBuildProjectName)</VerInfo_Keys>

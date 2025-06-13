@@ -41,7 +41,7 @@ void __fastcall TForm_PLCInterface::SetListViewPLC(int nTag)
 	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_ID), "IN TRAY BCR DATA");
 
 	// CELL INFO => 1 : YES, 0 : NO
-	for(int i = 0; i < 25; i++)
+	for(int i = 0; i < LINECOUNT; i++)
 	{
 		AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_CELL_DATA + i), "TRAY CELL DATA #" + IntToStr(i + 1));
 	}
@@ -68,7 +68,7 @@ void __fastcall TForm_PLCInterface::SetListViewPC(int nTag)
 	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGE_TIME), "CHARGE TIME");
 
 	// PRECHARGE RESULT OK/NG => 1 : NG, 0 : OK or NO CELL
-	for(int i = 0; i < 25; i++)
+	for(int i = 0; i < LINECOUNT; i++)
 		AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_MEASURE_OK_NG + i), "PRECHARGE OK/NG #" + IntToStr(i + 1));
 
 	for(int i = 0; i < MAXCHANNEL; i++)
@@ -117,16 +117,11 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetString(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_ID, 10);
 
-//			for(int i = 0; i < 25; i++)
-//			{
-//				nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] =  Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data[nTag], PLC_D_PRE_TRAY_CELL_DATA + (i * 2));
-//			}
-
 			AnsiString cellinfo;
-			for(int i = 0; i < 25; i++)
+			for(int i = 0; i < LINECOUNT; i++)
 			{
 				cellinfo = "";
-				for(int j = 0; j < 16; j++)
+				for(int j = 0; j < LINECOUNT; j++)
 				{
 					cellinfo += Mod_PLC->GetData(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_CELL_DATA + i, j);
 				}
@@ -158,10 +153,10 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 
 			// PRECHARGE RESULT OK/NG
 			AnsiString okng_bin;
-			for(int i = 0; i < 25; i++)
+			for(int i = 0; i < LINECOUNT; i++)
 			{
 				okng_bin = "";
-				for(int j = 0; j < 16; j++)
+				for(int j = 0; j < LINECOUNT; j++)
 				{
 					okng_bin += Mod_PLC->GetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j);
 				}
@@ -211,10 +206,10 @@ void __fastcall TForm_PLCInterface::btnWriteNgValueClick(TObject *Sender)
 	vector<int> ngchannels = BaseForm->StringToVector(strIrocvNg);
 
     int ngCount = 0;
-	for(int i = 0; i < 25; ++i){
-		for(int j = 0; j < 16; j++)
+	for(int i = 0; i < LINECOUNT; ++i){
+		for(int j = 0; j < LINECOUNT; j++)
 		{
-			int nChannel = i * 16 + j + 1;
+			int nChannel = i * LINECOUNT + j + 1;
 			if(find(ngchannels.begin(), ngchannels.end(), nChannel) != ngchannels.end())
 			{
 				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, true);
@@ -238,14 +233,14 @@ void __fastcall TForm_PLCInterface::btnWriteIrOcvValueClick(TObject *Sender)
 
 	// ir value 2 Word
 	// 2 Word :  value / (65536 / 2) => 윗 주소에 쓰기, value % (65536 /2 ) => 아래 주소에 쓰기 // herald 2017 11 30
-	for(int i = 0; i < 400; i++)
+	for(int i = 0; i < MAXCHANNEL; i++)
 	{
 		double voltage = voltage_base + (i / 100.0);
 		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + (i * 2), FormatFloat("0000", voltage * 10.0) % (256 * 256));
 		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + (i * 2) + 1, voltage / (256 * 256));
 	}
 
-	for(int i = 0; i < 400; i++)
+	for(int i = 0; i < MAXCHANNEL; i++)
 	{
 		double current = current_base + (i / 10.0);
 		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + (i * 2), FormatFloat("00000", current * 10.0) % (256 * 256));

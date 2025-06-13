@@ -9,7 +9,7 @@ object BaseForm: TBaseForm
   VertScrollBar.Range = 83
   VertScrollBar.Visible = False
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Precharger (Ver.250613 001)'
+  Caption = 'Precharger (Ver.250613 002)'
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -6435,14 +6435,12 @@ object BaseForm: TBaseForm
     Width = 137
     Height = 17
     Caption = 'InTops TEST'
-    Checked = True
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -19
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
-    State = cbChecked
     TabOrder = 15
   end
   object ClockTimer: TTimer

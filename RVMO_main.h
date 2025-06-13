@@ -126,7 +126,7 @@ private:	// User declarations
     	void __fastcall WriteSystemInfo();
 
 
-	AnsiString m_sTrayID, m_sCellModel, m_sLOTNumber, m_sCell_Serial[401];
+	AnsiString m_sTrayID, m_sCellModel, m_sLOTNumber, m_sCell_Serial[MAXCHANNEL + 1];
 
 	int nSection, nStep;
 

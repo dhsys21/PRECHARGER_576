@@ -88,7 +88,7 @@ void __fastcall TTotalForm::InitTrayStruct()
     memset(&real_data, 0, sizeof(real_data));
     memset(&charge, 0, sizeof(config));
 
-	for(int i=0; i<MAXCHANNEL; ++i){
+	for(int i=0; i < MAXCHANNEL; ++i){
 		tray.cell[i] = 0;	//CELL INFO
 		tray.measure_result[i] = 0;
         tray.error_time_count[i] = 0;
@@ -175,20 +175,49 @@ void __fastcall TTotalForm::InitMeasureForm()
 void __fastcall TTotalForm::MakePanel(AnsiString type)
 {
 	int nx, ny, nw, nh;
+    nh = (pBase->Height-25)/LINECOUNT;
+    nw = (pBase->Width-25)/LINECOUNT;
 
-	if(type == "3" || type == "4")
+	if(type == "3") //* 왼쪽 위가 1번, 오른쪽 방향으로 1 -> 24
 	{
-    	nh = (pBase->Height-21)/LINECOUNT;
-		nw = (pBase->Width-21)/LINECOUNT;
-		nx = pBase->Width - nw - 1;
-//		nx = 1;
-//		ny = pBase->Height - nh - 1;
+		nx = 1;
 		ny = 1;
 
-//		nx = 2;
-//		ny = 308;
-//		nw = 26;
-//		nh = 19;
+		for(int index = 0; index < MAXCHANNEL;){
+			panel[index] = new TPanel(this);
+			panel[index]->Parent = pBase;
+			panel[index]->Left =  nx;
+			panel[index]->Top = ny;
+			panel[index]->Width = nw;
+			panel[index]->Height = nh;
+
+			panel[index]->Color = pnormal1->Color;
+
+			panel[index]->BevelInner = bvNone;
+			panel[index]->BevelKind = bkNone;
+			panel[index]->BevelOuter = bvNone;
+			panel[index]->Tag = index;
+	//		panel[index]->Caption = index;
+
+			panel[index]->Hint = IntToStr(index+1) + " (" + IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index%LINECOUNT)+1) + ")";
+			panel[index]->ShowHint = true;
+
+			index += 1;
+			nx = nx + nw + 1;
+			if(index % 2 == 0) nx += 1;
+			if(index % (LINECOUNT / 4) == 0) nx += 1;
+			if(index % LINECOUNT == 0)
+			{
+				ny = ny + nh + 1;
+				nx = 1;
+				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny += 2;
+			}
+		}
+	}
+    else if(type == "4") //* 오른쪽 위가 1번, 왼쪽 방향으로 24 <- 1
+	{
+		nx = pBase->Width - nw - 1;
+		ny = 1;
 
 		for(int index=0; index<MAXCHANNEL;){
 			panel[index] = new TPanel(this);
@@ -210,36 +239,21 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			panel[index]->ShowHint = true;
 
 			index += 1;
-//			nx = nx + nw + 1;
 			nx = nx - nw - 1;
-//			if(index % 2 == 0) nx += 1;
 			if(index % 2 == 0) nx -= 1;
-//			if(index % 10 == 0) nx += 1;
-			if(index % (LINECOUNT / 2) == 0) nx -= 1;
+			if(index % (LINECOUNT / 4) == 0) nx -= 1;
 			if(index % LINECOUNT == 0)
 			{
-//				ny = ny - nh - 1;
 				ny = ny + nh + 1;
-//				nx = 1;
 				nx = pBase->Width - nw - 1;
-//				if( (index / 20) % 10 == 0) ny -= 2;
-				if( (index / LINECOUNT) % (LINECOUNT / 2) == 0) ny += 2;
+				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny += 2;
 			}
 		}
 	}
-	else if(type == "1")
+	else if(type == "1") //* 왼쪽 아래가 1번. 오른쪽 방향으로 1 -> 24
 	{
-        nh = (pBase->Height-21)/LINECOUNT;
-		nw = (pBase->Width-21)/LINECOUNT;
-//		nx = pBase->Width - nw - 1;
 		nx = 1;
 		ny = pBase->Height - nh - 1;
-
-//		nh = 13;
-//		nw = 27;
-//		//nx = 421;
-//		nx = 2;
-//		ny = 225;
 
 		for(int index=0; index<MAXCHANNEL;){
 			panel[index] = new TPanel(this);
@@ -264,19 +278,17 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			index += 1;
 			nx = nx + nw + 1;
 			if(index % 2 == 0) nx += 1;
-			if(index % (LINECOUNT / 2) == 0) nx += 1;
+			if(index % (LINECOUNT / 4) == 0) nx += 1;
 			if(index % LINECOUNT == 0)
 			{
 				ny = ny - nh - 1;
 				nx = 1;
-				if( (index / LINECOUNT) % (LINECOUNT / 2) == 0) ny -= 2;
+				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny -= 2;
 			}
 		}
 	}
-    else if(type == "2")
+    else if(type == "2") //* 오른쪽 아래가 1번. 왼쪽 방향으로 24 <- 1
 	{
-        nh = (pBase->Height-21)/LINECOUNT;
-		nw = (pBase->Width-21)/LINECOUNT;
 		nx = pBase->Width - nw - 1;
 		ny = pBase->Height - nh - 1;
 
@@ -303,12 +315,12 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			index += 1;
 			nx = nx - (nw + 1);
 			if(index % 2 == 0) nx -= 1;
-			if(index % (LINECOUNT / 2) == 0) nx -= 1;
+			if(index % (LINECOUNT / 4) == 0) nx -= 1;
 			if(index % LINECOUNT == 0)
 			{
 				ny = ny - nh - 1;
 				nx = pBase->Width - nw - 1;
-				if( (index / LINECOUNT) % (LINECOUNT / 2) == 0) ny -= 2;
+				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny -= 2;
 			}
 		}
 	}

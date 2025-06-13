@@ -67,7 +67,7 @@ void __fastcall TBaseForm::MakePanel()
 	nx = 5;
 	ny = 85;
 
-	for(int i=0; i<FormCnt;){
+	for(int i = 0; i < FormCnt;){
 		nForm[i] = new TTotalForm(Owner);
 		nForm[i]->Parent = this;
 		nForm[i]->Left = nx;
@@ -191,7 +191,6 @@ void __fastcall TBaseForm::FileDeleteTimerTimer(TObject *Sender)
 	dt = Now() - DeleteDay;
 	switch(DeleteIndex){
 	case 0:
-
 		DeleteLogFolder((AnsiString)LOG_PATH + dt.FormatString("yyyymmdd"));
 		DeleteDay += 1;
 		break;

@@ -48,7 +48,7 @@ object TotalForm: TTotalForm
     Fill.ShadowColor = 3355443
     Fill.ShadowOffset = 5
     Fill.Glow = gmNone
-    Version = '1.7.1.2'
+    Version = '1.5.2.1'
     TabOrder = 3
     TMSStyle = 0
     object lblTitle: TLabel
@@ -78,7 +78,6 @@ object TotalForm: TTotalForm
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
-      Appearance.SimpleLayout = False
       Appearance.Rounding = 3
       Appearance.WordWrapping = False
       Status.Caption = '0'
@@ -101,7 +100,7 @@ object TotalForm: TTotalForm
       Color = 16744448
       ParentFont = False
       TabOrder = 0
-      Version = '2.2.1.4'
+      Version = '2.1.1.5'
       OnClick = btnAutoClick
       TMSStyle = 8
     end
@@ -116,7 +115,6 @@ object TotalForm: TTotalForm
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
-      Appearance.SimpleLayout = False
       Appearance.Rounding = 3
       Appearance.WordWrapping = False
       Status.Caption = '0'
@@ -139,7 +137,7 @@ object TotalForm: TTotalForm
       Color = clWhite
       ParentFont = False
       TabOrder = 1
-      Version = '2.2.1.4'
+      Version = '2.1.1.5'
       OnClick = btnManualClick
       TMSStyle = 8
     end
@@ -169,7 +167,7 @@ object TotalForm: TTotalForm
       Fill.Rounding = 5
       Fill.ShadowOffset = 0
       Fill.Glow = gmNone
-      Version = '1.7.1.2'
+      Version = '1.5.2.1'
       TabOrder = 2
       TMSStyle = 0
       object flowChart: TPanel
@@ -791,7 +789,6 @@ object TotalForm: TTotalForm
           Appearance.Font.Name = 'Tahoma'
           Appearance.Font.Style = [fsBold]
           Appearance.Spacing = 0
-          Appearance.SimpleLayout = False
           Appearance.Rounding = 3
           Appearance.WordWrapping = False
           Status.Caption = '0'
@@ -814,7 +811,7 @@ object TotalForm: TTotalForm
           Color = 4342527
           ParentFont = False
           TabOrder = 0
-          Version = '2.2.1.4'
+          Version = '2.1.1.5'
           OnClick = btnInitClick
           TMSStyle = 8
         end
@@ -829,7 +826,6 @@ object TotalForm: TTotalForm
           Appearance.Font.Name = 'Tahoma'
           Appearance.Font.Style = [fsBold]
           Appearance.Spacing = 0
-          Appearance.SimpleLayout = False
           Appearance.Rounding = 2
           Appearance.WordWrapping = False
           Status.Caption = '0'
@@ -853,7 +849,7 @@ object TotalForm: TTotalForm
           ParentFont = False
           TabOrder = 1
           Visible = False
-          Version = '2.2.1.4'
+          Version = '2.1.1.5'
           OnClick = btnMeasureInfoClick
           TMSStyle = 8
         end
@@ -868,7 +864,6 @@ object TotalForm: TTotalForm
           Appearance.Font.Name = 'Tahoma'
           Appearance.Font.Style = [fsBold]
           Appearance.Spacing = 0
-          Appearance.SimpleLayout = False
           Appearance.Rounding = 3
           Appearance.WordWrapping = False
           Status.Caption = '0'
@@ -891,7 +886,7 @@ object TotalForm: TTotalForm
           Color = clWhite
           ParentFont = False
           TabOrder = 2
-          Version = '2.2.1.4'
+          Version = '2.1.1.5'
           OnClick = btnNgInfoClick
           TMSStyle = 8
         end
@@ -906,7 +901,6 @@ object TotalForm: TTotalForm
           Appearance.Font.Name = 'Tahoma'
           Appearance.Font.Style = [fsBold]
           Appearance.Spacing = 0
-          Appearance.SimpleLayout = False
           Appearance.Rounding = 3
           Appearance.WordWrapping = False
           Status.Caption = '0'
@@ -929,7 +923,7 @@ object TotalForm: TTotalForm
           Color = 16744448
           ParentFont = False
           TabOrder = 3
-          Version = '2.2.1.4'
+          Version = '2.1.1.5'
           OnClick = btnTrayOutClick
           TMSStyle = 8
         end
@@ -944,7 +938,6 @@ object TotalForm: TTotalForm
           Appearance.Font.Name = 'Tahoma'
           Appearance.Font.Style = [fsBold]
           Appearance.Spacing = 0
-          Appearance.SimpleLayout = False
           Appearance.Rounding = 3
           Appearance.WordWrapping = False
           Status.Caption = '0'
@@ -967,7 +960,7 @@ object TotalForm: TTotalForm
           Color = clWhite
           ParentFont = False
           TabOrder = 4
-          Version = '2.2.1.4'
+          Version = '2.1.1.5'
           OnClick = ConfigBtn1Click
           TMSStyle = 8
         end
@@ -1199,7 +1192,6 @@ object TotalForm: TTotalForm
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
-      Appearance.SimpleLayout = False
       Appearance.Rounding = 3
       Appearance.WordWrapping = False
       Status.Caption = '0'
@@ -1222,7 +1214,7 @@ object TotalForm: TTotalForm
       Color = clWhite
       ParentFont = False
       TabOrder = 6
-      Version = '2.2.1.4'
+      Version = '2.1.1.5'
       OnClick = btnConfigClick
       TMSStyle = 8
     end
@@ -1282,7 +1274,7 @@ object TotalForm: TTotalForm
       Fill.Rounding = 1
       Fill.ShadowOffset = 0
       Fill.Glow = gmNone
-      Version = '1.7.1.2'
+      Version = '1.5.2.1'
       TabOrder = 8
       TMSStyle = 0
     end
@@ -1320,7 +1312,7 @@ object TotalForm: TTotalForm
       Fill.Rounding = 1
       Fill.ShadowOffset = 0
       Fill.Glow = gmNone
-      Version = '1.7.1.2'
+      Version = '1.5.2.1'
       TabOrder = 9
       TMSStyle = 0
     end
@@ -1358,7 +1350,7 @@ object TotalForm: TTotalForm
       Fill.Rounding = 1
       Fill.ShadowOffset = 0
       Fill.Glow = gmNone
-      Version = '1.7.1.2'
+      Version = '1.5.2.1'
       TabOrder = 10
       TMSStyle = 0
     end
@@ -1396,7 +1388,7 @@ object TotalForm: TTotalForm
       Fill.Rounding = 1
       Fill.ShadowOffset = 0
       Fill.Glow = gmNone
-      Version = '1.7.1.2'
+      Version = '1.5.2.1'
       TabOrder = 11
       TMSStyle = 0
     end
@@ -2409,7 +2401,6 @@ object TotalForm: TTotalForm
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
-      Appearance.SimpleLayout = False
       Appearance.Rounding = 3
       Appearance.WordWrapping = False
       Status.Caption = '0'
@@ -2433,7 +2424,7 @@ object TotalForm: TTotalForm
       ParentFont = False
       TabOrder = 0
       Visible = False
-      Version = '2.2.1.4'
+      Version = '2.1.1.5'
       TMSStyle = 8
     end
   end
@@ -2662,7 +2653,6 @@ object TotalForm: TTotalForm
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
-      Appearance.SimpleLayout = False
       Appearance.Rounding = 3
       Appearance.WordWrapping = False
       Status.Caption = '0'
@@ -2685,7 +2675,7 @@ object TotalForm: TTotalForm
       Color = clWhite
       ParentFont = False
       TabOrder = 0
-      Version = '2.2.1.4'
+      Version = '2.1.1.5'
       TMSStyle = 8
     end
   end
@@ -5043,7 +5033,7 @@ object TotalForm: TTotalForm
     Fill.Rounding = 5
     Fill.ShadowOffset = 0
     Fill.Glow = gmNone
-    Version = '1.7.1.2'
+    Version = '1.5.2.1'
     Visible = False
     TabOrder = 5
     TMSStyle = 0
@@ -5152,7 +5142,6 @@ object TotalForm: TTotalForm
         Appearance.Font.Name = 'Tahoma'
         Appearance.Font.Style = [fsBold]
         Appearance.Spacing = 0
-        Appearance.SimpleLayout = False
         Appearance.Rounding = 3
         Appearance.WordWrapping = False
         Status.Caption = '0'
@@ -5175,7 +5164,7 @@ object TotalForm: TTotalForm
         Color = clWhite
         ParentFont = False
         TabOrder = 4
-        Version = '2.2.1.4'
+        Version = '2.1.1.5'
         OnClick = btnConnectPRECHARGERClick
         TMSStyle = 8
       end
@@ -5191,7 +5180,6 @@ object TotalForm: TTotalForm
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
-      Appearance.SimpleLayout = False
       Appearance.Rounding = 3
       Appearance.WordWrapping = False
       Status.Caption = '0'
@@ -5214,7 +5202,7 @@ object TotalForm: TTotalForm
       Color = clWhite
       ParentFont = False
       TabOrder = 1
-      Version = '2.2.1.4'
+      Version = '2.1.1.5'
       OnClick = btnCloseConnConfigClick
       TMSStyle = 8
     end
@@ -5229,7 +5217,6 @@ object TotalForm: TTotalForm
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
-      Appearance.SimpleLayout = False
       Appearance.Rounding = 3
       Appearance.WordWrapping = False
       Status.Caption = '0'
@@ -5252,7 +5239,7 @@ object TotalForm: TTotalForm
       Color = clWhite
       ParentFont = False
       TabOrder = 2
-      Version = '2.2.1.4'
+      Version = '2.1.1.5'
       OnClick = btnSaveConfigClick
       TMSStyle = 8
     end
@@ -5267,7 +5254,6 @@ object TotalForm: TTotalForm
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
-      Appearance.SimpleLayout = False
       Appearance.Rounding = 3
       Appearance.WordWrapping = False
       Status.Caption = '0'
@@ -5291,7 +5277,7 @@ object TotalForm: TTotalForm
       ParentFont = False
       TabOrder = 3
       Visible = False
-      Version = '2.2.1.4'
+      Version = '2.1.1.5'
       OnClick = btnSaveConfigClick
       TMSStyle = 8
     end
@@ -5606,7 +5592,6 @@ object TotalForm: TTotalForm
         Appearance.Font.Name = 'Tahoma'
         Appearance.Font.Style = [fsBold]
         Appearance.Spacing = 0
-        Appearance.SimpleLayout = False
         Appearance.Rounding = 3
         Appearance.WordWrapping = False
         Status.Caption = '0'
@@ -5629,7 +5614,7 @@ object TotalForm: TTotalForm
         Color = clWhite
         ParentFont = False
         TabOrder = 2
-        Version = '2.2.1.4'
+        Version = '2.1.1.5'
         OnClick = btnConnectPLCClick
         TMSStyle = 8
       end
@@ -5644,7 +5629,6 @@ object TotalForm: TTotalForm
         Appearance.Font.Name = 'Tahoma'
         Appearance.Font.Style = [fsBold]
         Appearance.Spacing = 0
-        Appearance.SimpleLayout = False
         Appearance.Rounding = 3
         Appearance.WordWrapping = False
         Status.Caption = '0'
@@ -5667,7 +5651,7 @@ object TotalForm: TTotalForm
         Color = clWhite
         ParentFont = False
         TabOrder = 3
-        Version = '2.2.1.4'
+        Version = '2.1.1.5'
         OnClick = btnDisConnectPLCClick
         TMSStyle = 8
       end

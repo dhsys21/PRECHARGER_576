@@ -40,10 +40,8 @@ void __fastcall TRemeasureForm::RefreshForm()
 
 void __fastcall TRemeasureForm::FormCreate(TObject *Sender)
 {
-	MakeUIPanel();
-	MakePanel(BaseForm->lblLineNo->Caption);
-
-	DrawChannelTitle(BaseForm->lblLineNo->Caption);
+	//MakeUIPanel();
+	//MakePanel(BaseForm->lblLineNo->Caption);
 }
 //---------------------------------------------------------------------------
 void __fastcall TRemeasureForm::DrawChannelTitle(AnsiString type)
@@ -259,22 +257,16 @@ void __fastcall TRemeasureForm::DrawChannelTitle(AnsiString type)
 void __fastcall TRemeasureForm::MakePanel(AnsiString type)
 {
 	int nx, ny, nw, nh;
+    nw = pnl_nw;
+    nh = pnl_nh / 2;
 
-	if(type == "3" || type == "4")
+	if(type == "3")
 	{
-//		nx = Panel19->Left;
-//		ny = Panel18->Top;
-//		nw = Panel35->Width;
-//		nh = Panel18->Height / 2;
-
-		nw = Panel2->Width/22;
-		nh = Panel2->Height/22/2;
-		nx = Panel2->Width - (nw+2);
-//		ny = Panel2->Height - (nh*2+2);
-		ny = nh*2+5;
+		nx = nw + 4;
+		ny = nh * 2 + 6;
 
 		TColor clr;
-		for(int index=0; index<MAXCHANNEL;){
+		for(int index = 0; index < MAXCHANNEL;){
 			pch[index] = new TPanel(this);
 			pre[index] = new TPanel(this);
 
@@ -289,37 +281,56 @@ void __fastcall TRemeasureForm::MakePanel(AnsiString type)
 			pre[index]->ParentBackground = false;
 
 			index += 1;
-//			nx = nx + nw + 1;
-			nx = nx - nw - 2;
-//			if(index % 2 == 0) nx += 1;
-			if(index % 2 == 0) nx -= 2;
-//			if(index % 10 == 0) nx += 1;
-			if(index % 10 == 0) nx -= 2;
-			if(index % 20 == 0)
+			nx += (nw + 1);
+			if(index % 2 == 0) nx += 1;
+			if(index % (LINECOUNT / 4) == 0) nx += 1;
+			if(index % LINECOUNT == 0)
 			{
-//				ny = ny - nh - nh  - 2;
-				ny = ny + nh + nh  + 3;
-				nx = Panel2->Width - (nw+2);
-//				if( (index / 20) % 10 == 0) ny -= 2;
-				if( (index / 20) % 10 == 0) ny += 3;
+				ny += nh * 2 + 2;
+				nx = nw + 4;
+				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny += 2;
 			}
 		}
 	}
-	else if(type == "1" || type == "2")
+	else if(type == "4")
 	{
-
-	//	nx = Panel19->Left;
-	//	ny = Panel3->Top;
-	//	nw = 55;
-	//	nh = 24;
-
-		nw = Panel35->Width*0.8;
-		nh = (Panel35->Height*0.8+1) / 2;
-		nx = Panel35->Width*0.8 + 5;
-		ny = Panel2->Height - (nh*2+2);
+		nx = pUIx[0]->Left;
+		ny = nh * 2 + 6;
 
 		TColor clr;
-		for(int index=0; index<MAXCHANNEL;){
+		for(int index = 0; index < MAXCHANNEL;){
+			pch[index] = new TPanel(this);
+			pre[index] = new TPanel(this);
+
+			SetOption(pch[index], nx, ny, nw, nh-1, index);
+			pch[index]->Font->Color = clWhite;
+			pch[index]->Caption = index+1;
+			pch[index]->Color = clSkyBlue;
+			pch[index]->ParentBackground = false;
+
+			SetOption(pre[index], nx, ny+nh, nw, nh, index);
+			pre[index]->Color = pcolor1->Color;
+			pre[index]->ParentBackground = false;
+
+			index += 1;
+			nx -= (nw + 1);
+			if(index % 2 == 0) nx -= 1;
+			if(index % (LINECOUNT / 4) == 0) nx -= 1;
+			if(index % LINECOUNT == 0)
+			{
+				ny += nh * 2 + 2;
+				nx = pUIx[0]->Left;
+				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny += 2;
+			}
+		}
+	}
+	else if(type == "1")
+	{
+		nx = pUIx[0]->Left;
+		ny = pUIy[0]->Top;
+
+		TColor clr;
+		for(int index = 0; index < MAXCHANNEL;){
 			pch[index] = new TPanel(this);
 			pre[index] = new TPanel(this);
 			pch[index]->ParentBackground = false;
@@ -336,50 +347,143 @@ void __fastcall TRemeasureForm::MakePanel(AnsiString type)
 			pre[index]->ParentBackground = false;
 
 			index += 1;
-			nx = nx + nw + 1;
+			nx = nx + (nw + 1);
 			if(index % 2 == 0) nx += 1;
-			if(index % 10 == 0) nx += 1;
-			if(index % 20 == 0)
+			if(index % (LINECOUNT / 4) == 0) nx += 1;
+			if(index % LINECOUNT == 0)
 			{
-				ny = ny - nh - nh  - 2;
-				nx = Panel35->Width*0.8 + 5;
-				if( (index / 20) % 10 == 0) ny -= 2;
+				ny = ny - nh - nh - 2;
+				nx = nx = pUIx[0]->Left;
+				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny -= 2;
+			}
+		}
+    }
+    else if(type == "2")
+	{
+		nx = pUIx[0]->Left;
+		//ny = Panel2->Height - nh*2 - 5;
+		ny = pUIy[0]->Top;
+
+		TColor clr;
+		for(int index = 0; index < MAXCHANNEL;){
+			pch[index] = new TPanel(this);
+			pre[index] = new TPanel(this);
+			pch[index]->ParentBackground = false;
+			pre[index]->ParentBackground = false;
+
+			SetOption(pch[index], nx, ny, nw, nh, index);
+			pch[index]->Font->Color = clWhite;
+			pch[index]->Caption = index+1;
+			pch[index]->Color = clSkyBlue;
+			pch[index]->ParentBackground = false;
+
+			SetOption(pre[index], nx, ny+nh+1, nw, nh, index);
+			pre[index]->Color = pcolor1->Color;
+			pre[index]->ParentBackground = false;
+
+			index += 1;
+			nx = nx - (nw + 1);
+			if(index % 2 == 0) nx -= 1;
+			if(index % (LINECOUNT / 4) == 0) nx -= 1;
+			if(index % LINECOUNT == 0)
+			{
+				ny = ny - nh - nh - 2;
+				nx = pUIx[0]->Left;
+				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny -= 2;
 			}
 		}
     }
 }
 //---------------------------------------------------------------------------
-void __fastcall TRemeasureForm::MakeUIPanel()
+void __fastcall TRemeasureForm::MakeUIPanel(AnsiString type)
 {
 	int nx, ny, nw, nh;
 
-	nw = Panel35->Width*0.8;
-	nh = Panel35->Height*0.8+1;
-	nx = nw+5;
-	ny = Panel2->Height-(nh+1);
+	nw = pnl_nw;
+	nh = pnl_nh + 1;
 
-    //* 번호가 없는 판넬
-    Panel1->Width = nw;
-	Panel1->Height = nh;
-	Panel1->Left = 3;
-    Panel1->Top = 3;
+	if(type == "1"){
+        ny = Panel2->Height - (nh) - 2;
+        nx = nw + 4;
 
-	for(int index=0; index<20;){
-		pUIx[index] = new TPanel(this);
-		pUIy[index] = new TPanel(this);
+        for(int index = 0; index < LINECOUNT;){
+            pUIx[index] = new TPanel(this);
+            pUIy[index] = new TPanel(this);
 
-		SetUIOption(pUIx[index], nx, Panel35->Top, nw, nh, index);
-		SetUIOption(pUIy[index], Panel35->Width-nw-8, ny-1, nw, nh, index);
-		pUIx[index]->ParentBackground = false;
-		pUIy[index]->ParentBackground = false;
+            SetUIOption(pUIx[index], nx, Panel35->Top, nw, nh, index);
+            SetUIOption(pUIy[index], 2, ny-1, nw, nh, index);
+            pUIx[index]->ParentBackground = false;
+            pUIy[index]->ParentBackground = false;
 
-		index ++;
-		nx += (nw+1);
-		if(index % 2 == 0) nx += 1;
-		if(index % 10 == 0) nx += 2;
-		ny -= (nh+1);
-		if( index % 10 == 0) ny -= 2;
-	}
+            index ++;
+            nx += (nw+1);
+            if(index % 2 == 0) nx += 1;
+            if(index % (LINECOUNT / 4) == 0) nx += 1;
+            ny -= (nh+1);
+            if( index % (LINECOUNT / 4) == 0) ny -= 2;
+        }
+    }
+    else if(type == "2"){
+        ny = Panel2->Height - (nh) - 2;
+        nx = Panel2->Width - (nw + 2);
+
+        for(int index = 0; index < LINECOUNT;){
+            pUIx[index] = new TPanel(this);
+            pUIy[index] = new TPanel(this);
+
+            SetUIOption(pUIx[index], nx, Panel35->Top, nw, nh, index);
+            SetUIOption(pUIy[index], 2, ny-1, nw, nh, index);
+            pUIx[index]->ParentBackground = false;
+            pUIy[index]->ParentBackground = false;
+
+            index ++;
+            nx -= (nw+1);
+            if(index % 2 == 0) nx -= 1;
+            if(index % (LINECOUNT / 4) == 0) nx -= 1;
+            ny -= (nh+1);
+            if( index % (LINECOUNT / 4) == 0) ny -= 2;
+        }
+    }
+    else if(type == "3"){
+        ny = nh + 4;
+        nx = nw + 4;
+        for(int index = 0; index < LINECOUNT;){
+            pUIx[index] = new TPanel(this);
+            pUIy[index] = new TPanel(this);
+
+            SetUIOption(pUIx[index], nx, Panel35->Top, nw, nh, index);
+            SetUIOption(pUIy[index], 2, ny, nw, nh, index);
+            pUIx[index]->ParentBackground = false;
+            pUIy[index]->ParentBackground = false;
+
+            index ++;
+            nx += (nw+1);
+            if(index % 2 == 0) nx += 1;
+            if(index % (LINECOUNT / 4) == 0) nx += 1;
+            ny += (nh+1);
+            if( index % (LINECOUNT / 4) == 0) ny += 2;
+        }
+    }
+    else if(type == "4"){
+        ny = nh + 4;
+        nx = Panel2->Width - (nw + 2);;
+        for(int index = 0; index < LINECOUNT;){
+            pUIx[index] = new TPanel(this);
+            pUIy[index] = new TPanel(this);
+
+            SetUIOption(pUIx[index], nx, Panel35->Top, nw, nh, index);
+            SetUIOption(pUIy[index], 2, ny, nw, nh, index);
+            pUIx[index]->ParentBackground = false;
+            pUIy[index]->ParentBackground = false;
+
+            index ++;
+            nx -= (nw+1);
+            if(index % 2 == 0) nx -= 1;
+            if(index % (LINECOUNT / 4) == 0) nx -= 1;
+            ny += (nh+1);
+            if( index % (LINECOUNT / 4) == 0) ny += 2;
+        }
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TRemeasureForm::SetOption(TPanel *pnl, int nx, int ny, int nw, int nh, int index)
@@ -398,7 +502,7 @@ void __fastcall TRemeasureForm::SetOption(TPanel *pnl, int nx, int ny, int nw, i
 	pnl->BevelKind = bkNone;
 	pnl->BevelOuter = bvNone;
 	pnl->Tag = index; // index + 16
-	pnl->Hint = "POS : " + IntToStr((index/20)+1) + "-" + IntToStr((index%20)+1);
+	pnl->Hint = "POS : " + IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index%LINECOUNT)+1);
 
 	pnl->ShowHint = true;
 	pnl->OnDblClick = chInitdblClick;

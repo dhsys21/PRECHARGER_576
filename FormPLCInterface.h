@@ -3,6 +3,7 @@
 #ifndef FormPLCInterfaceH
 #define FormPLCInterfaceH
 //---------------------------------------------------------------------------
+#include "DEFINE.h"
 #include <Classes.hpp>
 #include <Controls.hpp>
 #include <StdCtrls.hpp>

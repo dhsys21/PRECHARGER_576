@@ -2,7 +2,7 @@
 #define RVMO_define
 
 
-#define APP_PATH					"D:\\PreCharger\\"
+#define APP_PATH					"D:\\PreCharger576\\"
 #define BIN_PATH					APP_PATH"Bin\\"
 #define DATA_PATH					APP_PATH"Data\\"
 #define LOG_PATH                    APP_PATH"Log\\"
@@ -56,8 +56,8 @@ const int NOA = 25; // noanswer
 //	Channel °¹¼ö
 //---------------------------------------------------------------------------
 const int CONTCOUNT 	= 1;
-const int MAXCHANNEL 	= 400;
-const int LINECOUNT		= 20;
+const int MAXCHANNEL 	= 576;
+const int LINECOUNT		= 24;
 
 const int SEND 			= 1;
 const int RECEIVE 		= 2;
