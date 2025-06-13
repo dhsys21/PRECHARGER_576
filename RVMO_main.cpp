@@ -64,7 +64,7 @@ void __fastcall TBaseForm::FormShow(TObject *Sender)
 void __fastcall TBaseForm::MakePanel()
 {
 	int nx, ny;
-	nx = 5;
+	nx = 3;
 	ny = 85;
 
 	for(int i = 0; i < FormCnt;){

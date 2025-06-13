@@ -96,7 +96,6 @@ __published:	// IDE-managed Components
 	TLineSeries *LineSeries2;
 	TLineSeries *LineSeries3;
 	TAdvSmoothButton *btnSetPrecharger;
-	TImage *Image1;
 	TAdvSmoothButton *btnReset;
 	TAdvSmoothButton *btnRBT;
 	TAdvSmoothButton *btnReport;
@@ -140,7 +139,8 @@ private:	// User declarations
 	void __fastcall MakeUIPanel(AnsiString type);
 	void __fastcall SetOption(TPanel *pnl, int nx, int ny, int nw, int nh, int index);
 	void __fastcall SetUIOption(TPanel *pnl, int nx, int ny, int nw, int nh, int index);
-
+    int pnl_nw;
+    int pnl_nh;
 public:		// User declarations
 	TPanel *pvolt[MAXCHANNEL];
 	TPanel *pcurr[MAXCHANNEL];

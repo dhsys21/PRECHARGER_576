@@ -19,6 +19,11 @@ __fastcall TMeasureInfoForm::TMeasureInfoForm(TComponent* Owner)
 
     this->Parent = BaseForm;
 	stage = 0;
+
+    this->Left = 0;
+    this->Top = 0;
+    pnl_nw = 40;
+    pnl_nh = 34;
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::FormShow(TObject *Sender)
@@ -45,20 +50,43 @@ void __fastcall TMeasureInfoForm::FormCreate(TObject *Sender)
 void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 {
 	int nx, ny, nw, nh;
+    nw = pnl_nw;
+    nh = pnl_nh / 2;
 
-	if(type == "3" || type == "4")
+	if(type == "3") //* 왼쪽 위가 1번, 오른쪽 방향으로 1 -> 24
 	{
-//		nx = Panel19->Left;
-//		ny = Panel18->Top;
-//		nw = Panel35->Width;
-//		nh = Panel18->Height / 2;
+		nx = nw + 4;
+		ny = nh * 2 + 6;
 
-		nw = Panel2->Width/22;
-		nh = Panel2->Height/22/2;
-		nx = Panel2->Width - (nw+2);
-		ny = nh*2+5;
+		for(int index = 0; index < MAXCHANNEL;){
+			pvolt[index] = new TPanel(this);
+			pcurr[index] = new TPanel(this);
 
-		for(int index=0; index<MAXCHANNEL;){
+			SetOption(pvolt[index], nx, ny, nw, nh-1, index);
+			SetOption(pcurr[index], nx, ny+nh, nw, nh, index);
+			pcurr[index]->Caption = IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index+LINECOUNT)%LINECOUNT);
+			pcurr[index]->Color = pnormal2->Color;
+			pcurr[index]->ParentBackground = false;
+			pvolt[index]->ParentBackground = false;
+
+			index += 1;
+			nx += (nw + 1);
+			if(index % 2 == 0) nx += 1;
+			if(index % (LINECOUNT / 4) == 0) nx += 1;
+			if(index % LINECOUNT == 0)
+			{
+				ny += nh * 2 + 2;
+				nx = nw + 4;
+				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny += 2;
+			}
+		}
+	}
+    else if(type == "4") //* 오른쪽 위가 1번, 왼쪽 방향으로 24 <- 1
+	{
+		nx = pUIx[0]->Left;
+		ny = nh * 2 + 6;
+
+		for(int index = 0; index < MAXCHANNEL;){
 			pvolt[index] = new TPanel(this);
 			pcurr[index] = new TPanel(this);
 
@@ -71,31 +99,28 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 
 			index += 1;
 			nx -= (nw + 1);
-			if(index % 2 == 0) nx -= 2;
-			if(index % (LINECOUNT / 2) == 0) nx -= 2;
+			if(index % 2 == 0) nx -= 1;
+			if(index % (LINECOUNT / 4) == 0) nx -= 1;
 			if(index % LINECOUNT == 0)
 			{
-				ny += (nh+1)*2+1;
-				nx = Panel2->Width - (nw+2);
-				if( (index / LINECOUNT) % (LINECOUNT / 2) == 0) ny += 2;
+				ny += nh * 2 + 2;
+				nx = pUIx[0]->Left;
+				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny += 2;
 			}
 		}
 	}
-    //* 왼쪽 아래가 1번. 오른쪽 방향으로 1 -> 20
+    //* 왼쪽 아래가 1번. 오른쪽 방향으로 1 -> 24
 	else if(type == "1")
 	{
-		nw = Panel35->Width*0.8;
-		nh = Panel2->Height/22/2;
 		nx = pUIx[0]->Left;
-		//ny = Panel2->Height - nh*2 - 5;
 		ny = pUIy[0]->Top;
 
 		for(int index=0; index<MAXCHANNEL;){
 			pvolt[index] = new TPanel(this);
 			pcurr[index] = new TPanel(this);
 
-			SetOption(pvolt[index], nx, ny, nw, nh-1, index);
-			SetOption(pcurr[index], nx, ny+nh, nw, nh, index);
+			SetOption(pvolt[index], nx, ny, nw, nh, index);
+			SetOption(pcurr[index], nx, ny + nh + 1, nw, nh, index);
 			pcurr[index]->Caption = IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index+LINECOUNT)%LINECOUNT);
 			pcurr[index]->Color = pnormal2->Color;
 			pcurr[index]->ParentBackground = false;
@@ -104,29 +129,28 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 			index += 1;
 			nx = nx + (nw + 1);
 			if(index % 2 == 0) nx += 1;
-			if(index % (LINECOUNT / 2) == 0) nx += 1;
+			if(index % (LINECOUNT / 4) == 0) nx += 1;
 			if(index % LINECOUNT == 0)
 			{
 				ny = ny - nh - nh - 2;
 				nx = nx = pUIx[0]->Left;
-				if( (index / LINECOUNT) % (LINECOUNT / 2) == 0) ny -= 2;
+				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny -= 2;
 			}
 		}
     }
-    //* 오른쪽 아래가 1번. 왼쪽 방향으로 20 <- 1
+    //* 오른쪽 아래가 1번. 왼쪽 방향으로 24 <- 1
     else if(type == "2")
 	{
-		nw = Panel35->Width*0.8;
-		nh = Panel2->Height/22/2;
 		nx = pUIx[0]->Left;
+		//ny = Panel2->Height - nh*2 - 5;
 		ny = pUIy[0]->Top;
 
 		for(int index=0; index<MAXCHANNEL;){
 			pvolt[index] = new TPanel(this);
 			pcurr[index] = new TPanel(this);
 
-			SetOption(pvolt[index], nx, ny, nw, nh-1, index);
-			SetOption(pcurr[index], nx, ny+nh, nw, nh, index);
+			SetOption(pvolt[index], nx, ny, nw, nh, index);
+			SetOption(pcurr[index], nx, ny + nh + 1, nw, nh, index);
 			pcurr[index]->Caption = IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index+LINECOUNT)%LINECOUNT);
 			pcurr[index]->Color = pnormal2->Color;
 			pcurr[index]->ParentBackground = false;
@@ -135,12 +159,12 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 			index += 1;
 			nx = nx - (nw + 1);
 			if(index % 2 == 0) nx -= 1;
-			if(index % (LINECOUNT / 2) == 0) nx -= 1;
+			if(index % (LINECOUNT / 4) == 0) nx -= 1;
 			if(index % LINECOUNT == 0)
 			{
 				ny = ny - nh - nh - 2;
 				nx = pUIx[0]->Left;
-				if( (index / LINECOUNT) % (LINECOUNT / 2) == 0) ny -= 2;
+				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny -= 2;
 			}
 		}
     }
@@ -151,67 +175,97 @@ void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)
 {
 	int nx, ny, nw, nh;
 
-	//nw = Panel2->Width/22;
-	//nh = Panel2->Height/22 + 1;
-    nw = Panel35->Width*0.8;
-	nh = Panel35->Height*0.8+1;
+    nw = pnl_nw;
+	nh = pnl_nh + 1;
 
-	clir->Width = nw;
-	clocv->Width = nw;
+    clir->Width = nw - 1;
+	clocv->Width = nw - 1;
 	clir->Height = nh/2;
-	clocv->Height = nh/2-1;
-
-	clir->Top = 2;
-	clocv->Top = clir->Height +4;
-
-    clir->Width = nw;
-	clocv->Width = nw;
-	clir->Height = nh/2;
-	clocv->Height = nh/2-1;
+	clocv->Height = nh/2;
 
 	clir->Top = 2;
 	clocv->Top = clir->Height +4;
 
     if(type == "1"){
-        ny = Panel2->Height - (nh) ;
-        nx = nw + 5;
+        ny = Panel2->Height - (nh) - 2;
+        nx = nw + 4;
 
-        for(int index=0; index<LINECOUNT;){
+        for(int index = 0; index < LINECOUNT;){
             pUIx[index] = new TPanel(this);
             pUIy[index] = new TPanel(this);
 
             SetUIOption(pUIx[index], nx, Panel35->Top, nw, nh, index);
-            SetUIOption(pUIy[index], Panel35->Width-nw-9, ny-1, nw, nh, index);
+            SetUIOption(pUIy[index], 2, ny-1, nw, nh, index);
             pUIx[index]->ParentBackground = false;
             pUIy[index]->ParentBackground = false;
 
             index ++;
             nx += (nw+1);
             if(index % 2 == 0) nx += 1;
-            if(index % (LINECOUNT / 2) == 0) nx += 1;
+            if(index % (LINECOUNT / 4) == 0) nx += 1;
             ny -= (nh+1);
-            if( index % (LINECOUNT / 2) == 0) ny -= 2;
+            if( index % (LINECOUNT / 4) == 0) ny -= 2;
         }
     }
     else if(type == "2"){
-        ny = Panel2->Height - (nh) ;
+        ny = Panel2->Height - (nh) - 2;
         nx = Panel2->Width - (nw + 2);
 
-        for(int index=0; index<LINECOUNT;){
+        for(int index = 0; index < LINECOUNT;){
             pUIx[index] = new TPanel(this);
             pUIy[index] = new TPanel(this);
 
             SetUIOption(pUIx[index], nx, Panel35->Top, nw, nh, index);
-            SetUIOption(pUIy[index], Panel35->Width-nw-9, ny-1, nw, nh, index);
+            SetUIOption(pUIy[index], 2, ny-1, nw, nh, index);
             pUIx[index]->ParentBackground = false;
             pUIy[index]->ParentBackground = false;
 
             index ++;
             nx -= (nw+1);
             if(index % 2 == 0) nx -= 1;
-            if(index % (LINECOUNT / 2) == 0) nx -= 1;
+            if(index % (LINECOUNT / 4) == 0) nx -= 1;
             ny -= (nh+1);
-            if( index % (LINECOUNT / 2) == 0) ny -= 2;
+            if( index % (LINECOUNT / 4) == 0) ny -= 2;
+        }
+    }
+    else if(type == "3"){
+        ny = nh + 4;
+        nx = nw + 4;
+        for(int index = 0; index < LINECOUNT;){
+            pUIx[index] = new TPanel(this);
+            pUIy[index] = new TPanel(this);
+
+            SetUIOption(pUIx[index], nx, Panel35->Top, nw, nh, index);
+            SetUIOption(pUIy[index], 2, ny, nw, nh, index);
+            pUIx[index]->ParentBackground = false;
+            pUIy[index]->ParentBackground = false;
+
+            index ++;
+            nx += (nw+1);
+            if(index % 2 == 0) nx += 1;
+            if(index % (LINECOUNT / 4) == 0) nx += 1;
+            ny += (nh+1);
+            if( index % (LINECOUNT / 4) == 0) ny += 2;
+        }
+    }
+    else if(type == "4"){
+        ny = nh + 4;
+        nx = Panel2->Width - (nw + 2);;
+        for(int index = 0; index < LINECOUNT;){
+            pUIx[index] = new TPanel(this);
+            pUIy[index] = new TPanel(this);
+
+            SetUIOption(pUIx[index], nx, Panel35->Top, nw, nh, index);
+            SetUIOption(pUIy[index], 2, ny, nw, nh, index);
+            pUIx[index]->ParentBackground = false;
+            pUIy[index]->ParentBackground = false;
+
+            index ++;
+            nx -= (nw+1);
+            if(index % 2 == 0) nx -= 1;
+            if(index % (LINECOUNT / 4) == 0) nx -= 1;
+            ny += (nh+1);
+            if( index % (LINECOUNT / 4) == 0) ny += 2;
         }
     }
 }
@@ -270,16 +324,12 @@ void __fastcall TMeasureInfoForm::SetUIOption(TPanel *pnl, int nx, int ny, int n
 
 void __fastcall TMeasureInfoForm::btnProbeClick(TObject *Sender)
 {
-//	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_PROB_CLOSE, 1);
-//	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_PROB_OPEN, 0);
     BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_PROB_CLOSE, 1);
     BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_PROB_OPEN, 0);
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::btnProbeOpenClick(TObject *Sender)
 {
-//	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_PROB_OPEN, 1);
-//	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_PROB_CLOSE, 0);
     BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
     BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_PROB_OPEN, 1);
 }
