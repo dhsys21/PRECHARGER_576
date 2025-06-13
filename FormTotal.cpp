@@ -180,7 +180,7 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 
 	if(type == "3") //* 왼쪽 위가 1번, 오른쪽 방향으로 1 -> 24
 	{
-		nx = 1;
+		nx = 2;
 		ny = 1;
 
 		for(int index = 0; index < MAXCHANNEL;){
@@ -192,6 +192,7 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			panel[index]->Height = nh;
 
 			panel[index]->Color = pnormal1->Color;
+            panel[index]->ParentBackground = false;
 
 			panel[index]->BevelInner = bvNone;
 			panel[index]->BevelKind = bkNone;
@@ -205,18 +206,18 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			index += 1;
 			nx = nx + nw + 1;
 			if(index % 2 == 0) nx += 1;
-			if(index % (LINECOUNT / 4) == 0) nx += 1;
+			if(index % (LINECOUNT / 6) == 0) nx += 1;
 			if(index % LINECOUNT == 0)
 			{
 				ny = ny + nh + 1;
-				nx = 1;
-				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny += 2;
+				nx = 2;
+				if( (index / LINECOUNT) % (LINECOUNT / 6) == 0) ny += 2;
 			}
 		}
 	}
     else if(type == "4") //* 오른쪽 위가 1번, 왼쪽 방향으로 24 <- 1
 	{
-		nx = pBase->Width - nw - 1;
+		nx = pBase->Width - nw - 2;
 		ny = 1;
 
 		for(int index=0; index<MAXCHANNEL;){
@@ -228,6 +229,7 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			panel[index]->Height = nh;
 
 			panel[index]->Color = pnormal1->Color;
+            panel[index]->ParentBackground = false;
 
 			panel[index]->BevelInner = bvNone;
 			panel[index]->BevelKind = bkNone;
@@ -241,18 +243,18 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			index += 1;
 			nx = nx - nw - 1;
 			if(index % 2 == 0) nx -= 1;
-			if(index % (LINECOUNT / 4) == 0) nx -= 1;
+			if(index % (LINECOUNT / 6) == 0) nx -= 1;
 			if(index % LINECOUNT == 0)
 			{
 				ny = ny + nh + 1;
-				nx = pBase->Width - nw - 1;
-				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny += 2;
+				nx = pBase->Width - nw - 2;
+				if( (index / LINECOUNT) % (LINECOUNT / 6) == 0) ny += 2;
 			}
 		}
 	}
 	else if(type == "1") //* 왼쪽 아래가 1번. 오른쪽 방향으로 1 -> 24
 	{
-		nx = 1;
+		nx = 2;
 		ny = pBase->Height - nh - 1;
 
 		for(int index=0; index<MAXCHANNEL;){
@@ -278,18 +280,18 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			index += 1;
 			nx = nx + nw + 1;
 			if(index % 2 == 0) nx += 1;
-			if(index % (LINECOUNT / 4) == 0) nx += 1;
+			if(index % (LINECOUNT / 6) == 0) nx += 1;
 			if(index % LINECOUNT == 0)
 			{
 				ny = ny - nh - 1;
-				nx = 1;
-				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny -= 2;
+				nx = 2;
+				if( (index / LINECOUNT) % (LINECOUNT / 6) == 0) ny -= 2;
 			}
 		}
 	}
     else if(type == "2") //* 오른쪽 아래가 1번. 왼쪽 방향으로 24 <- 1
 	{
-		nx = pBase->Width - nw - 1;
+		nx = pBase->Width - nw - 2;
 		ny = pBase->Height - nh - 1;
 
 		for(int index=0; index<MAXCHANNEL;){
@@ -315,12 +317,12 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			index += 1;
 			nx = nx - (nw + 1);
 			if(index % 2 == 0) nx -= 1;
-			if(index % (LINECOUNT / 4) == 0) nx -= 1;
+			if(index % (LINECOUNT / 6) == 0) nx -= 1;
 			if(index % LINECOUNT == 0)
 			{
 				ny = ny - nh - 1;
-				nx = pBase->Width - nw - 1;
-				if( (index / LINECOUNT) % (LINECOUNT / 4) == 0) ny -= 2;
+				nx = pBase->Width - nw - 2;
+				if( (index / LINECOUNT) % (LINECOUNT / 6) == 0) ny -= 2;
 			}
 		}
 	}
