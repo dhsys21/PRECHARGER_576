@@ -31,6 +31,16 @@ void __fastcall TMeasureInfoForm::FormShow(TObject *Sender)
     this->BringToFront();
 	pLocal->Visible = false;
     GroupBox3->Height = 230;
+
+    chartVoltage->Width = 998;
+    chartVoltage->Height = 433;
+    chartVoltage->Left = pnl_nw + 4;
+    chartVoltage->Top = pnl_nh + 6;
+
+    chartCurrent->Width = 998;
+    chartCurrent->Height = 433;
+    chartCurrent->Left = pnl_nw + 4;
+    chartCurrent->Top = chartVoltage->Height + pnl_nh + 8;
 }
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -142,7 +152,6 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
     else if(type == "2")
 	{
 		nx = pUIx[0]->Left;
-		//ny = Panel2->Height - nh*2 - 5;
 		ny = pUIy[0]->Top;
 
 		for(int index=0; index<MAXCHANNEL;){

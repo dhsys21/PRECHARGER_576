@@ -29,10 +29,10 @@ object MeasureInfoForm: TMeasureInfoForm
     ParentBackground = False
     TabOrder = 0
     object chartCurrent: TChart
-      Left = 2
-      Top = 423
-      Width = 956
-      Height = 421
+      Left = 44
+      Top = 476
+      Width = 998
+      Height = 433
       BackWall.Brush.Style = bsClear
       Legend.Visible = False
       Title.Alignment = taLeftJustify
@@ -114,10 +114,10 @@ object MeasureInfoForm: TMeasureInfoForm
       end
     end
     object chartVoltage: TChart
-      Left = 2
-      Top = 0
-      Width = 956
-      Height = 421
+      Left = 44
+      Top = 40
+      Width = 998
+      Height = 433
       BackWall.Brush.Style = bsClear
       Legend.Visible = False
       Title.Alignment = taLeftJustify
