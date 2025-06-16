@@ -80,7 +80,7 @@ const int PC_D_PRE_CHARGE_TIME                      =   17;
 const int PC_D_PRE_MEASURE_OK_NG			   		=	30;
 
 // D41070
-const int PC_D_PRE_VOLTAGE_VALUE                    =   70;
+const int PC_D_PRE_VOLTAGE_VALUE                    =   100;
 // D42000
 const int PC_D_PRE_CURRENT_VALUE                    =   0;
 //---------------------------------------------------------------------------
