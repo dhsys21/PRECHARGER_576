@@ -38,6 +38,7 @@ void __fastcall TForm_PLCInterface::SetListViewPLC(int nTag)
 	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_IN), "TRAY IN");
 	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_PROB_OPEN), "PROB OPEN");
 	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_PROB_CLOSE), "PROB CLOSE");
+    AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_POS), "TRAY POS");
 	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_ID), "IN TRAY BCR DATA");
 
 	// CELL INFO => 1 : YES, 0 : NO
@@ -59,13 +60,16 @@ void __fastcall TForm_PLCInterface::SetListViewPC(int nTag)
 	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_PROB_OPEN), "PROB OPEN");
 	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_PROB_CLOSE), "PROB CLOSE");
 	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGING), "CHARGING");
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_NG_ALARM), "NG ALARM");
+    AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_COMPLETE1), "COMPLETE1");
+    AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_COMPLETE2), "COMPLETE2");
+    AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_TRAY_POS_MOVE), "TRAY POS MOVE");
 
 	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_NG_COUNT), "PRECHARGER NG COUNT");
 	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CURRENT_MIN), "CURRENT MIN. VALUE");
 	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGE_VOLTAGE), "CHARGE VOLTAGE");
 	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGE_CURRENT), "CHARGE CURRENT");
 	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGE_TIME), "CHARGE TIME");
+    AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_NG_ALARM), "NG ALARM");
 
 	// PRECHARGE RESULT OK/NG => 1 : NG, 0 : OK or NO CELL
 	for(int i = 0; i < LINECOUNT; i++)
@@ -114,6 +118,7 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_IN);
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_PROB_OPEN);
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_PROB_CLOSE);
+            nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_POS);
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetString(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_ID, 10);
 
 			AnsiString cellinfo;
@@ -142,14 +147,16 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 			nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_PROB_OPEN);
 			nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_PROB_CLOSE);
 			nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_CHARGING);
-			nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_ALARM);
+            nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_COMPLETE1);
+            nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_COMPLETE2);
+            nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_TRAY_POS_MOVE);
 
 			nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_COUNT);
 			nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_CURRENT_MIN);
 			nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_CHARGE_VOLTAGE);
 			nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_CHARGE_CURRENT);
 			nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_CHARGE_TIME);
-
+            nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_ALARM);
 			// PRECHARGE RESULT OK/NG
 			AnsiString okng_bin;
 			for(int i = 0; i < LINECOUNT; i++)
@@ -165,8 +172,6 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 			// PRECHARGE RESULT VOLTAGE VALUE
 			for(int i = 0; i < MAXCHANNEL; i++)
 			{
-//				nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + (i * 2))
-//                	+ Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + (i * 2) + 1) * (256 * 256);
 				vol1 = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + i);
                 nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = vol1;
 			}

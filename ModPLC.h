@@ -53,6 +53,7 @@ const int PLC_D_PRE_ERROR		   	  				=	2;
 const int PLC_D_PRE_TRAY_IN	    	  		        =   3;
 const int PLC_D_PRE_PROB_OPEN   	  		        =   4;
 const int PLC_D_PRE_PROB_CLOSE 		   	  	        =   5;
+const int PLC_D_PRE_TRAY_POS	                    =   6;
 
 const int PLC_D_PRE_TRAY_ID    	  			        =   10;
 
@@ -68,13 +69,16 @@ const int PC_D_PRE_TRAY_OUT    	  		        	=   3;
 const int PC_D_PRE_PROB_OPEN   	  		        	=   4;
 const int PC_D_PRE_PROB_CLOSE    	  	        	=   5;
 const int PC_D_PRE_CHARGING                      	=   6;
-const int PC_D_PRE_NG_ALARM                         =   7;
+const int PC_D_PRE_COMPLETE1		                =   7;
+const int PC_D_PRE_COMPLETE2		                =   8;
+const int PC_D_PRE_TRAY_POS_MOVE	                =   9;
 
 const int PC_D_PRE_NG_COUNT                      	=   10;
 const int PC_D_PRE_CURRENT_MIN                      =   11;
 const int PC_D_PRE_CHARGE_VOLTAGE                   =   13;
 const int PC_D_PRE_CHARGE_CURRENT                   =   15;
 const int PC_D_PRE_CHARGE_TIME                      =   17;
+const int PC_D_PRE_NG_ALARM                         =   19;
 
 // OK/NG - D41030
 const int PC_D_PRE_MEASURE_OK_NG			   		=	30;
