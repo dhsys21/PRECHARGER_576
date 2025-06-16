@@ -369,11 +369,6 @@ void __fastcall TMeasureInfoForm::Panel35Click(TObject *Sender)
 
 void __fastcall TMeasureInfoForm::probeTimerTimer(TObject *Sender)
 {
-//    if(Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_PROB_CLOSE))
-//        Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_PROB_CLOSE, 0);
-//    if(Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PC_D_PRE_PROB_OPEN))
-//        Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_PROB_OPEN, 0);
-
     if(BaseForm->nForm[stage]->GetPlcValue(PLC_D_PRE_PROB_CLOSE))
         BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
     if(BaseForm->nForm[stage]->GetPlcValue(PLC_D_PRE_PROB_OPEN))
@@ -399,7 +394,7 @@ void __fastcall TMeasureInfoForm::btnSaveClick(TObject *Sender)
 		file_handle = FileCreate(FileName);
         FileSeek(file_handle, 0, 0);
 		str = "No,Voltage,Current\n";
-		for(int i=0; i<MAXCHANNEL; ++i){
+		for(int i = 0; i < MAXCHANNEL; ++i){
 			str = str + IntToStr(i+1) + "," ;
 			str = str + pvolt[i]->Caption + ",";//TotalForm->real_data.volt[i] + ","; //FormatFloat("0.0", TotalForm->real_data.volt[i]) + ",";
 			str = str + pcurr[i]->Caption + "\n";//TotalForm->real_data.curr[i] + "\n"; //FormatFloat("0.0", TotalForm->real_data.curr[i]) + "\n";
@@ -413,7 +408,7 @@ void __fastcall TMeasureInfoForm::btnSaveClick(TObject *Sender)
 
 void __fastcall TMeasureInfoForm::btnInitClick(TObject *Sender)
 {
-	for(int i=0; i<MAXCHANNEL; ++i){
+	for(int i = 0; i < MAXCHANNEL; ++i){
 		pvolt[i]->Caption = IntToStr(i+1);
 		pvolt[i]->Color = pnormal1->Color;
 		pcurr[i]->Caption = IntToStr((i+LINECOUNT)/LINECOUNT) + "-" + IntToStr((i%LINECOUNT)+1);

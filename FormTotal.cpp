@@ -984,7 +984,7 @@ void __fastcall TTotalForm::DisplayChannelInfo()
 	AnsiString channelno = "", channeldata = "";
 	double volt, curr;
 	try{
-		for(int i=0; i<MAXCHANNEL; ++i){
+		for(int i = 0; i < MAXCHANNEL; ++i){
 			if(tray.amf)
 			{
 				if(tray.cell[i] == 1){
@@ -1079,6 +1079,7 @@ void __fastcall TTotalForm::DisplayChannelInfo()
 			}
 		}
 	}catch(...){}
+    Label1->Caption = "DisplayChabnnelInfo";
 }
 //---------------------------------------------------------------------------
 AnsiString __fastcall TTotalForm::GetCodeColor(TPanel *pnl, int index)
@@ -1952,7 +1953,7 @@ void __fastcall TTotalForm::btnMeasureInfoClick(TObject *Sender)
 	//* test end
     MeasureInfoForm->Left = 620;
 	MeasureInfoForm->Top = 85;
-	for(int i=0; i<MAXCHANNEL; ++i){
+	for(int i = 0; i < MAXCHANNEL; ++i){
         MeasureInfoForm->pvolt[i]->Caption = "-";
         MeasureInfoForm->pvolt[i]->ParentBackground = false;
         MeasureInfoForm->pcurr[i]->Caption = "-";

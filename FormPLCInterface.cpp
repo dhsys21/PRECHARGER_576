@@ -114,7 +114,6 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_IN);
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_PROB_OPEN);
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_PROB_CLOSE);
-
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetString(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_ID, 10);
 
 			AnsiString cellinfo;
@@ -157,9 +156,8 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 			{
 				okng_bin = "";
 				for(int j = 0; j < LINECOUNT; j++)
-				{
 					okng_bin += Mod_PLC->GetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j);
-				}
+
 				nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = okng_bin;
 			}
 
@@ -169,16 +167,14 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 			{
 //				nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + (i * 2))
 //                	+ Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + (i * 2) + 1) * (256 * 256);
-				vol1 = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + (i * 2));
-				vol2 =  Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + (i * 2) + 1) * (256 * 256);
-                nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = vol1 + vol2;
+				vol1 = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + i);
+                nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = vol1;
 			}
 
 			// PRECHARGE RESULT CURRENT VALUE
 			for(int i = 0; i < MAXCHANNEL; i++)
 			{
-				nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + (i * 2))
-                    + Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + (i * 2) + 1) * (256 * 256);
+				nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + i);
 			}
 		}
 	}

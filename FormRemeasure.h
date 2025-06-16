@@ -74,13 +74,13 @@ __published:	// IDE-managed Components
 	TPanel *pnormal1;
 	TPanel *Panel1;
 	TAdvSmoothButton *AccInitBtn;
+	TLabel *Label4;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormHide(TObject *Sender);
 	void __fastcall chInitdblClick(TObject *Sender);
 	void __fastcall AccInitBtnClick(TObject *Sender);
 private:	// User declarations
-void __fastcall DrawChannelTitle(AnsiString type);
 	void __fastcall MakePanel(AnsiString type);
 	void __fastcall MakeUIPanel(AnsiString type);
 	void __fastcall SetOption(TPanel *pnl, int nx, int ny, int nw, int nh, int index);

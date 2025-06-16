@@ -144,12 +144,14 @@ object Form_Language: TForm_Language
       'DISCONNECT=DisConnect'
       'msgRBT=Rebooting takes 60 seconds. Do you want to reboot?'
       'msgRST=Reset takes 15 seconds. Do you want to reset?'
-      'msgTooManyNG=Too many NG cells. Please check it.')
+      'msgTooManyNG=Too many NG cells. Please check it.'
+      'msgError=Error')
     TabOrder = 1
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
       18
       18
       18

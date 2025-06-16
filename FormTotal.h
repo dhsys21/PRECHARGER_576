@@ -231,6 +231,7 @@ __published:	// IDE-managed Components
 	TLabel *lblSet1;
 	TPanel *pnlStatus;
 	TPanel *pnlResetMsg;
+	TLabel *Label1;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnSaveConfigClick(TObject *Sender);
 	void __fastcall BitmapBtn5Click(TObject *Sender);

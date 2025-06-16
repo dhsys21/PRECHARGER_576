@@ -16,12 +16,14 @@ __fastcall TRemeasureForm::TRemeasureForm(TComponent* Owner)
 	: TForm(Owner)
 {
 	stage = -1;
+    pnl_nw = 40;
+    pnl_nh = 34;
 }
 //---------------------------------------------------------------------------
 void __fastcall TRemeasureForm::RefreshForm()
 {
 
-	for(int i=0; i<MAXCHANNEL; ++i){
+	for(int i = 0; i < MAXCHANNEL; ++i){
 		pre[i]->Caption = acc_remeasure[i];
 		if(acc_remeasure[i] < pcolor2->Caption.ToIntDef(3)){
 			pre[i]->Color = pcolor1->Color;
@@ -34,224 +36,29 @@ void __fastcall TRemeasureForm::RefreshForm()
 	}
 	pAccCnt->Caption = IntToStr(*acc_cnt);
 	pAccDate->Caption = *acc_init;
-
+    Panel2->Caption = "RefreshForm";
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TRemeasureForm::FormCreate(TObject *Sender)
 {
-	//MakeUIPanel();
-	//MakePanel(BaseForm->lblLineNo->Caption);
+
+    Panel2->Caption = BaseForm->lblLineNo->Caption;
 }
 //---------------------------------------------------------------------------
-void __fastcall TRemeasureForm::DrawChannelTitle(AnsiString type)
+void __fastcall TRemeasureForm::FormShow(TObject *Sender)
 {
-	if(type == "1" || type == "2")
-	{
-		//* 세로 번호
-		Panel3->Left = 3;
-		Panel3->Top = 53;
-		Panel3->Caption = "16";
-
-		Panel4->Top = 101;
-		Panel4->Caption = "15";
-
-		Panel5->Top = 149;
-		Panel5->Caption = "14";
-
-		Panel6->Top = 197;
-		Panel6->Caption = "13";
-
-		Panel7->Top = 247;
-		Panel7->Caption = "12";
-
-		Panel8->Top = 295;
-		Panel8->Caption = "11";
-
-		Panel9->Top = 343;
-		Panel9->Caption = "10";
-
-		Panel10->Top = 391;
-		Panel10->Caption = "9";
-
-		Panel11->Top = 441;
-		Panel11->Caption = "8";
-
-		Panel12->Top = 489;
-		Panel12->Caption = "7";
-
-		Panel13->Top = 537;
-		Panel13->Caption = "6";
-
-		Panel14->Top = 585;
-		Panel14->Caption = "5";
-
-		Panel15->Top = 635;
-		Panel15->Caption = "4";
-
-		Panel16->Top = 683;
-		Panel16->Caption = "3";
-
-		Panel17->Top = 731;
-		Panel17->Caption = "2";
-
-		Panel18->Top = 779;
-		Panel18->Caption = "1";
-
-
-		//* 가로 번호
-		Panel19->Left = 55;
-		Panel19->Top = 3;
-		Panel19->Caption = "1";
-
-		Panel21->Left = 111;
-		Panel21->Caption = "2";
-
-		Panel22->Left = 169;
-		Panel22->Caption = "3";
-
-		Panel24->Left = 225;
-		Panel24->Caption = "4";
-
-		Panel25->Left = 283;
-		Panel25->Caption = "5";
-
-		Panel26->Left = 339;
-		Panel26->Caption = "6";
-
-		Panel27->Left = 397;
-		Panel27->Caption = "7";
-
-		Panel28->Left = 453;
-		Panel28->Caption = "8";
-
-		Panel29->Left = 511;
-		Panel29->Caption = "9";
-
-		Panel30->Left = 567;
-		Panel30->Caption = "10";
-
-		Panel31->Left = 625;
-		Panel31->Caption = "11";
-
-		Panel32->Left = 681;
-		Panel32->Caption = "12";
-
-		Panel33->Left = 739;
-		Panel33->Caption = "13";
-
-		Panel34->Left = 795;
-		Panel34->Caption = "14";
-
-		Panel23->Left = 853;
-		Panel23->Caption = "15";
-
-		Panel35->Left = 909;
-		Panel35->Caption = "16";
-	}
-	else if(type == "3" || type == "4")
-	{
-        //* 세로 번호
-		Panel3->Left = 3;
-		Panel3->Top = 53;
-		Panel3->Caption = "16";
-
-		Panel4->Top = 101;
-		Panel4->Caption = "15";
-
-		Panel5->Top = 149;
-		Panel5->Caption = "14";
-
-		Panel6->Top = 197;
-		Panel6->Caption = "13";
-
-		Panel7->Top = 247;
-		Panel7->Caption = "12";
-
-		Panel8->Top = 295;
-		Panel8->Caption = "11";
-
-		Panel9->Top = 343;
-		Panel9->Caption = "10";
-
-		Panel10->Top = 391;
-		Panel10->Caption = "9";
-
-		Panel11->Top = 441;
-		Panel11->Caption = "8";
-
-		Panel12->Top = 489;
-		Panel12->Caption = "7";
-
-		Panel13->Top = 537;
-		Panel13->Caption = "6";
-
-		Panel14->Top = 585;
-		Panel14->Caption = "5";
-
-		Panel15->Top = 635;
-		Panel15->Caption = "4";
-
-		Panel16->Top = 683;
-		Panel16->Caption = "3";
-
-		Panel17->Top = 731;
-		Panel17->Caption = "2";
-
-		Panel18->Top = 779;
-		Panel18->Caption = "1";
-
-
-		//* 가로 번호
-		Panel19->Left = 55;
-		Panel19->Top = 3;
-		Panel19->Caption = "16";
-
-		Panel21->Left = 111;
-		Panel21->Caption = "15";
-
-		Panel22->Left = 169;
-		Panel22->Caption = "14";
-
-		Panel24->Left = 225;
-		Panel24->Caption = "13";
-
-		Panel25->Left = 283;
-		Panel25->Caption = "12";
-
-		Panel26->Left = 339;
-		Panel26->Caption = "11";
-
-		Panel27->Left = 397;
-		Panel27->Caption = "10";
-
-		Panel28->Left = 453;
-		Panel28->Caption = "9";
-
-		Panel29->Left = 511;
-		Panel29->Caption = "8";
-
-		Panel30->Left = 567;
-		Panel30->Caption = "7";
-
-		Panel31->Left = 625;
-		Panel31->Caption = "6";
-
-		Panel32->Left = 681;
-		Panel32->Caption = "5";
-
-		Panel33->Left = 739;
-		Panel33->Caption = "4";
-
-		Panel34->Left = 795;
-		Panel34->Caption = "3";
-
-		Panel23->Left = 853;
-		Panel23->Caption = "2";
-
-		Panel35->Left = 909;
-		Panel35->Caption = "1";
-	}
+    this->Left = 140;
+	this->Top = 50;
+	this->BringToFront();
+
+    MakeUIPanel(BaseForm->lblLineNo->Caption);
+	MakePanel(BaseForm->lblLineNo->Caption);
+	this->RefreshForm();
+}
+//---------------------------------------------------------------------------
+void __fastcall TRemeasureForm::FormHide(TObject *Sender)
+{
+	stage = -1;
 }
 //---------------------------------------------------------------------------
 void __fastcall TRemeasureForm::MakePanel(AnsiString type)
@@ -533,23 +340,6 @@ void __fastcall TRemeasureForm::SetUIOption(TPanel *pnl, int nx, int ny, int nw,
 	pnl->BorderWidth = 0;
 }
 //---------------------------------------------------------------------------
-void __fastcall TRemeasureForm::FormShow(TObject *Sender)
-{
-    this->Left = 140;
-	this->Top = 50;
-	this->BringToFront();
-	this->RefreshForm();
-}
-//---------------------------------------------------------------------------
-
-
-void __fastcall TRemeasureForm::FormHide(TObject *Sender)
-{
-	stage = -1;	
-}
-//---------------------------------------------------------------------------
-
-
 void __fastcall TRemeasureForm::chInitdblClick(TObject *Sender)
 {
 	TPanel *pnl;

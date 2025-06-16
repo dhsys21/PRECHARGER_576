@@ -1041,6 +1041,22 @@ object TotalForm: TTotalForm
         ParentBiDiMode = False
         ParentBackground = False
         TabOrder = 1
+        object Label1: TLabel
+          Left = 35
+          Top = 248
+          Width = 7
+          Height = 21
+          Caption = '-'
+          Color = clWhite
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -17
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+          Transparent = True
+        end
         object cl_line: TPanel
           AlignWithMargins = True
           Left = 7

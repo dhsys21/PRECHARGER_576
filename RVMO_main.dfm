@@ -495,14 +495,13 @@ object BaseForm: TBaseForm
     Top = 13
     Width = 21
     Height = 40
-    Caption = '3'
+    Caption = '1'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWhite
     Font.Height = -33
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    Visible = False
   end
   object pon: TPanel
     Left = 331
