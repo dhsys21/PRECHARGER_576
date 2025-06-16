@@ -697,8 +697,8 @@ object RemeasureForm: TRemeasureForm
     object Panel1: TPanel
       Left = 3
       Top = 3
-      Width = 50
-      Height = 48
+      Width = 40
+      Height = 34
       Color = 12829635
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack

@@ -1661,16 +1661,13 @@ void __fastcall TTotalForm::SetVoltage(AnsiString strVoltage)
         hexStr = strVoltage.SubString(nIndex * 8 + 7, 2) + strVoltage.SubString(nIndex * 8 + 5, 2)
         	+ strVoltage.SubString(nIndex * 8 + 3, 2) + strVoltage.SubString(nIndex * 8 + 1, 2);
 
-        //uint32_t hexValue = StrToInt(AnsiString("$") + hexStr);
         uint32_t hexValue = strtoul(hexStr.c_str(), NULL, 16);
         float fVal;
         memcpy(&fVal, &hexValue, sizeof(float));
         double dVal = static_cast<double>(fVal) * 1000;
 
         ch = chMap[nIndex + 1];
-		real_data.volt[ch - 1] = FormatFloat("0.0", dVal);//FloatToStr(dVal);
-//		if(real_data.status[ch - 1] > 0)
-//			real_data.final_volt[ch - 1] = real_data.volt[ch - 1];
+		real_data.volt[ch - 1] = FormatFloat("0.0", dVal);
     }
 }
 //---------------------------------------------------------------------------
@@ -1682,7 +1679,6 @@ void __fastcall TTotalForm::SetCurrent(AnsiString strCurrent)
         hexStr = strCurrent.SubString(nIndex * 8 + 7, 2) + strCurrent.SubString(nIndex * 8 + 5, 2)
         	+ strCurrent.SubString(nIndex * 8 + 3, 2) + strCurrent.SubString(nIndex * 8 + 1, 2);
 
-        //uint32_t hexValue = StrToInt(AnsiString("$") + hexStr);
         uint32_t hexValue = strtoul(hexStr.c_str(), NULL, 16);
         float fVal;
         memcpy(&fVal, &hexValue, sizeof(float));
@@ -1690,9 +1686,6 @@ void __fastcall TTotalForm::SetCurrent(AnsiString strCurrent)
 
         ch = chMap[nIndex + 1];
 		real_data.curr[ch - 1] = FormatFloat("0.0", dVal);//FloatToStr(dVal);
-
-//		if(real_data.status[ch - 1] > 0)
-//			real_data.final_curr[ch - 1] = real_data.curr[ch - 1];
 	}
 }
 //---------------------------------------------------------------------------
@@ -1704,14 +1697,13 @@ void __fastcall TTotalForm::SetCapacity(AnsiString strCapacity)
         hexStr = strCapacity.SubString(nIndex * 8 + 7, 2) + strCapacity.SubString(nIndex * 8 + 5, 2)
         	+ strCapacity.SubString(nIndex * 8 + 3, 2) + strCapacity.SubString(nIndex * 8 + 1, 2);
 
-        //uint32_t hexValue = StrToInt(AnsiString("$") + hexStr);
         uint32_t hexValue = strtoul(hexStr.c_str(), NULL, 16);
         float fVal;
         memcpy(&fVal, &hexValue, sizeof(float));
         double dVal = static_cast<double>(fVal) * 1000;
 
         ch = chMap[nIndex + 1];
-        real_data.capa[ch - 1] = FormatFloat("0.0", dVal);//FloatToStr(dVal);
+        real_data.capa[ch - 1] = FormatFloat("0.0", dVal);
     }
 }
 //---------------------------------------------------------------------------
@@ -1786,10 +1778,6 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
             }
         }
     }
-
-
-
-
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::SetFinalData()
@@ -1831,11 +1819,6 @@ void __fastcall TTotalForm::SetEquipStatus(AnsiString eqStatus)
     if(eqStatus == "IDL"){
         if(stage.status == stage.oldstatus) stage.status = IDL;
         else if(stage.status != stage.oldstatus) stage.oldstatus = IDL;
-
-//		if(Timer_Reboot->Enabled == true)
-//			Timer_Reboot->Enabled = false;
-//		if(Timer_Reset->Enabled == true)
-//			Timer_Reset->Enabled = false;
 
         tray.channel_charging = false;
     }
