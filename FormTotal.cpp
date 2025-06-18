@@ -748,7 +748,7 @@ void __fastcall TTotalForm::Timer_FinishChargingTimer(TObject *Sender)
             //* 마지막 데이터 표시위해 한번 더
     		DisplayChannelInfo(nTrayPos);
 
-            //* final data 저장
+            //* final data 정리
             AutoTestFinish();
             nFinishStep = 4;
             break;

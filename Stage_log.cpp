@@ -249,7 +249,7 @@ void __fastcall TTotalForm::WriteTrayInfo()
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::WriteResultFile()
+void __fastcall TTotalForm::WriteResultFile(int traypos)
 {
 	int file_handle;
 	AnsiString filename;
@@ -259,7 +259,7 @@ void __fastcall TTotalForm::WriteResultFile()
 	dir = (AnsiString)DATA_PATH + Now().FormatString("yyyymmdd") + "\\" + lblTitle->Caption + "\\";
 	ForceDirectories((AnsiString)dir);
 
-	filename =  dir + tray.trayid +  "-" + Now().FormatString("yymmddhhnnss") + ".csv";
+	filename =  dir + tray.trayid +  "-" + Now().FormatString("yymmddhhnnss") + "_TP" + IntToStr(traypos) + ".csv";
 
 	if(FileExists(filename)){
 		DeleteFile(filename);
@@ -270,6 +270,7 @@ void __fastcall TTotalForm::WriteResultFile()
 
 	AnsiString file;
 	file = "TRAY ID," + tray.trayid + "\r\n";
+    file = "TRAY POSITION," + IntToStr(traypos) + "\r\n";
 //	file = file + "CELL MODEL," + tray.cell_model + "\r\n";
 //	file = file + "LOT NUMBER," + tray.lot_number + "\r\n";
 	file = file + "ARRIVE TIME," + m_dateTime.FormatString("yyyy/mm/dd hh:nn:ss") + "\r\n";
@@ -280,27 +281,29 @@ void __fastcall TTotalForm::WriteResultFile()
 
 	file += "CH,CELL,CELL ID,VOLT,CURR,RESULT\r\n";
 
-	for(int i=0; i<MAXCHANNEL; ++i){
-        cell_id = tray.cell_serial[i];
-		volt = real_data.final_volt[i];
-		curr = real_data.final_curr[i];
+    int channel;
+	for(int i = 0; i < MAXCHANNEL; ++i){
+        channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i] - 1;
+        cell_id = tray.cell_serial[channel];
+		volt = real_data.final_volt[channel];
+		curr = real_data.final_curr[channel];
 
-		if(tray.cell[i] == 1)
+		if(tray.cell[channel] == 1)
 		{
-			if(tray.measure_result[i] == 0) ok_ng = "OK";
+			if(tray.measure_result[channel] == 0) ok_ng = "OK";
 			else ok_ng = "NG";
 
 			cell = "O";
 		}
-		else if(tray.cell[i] == 0)
+		else if(tray.cell[channel] == 0)
 		{
-			if(tray.measure_result[i] == 0) ok_ng = "OUT FLOW";
+			if(tray.measure_result[channel] == 0) ok_ng = "OUT FLOW";
 			else ok_ng = "NG (No Cell)";
 
 			cell = "X";
 		}
 
-		file = file + IntToStr(i+1) + "," + cell + "," + cell_id + "," + volt + "," + curr + "," + ok_ng + "\r\n";
+		file = file + IntToStr(channel + 1) + "," + cell + "," + cell_id + "," + volt + "," + curr + "," + ok_ng + "\r\n";
 	}
 
 	FileWrite(file_handle, file.c_str(), file.Length());
@@ -311,11 +314,12 @@ void __fastcall TTotalForm::WriteMonData(int traypos)
 {
     AnsiString dir, filename;
 	int file_handle;
+    int channel;
 
 	dir = (AnsiString)DATA_PATH + Now().FormatString("yyyymmdd") + "\\" + lblTitle->Caption + "\\";
 	ForceDirectories((AnsiString)dir);
 
-	filename =  dir + tray.trayid +  "_MON.csv";
+	filename =  dir + tray.trayid +  "_MONTP" + IntToStr(traypos) + ".csv";
     AnsiString file = "";
 
 	if(FileExists(filename))
@@ -323,20 +327,21 @@ void __fastcall TTotalForm::WriteMonData(int traypos)
 	else{
 		file_handle = FileCreate(filename);
 
-        file = "DATETIME,RUNCOUNT";
-    for(int nIndex = chStart; nIndex < chEnd; nIndex++)
-        file += ",CH" + IntToStr(nIndex+1) + " STATUS,CH" + IntToStr(nIndex+1) + " VOLTAGE,CH" + IntToStr(nIndex+1) + " CURRENT";
+    file = "DATETIME,RUNCOUNT";
+    for(int nIndex = 0; nIndex < MAXCHANNEL / 2; nIndex++)
+        channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + nIndex];
+        file += ",CH" + IntToStr(channel) + " STATUS,CH" + IntToStr(channel) + " VOLTAGE,CH" + IntToStr(channel) + " CURRENT";
     	file += "\r\n";
 	}
 
 	FileSeek(file_handle, 0, 2);
 
     file += Now().FormatString("yyyy/mm/dd hh:nn:ss.zzz") + "," + stage.runcount;
-
-	for(int i = chStart; i < chEnd; ++i){
-        file += "," + IntToStr(real_data.status[i]);
-        file += "," + FormatFloat("0.0", BaseForm->StringToDouble(real_data.volt[i], 0.0));
-        file += "," + FormatFloat("0.0", BaseForm->StringToDouble(real_data.curr[i], 0.0));
+	for(int i = 0; i < MAXCHANNEL / 2; ++i){
+        channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i] - 1;
+        file += "," + IntToStr(real_data.status[channel]);
+        file += "," + FormatFloat("0.0", BaseForm->StringToDouble(real_data.volt[channel], 0.0));
+        file += "," + FormatFloat("0.0", BaseForm->StringToDouble(real_data.curr[channel], 0.0));
 	}
     file += "\r\n";
 

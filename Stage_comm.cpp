@@ -63,7 +63,7 @@ void __fastcall TTotalForm::CmdTrayOut()
         WriteVoltCurrValue();
 		ReadCellInfo();
 //		LoadTrayInfo(tray.trayid);
-		WriteResultFile();
+		WriteResultFile(nTrayPos);
 
 //		cell_serial_filename = (UnicodeString)TRAY_PATH2 + tray.trayid + ".Tray";
 //		if(FileExists(cell_serial_filename)){
@@ -113,7 +113,7 @@ void __fastcall TTotalForm::AutoTestFinish()
 	SetResultList();
 	if(MeasureInfoForm->n_bManualStart == true)
 	{
-		WriteResultFile();
+		WriteResultFile(nTrayPos);
 		MeasureInfoForm->n_bManualStart = false;
     }
 }
