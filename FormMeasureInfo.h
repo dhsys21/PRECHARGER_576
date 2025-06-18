@@ -151,6 +151,7 @@ public:		// User declarations
     int nStep;
     int nSetCount;
     void __fastcall SetStep();
+    void __fastcall SetChannelInfo();
 
     bool n_bManualStart;
 

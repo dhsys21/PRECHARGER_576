@@ -142,6 +142,7 @@ void __fastcall TTotalForm::CmdAutoStop()
         tray.ams = false;
 
         nFinishStep = 0;
+        nFinishCount = 0;
         Timer_FinishCharging->Enabled = true;
     }
 }

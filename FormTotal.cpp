@@ -105,10 +105,14 @@ void __fastcall TTotalForm::InitTrayStruct()
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::Initialization()
 {
+    int ch;
 	for(int i = 0; i < MAXCHANNEL; i++)
 	{
 		m_sTempVlot[i] = i + 1;
-		m_sTempCurr[i] = IntToStr((i+LINECOUNT)/LINECOUNT) + "-" + IntToStr((i%LINECOUNT)+1);;
+        ch = chReverseMap[i + 1];
+        if(ch >= 289) ch  = ch - 288;
+        m_sTempCurr[i] = IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
+		//m_sTempCurr[i] = IntToStr((i+LINECOUNT)/LINECOUNT) + "-" + IntToStr((i%LINECOUNT)+1);;
 		m_sTempVlot_Value[i] = 0;
 		m_sTempCurr_Value[i] = 0;
 
@@ -351,13 +355,11 @@ void __fastcall TTotalForm::Timer_PLCConnectTimer(TObject *Sender)
 void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
 {
 	if(stage.arl == nAuto && Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_STAGE_AUTO_READY) == 0){
-		//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_STAGE_AUTO_READY, 1);
         SetPcValue(PC_D_PRE_STAGE_AUTO_READY, 1);
 		PreChargerStatus = "PreCharger STAGE AUTO READY = 1";
 		WritePLCLog("PreCharger STAGE AUTO/MANUAL", PreChargerStatus);
 	}
 	else if(stage.arl == nLocal && Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_STAGE_AUTO_READY) == 1){
-		//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_STAGE_AUTO_READY, 0);
         SetPcValue(PC_D_PRE_STAGE_AUTO_READY, 0);
 		PreChargerStatus = "PreCharger STAGE AUTO READY = 0";
 		WritePLCLog("PreCharger STAGE AUTO/MANUAL", PreChargerStatus);
@@ -380,8 +382,6 @@ void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
 
 	if(stage.arl == nAuto && BaseForm->nForm[0]->Client->Active == true)
 	{
-//		if(Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_IN) == 1) tray.trayin = true;
-//		else tray.trayin = false;
         if(GetPlcValue(PLC_D_PRE_TRAY_IN) == 1) tray.trayin = true;
         else tray.trayin = false;
 
@@ -464,7 +464,6 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 	switch(nStep)
 	{
 		case 0:
-			//trayin = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_IN);
             trayin = GetPlcValue(PLC_D_PRE_TRAY_IN);
 			if(trayin)
 			{
@@ -492,7 +491,6 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 			}
 			break;
 		case 1:
-			//trayid = Mod_PLC->GetString(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_ID, 10);
             trayid = GetPlcValue(PLC_D_PRE_TRAY_ID, 10);
 			pTrayid->Caption = trayid;
 			DisplayStatus(nREADY);
@@ -513,14 +511,6 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 			break;
 		case 2:
 			DisplayStatus(nREADY);
-//          for(int i = 0; i < 25; i++)
-//			{
-//				for(int j = 0; j < 16; j++)
-//				{
-//					tray.cell[i * 25 + j] = Mod_PLC->GetData(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_CELL_DATA + i, j);
-//                    tray.cell_count += tray.cell[i * 25 + j];
-//				}
-//			}
             for(int i = 0; i < 25; i++)
 			{
 				for(int j = 0; j < 16; j++)
@@ -539,7 +529,6 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 				DisplayTrayInfo();
 				DisplayProcess(sProbeDown, "AutoInspection_Wait", " PROBE IS CLOSED ... ");
 
-				//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_PROB_CLOSE, 1);
                 SetPcValue(PC_D_PRE_PROB_CLOSE, 1);
 
 				WriteCommLog("AutoInspection_Wait", "PC_INTERFACE_PROB_CLOSE ...");
@@ -564,13 +553,11 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 void __fastcall TTotalForm::AutoInspection_Measure()
 {
 	//* Charging
-	if(tray.ams == true && tray.amf == false){   
-		//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_CHARGING, 1);
+	if(tray.ams == true && tray.amf == false){
         SetPcValue(PC_D_PRE_CHARGING, 1);
 		DisplayProcess(sCharge, "AutoInspection_Measure", " Start charging ... ");
 	}
-	else{    
-		//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_CHARGING, 0);
+	else{
         SetPcValue(PC_D_PRE_CHARGING, 0);
 	}
 
@@ -578,8 +565,6 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 	switch(nStep)
 	{
 		case 0:
-			//plc_probe_close = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_PROB_CLOSE);
-			//plc_tray_in = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_IN);
             plc_probe_close = GetPlcValue(PLC_D_PRE_PROB_CLOSE);
             plc_tray_in = GetPlcValue(PLC_D_PRE_TRAY_IN);
 			if(plc_probe_close == 1 && plc_tray_in == 1)
@@ -587,7 +572,6 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 				DisplayStatus(nRUN);
 				DisplayProcess(sProbeDown, "AutoInspection_Measure", "PLC - PROBE CLOSED");
 
-				//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_PROB_CLOSE, 0);
                 SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
 
 				tray.rst = false;
@@ -635,14 +619,12 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 			if(StatusImage->Picture == BaseForm->statusImage[nNoAnswer]->Picture)
                 StatusImage->Picture = BaseForm->statusImage[nRUN]->Picture;
 
-			//plc_probe_open = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_PROB_OPEN);
             plc_probe_open = GetPlcValue(PLC_D_PRE_PROB_OPEN);
 			if(plc_probe_open == 1 && tray.amf == true)
 			{
 				DisplayProcess(sProbeOpen, "AutoInspection_Measure", " PLC - PROBE IS OPEN ... ");
 				WriteCommLog("AutoInspection_Measure", "PreCharger Finish... ");
 
-				//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_PROB_OPEN, 0);
                 SetPcValue(PC_D_PRE_PROB_OPEN, 0);
 
                 //* NG count 후 셋팅값(20개) 이상이면 에러창
@@ -657,8 +639,7 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::AutoInspection_Finish()
-{                 
-	//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_CHARGING, 0);
+{
     SetPcValue(PC_D_PRE_CHARGING, 0);
 
 	double plc_tray_in;
@@ -666,15 +647,11 @@ void __fastcall TTotalForm::AutoInspection_Finish()
 	switch(nStep)
 	{
 		case 0:       
-			//plc_tray_in = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_IN);
             plc_tray_in = GetPlcValue(PLC_D_PRE_TRAY_IN);
 
 			if(plc_tray_in == 0)
 			{
 				WriteCommLog("AutoInspection_Finish", "TRAY OUT");
-//				Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_TRAY_OUT, 0);
-//				Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_PROB_OPEN, 0);
-//				Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_PROB_CLOSE, 0);
                 SetPcValue(PC_D_PRE_TRAY_OUT, 0);
                 SetPcValue(PC_D_PRE_PROB_OPEN, 0);
                 SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
@@ -743,13 +720,19 @@ void __fastcall TTotalForm::Timer_FinishChargingTimer(TObject *Sender)
             nFinishStep = 1;
             break;
         case 1:
-            //* check report : 명령어 실행 + 결과 읽기를 한 함수에서 같이 해야 함.
-            //* real_data.nResult 에 report 값 대입
-            CmdReport();
-            nResponseCount = 0;
-            real_data.bBT1 = false;  //* bt1 응답 읽음
-            real_data.bBT2 = false;  //* bt2 응답 읽음
-            nFinishStep = 2;
+            //* FinishCharging 횟수 - 일정횟수 이상 반복하면 중단.
+            //* (에러 발생하여 진행이 안되는 경우)
+            nFinishCount++;
+            if(nFinishCount > 3) nFinishStep = 3;
+            else{
+                //* check report : 명령어 실행 + 결과 읽기를 한 함수에서 같이 해야 함.
+                //* real_data.nResult 에 report 값 대입
+                CmdReport();
+                nResponseCount = 0;
+                real_data.bBT1 = false;  //* bt1 응답 읽음
+                real_data.bBT2 = false;  //* bt2 응답 읽음
+                nFinishStep = 2;
+            }
             break;
         case 2:
         	//* STAT:CELL:REP? 결과를 읽었는지 확인
@@ -1947,6 +1930,7 @@ void __fastcall TTotalForm::btnMeasureInfoClick(TObject *Sender)
         MeasureInfoForm->pcurr[i]->Color = pnormal2->Color;
 	}	// 모두 초기화
 
+    MeasureInfoForm->SetChannelInfo();
 	InitMeasureForm();
 }
 //---------------------------------------------------------------------------

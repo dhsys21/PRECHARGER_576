@@ -74,7 +74,7 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 
 			SetOption(pvolt[index], nx, ny, nw, nh-1, index);
 			SetOption(pcurr[index], nx, ny+nh, nw, nh, index);
-			pcurr[index]->Caption = IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index+LINECOUNT)%LINECOUNT);
+			//pcurr[index]->Caption = IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index+LINECOUNT)%LINECOUNT);
 			pcurr[index]->Color = pnormal2->Color;
 			pcurr[index]->ParentBackground = false;
 			pvolt[index]->ParentBackground = false;
@@ -102,7 +102,7 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 
 			SetOption(pvolt[index], nx, ny, nw, nh-1, index);
 			SetOption(pcurr[index], nx, ny+nh, nw, nh, index);
-			pcurr[index]->Caption = IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index+LINECOUNT)%LINECOUNT);
+			//pcurr[index]->Caption = IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index+LINECOUNT)%LINECOUNT);
 			pcurr[index]->Color = pnormal2->Color;
 			pcurr[index]->ParentBackground = false;
 			pvolt[index]->ParentBackground = false;
@@ -131,7 +131,7 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 
 			SetOption(pvolt[index], nx, ny, nw, nh, index);
 			SetOption(pcurr[index], nx, ny + nh + 1, nw, nh, index);
-			pcurr[index]->Caption = IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index+LINECOUNT)%LINECOUNT);
+			//pcurr[index]->Caption = IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index+LINECOUNT)%LINECOUNT);
 			pcurr[index]->Color = pnormal2->Color;
 			pcurr[index]->ParentBackground = false;
 			pvolt[index]->ParentBackground = false;
@@ -160,7 +160,7 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 
 			SetOption(pvolt[index], nx, ny, nw, nh, index);
 			SetOption(pcurr[index], nx, ny + nh + 1, nw, nh, index);
-			pcurr[index]->Caption = IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index+LINECOUNT)%LINECOUNT);
+			//pcurr[index]->Caption = IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index+LINECOUNT)%LINECOUNT);
 			pcurr[index]->Color = pnormal2->Color;
 			pcurr[index]->ParentBackground = false;
 			pvolt[index]->ParentBackground = false;
@@ -179,6 +179,19 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
     }
 }
 //---------------------------------------------------------------------------
+void __fastcall TMeasureInfoForm::SetChannelInfo()
+{
+    //* 채널 위치 -> 릴레이가 12줄이므로 위치를 계산해야 함
+    int ch;
+    for(int index = 0; index < MAXCHANNEL; index++){
+        ch = BaseForm->nForm[stage]->chReverseMap[index + 1];
+        if(ch >= 289)
+        	ch  = ch - 288;
+        pcurr[index]->Caption = IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
+        pcurr[index]->Hint = "CH " + IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
+        pcurr[index]->Refresh();
+    }
+}
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)
 {
@@ -299,8 +312,7 @@ void __fastcall TMeasureInfoForm::SetOption(TPanel *pnl, int nx, int ny, int nw,
 	pnl->BevelKind = bkNone;
 	pnl->BevelOuter = bvNone;
 	pnl->Tag = index;
-//	pnl->Hint = "채널 : " + IntToStr(index+1) + "(" + IntToStr((index%16)+1) + "-" + IntToStr((index+16)/16)+ ")";
-	pnl->Hint = "CH : " + IntToStr(index+1) + "(" + IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index%LINECOUNT)+1) + ")";
+	//pnl->Hint = "CH : " + IntToStr(index+1) + "(" + IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index%LINECOUNT)+1) + ")";
 	pnl->ShowHint = true;
 	pnl->Caption = index+1;
 }
@@ -350,7 +362,12 @@ void __fastcall TMeasureInfoForm::ChInfoMouseEnter(TObject *Sender)
 	int index;
 	index = pnl->Tag;
 	pch->Caption = index + 1;
-	ppos->Caption = IntToStr((index+LINECOUNT)/LINECOUNT) + "-" + IntToStr((index%LINECOUNT)+1);
+	//ppos->Caption = IntToStr((index+LINECOUNT)/LINECOUNT) + "-" + IntToStr((index%LINECOUNT)+1);
+
+    int ch = BaseForm->nForm[stage]->chReverseMap[index + 1];
+    if(ch >= 289)
+    	ch  = ch - 288;
+    ppos->Caption = IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::ChInfoMouseLeave(TObject *Sender)

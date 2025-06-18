@@ -476,6 +476,7 @@ public:		// User declarations
 	TDateTime dt1StartTime, dt1FinishTime, dt1CurrentTime, diff, dt2ChargingTime;
 
 	int no_file_error_count;
+    int nFinishCount;
 	int mon_count;
 
     void __fastcall StageStatus();
