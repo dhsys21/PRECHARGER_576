@@ -28,10 +28,6 @@ __published:	// IDE-managed Components
 	TLabel *Label2;
 	TLabel *Label3;
 	TGroupBox *GroupBox2;
-	TPanel *Panel39;
-	TPanel *Panel40;
-	TPanel *pAccCnt;
-	TPanel *pAccDate;
 	TPanel *pstage;
 	TPanel *pcolor1;
 	TPanel *pcolor2;
@@ -75,11 +71,21 @@ __published:	// IDE-managed Components
 	TPanel *Panel1;
 	TAdvSmoothButton *AccInitBtn;
 	TLabel *Label4;
+	TPanel *Panel20;
+	TPanel *pnlCh;
+	TPanel *Panel36;
+	TPanel *pnlPos;
+	TPanel *Panel39;
+	TPanel *pAccCnt;
+	TPanel *Panel40;
+	TPanel *pAccDate;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormHide(TObject *Sender);
 	void __fastcall chInitdblClick(TObject *Sender);
 	void __fastcall AccInitBtnClick(TObject *Sender);
+    void __fastcall ChInfoMouseEnter(TObject *Sender);
+	void __fastcall ChInfoMouseLeave(TObject *Sender);
 private:	// User declarations
 	void __fastcall MakePanel(AnsiString type);
 	void __fastcall MakeUIPanel(AnsiString type);
