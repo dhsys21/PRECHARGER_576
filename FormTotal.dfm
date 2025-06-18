@@ -68,7 +68,7 @@ object TotalForm: TTotalForm
       Transparent = True
     end
     object btnAuto: TAdvSmoothButton
-      Left = 489
+      Left = 500
       Top = 3
       Width = 100
       Height = 34
@@ -105,7 +105,7 @@ object TotalForm: TTotalForm
       TMSStyle = 8
     end
     object btnManual: TAdvSmoothButton
-      Left = 387
+      Left = 398
       Top = 3
       Width = 100
       Height = 34
@@ -1041,22 +1041,6 @@ object TotalForm: TTotalForm
         ParentBiDiMode = False
         ParentBackground = False
         TabOrder = 1
-        object Label1: TLabel
-          Left = 35
-          Top = 248
-          Width = 7
-          Height = 21
-          Caption = '-'
-          Color = clWhite
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -17
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentColor = False
-          ParentFont = False
-          Transparent = True
-        end
         object cl_line: TPanel
           AlignWithMargins = True
           Left = 7
@@ -1195,10 +1179,47 @@ object TotalForm: TTotalForm
           ParentFont = False
           TabOrder = 5
         end
+        object Panel1: TPanel
+          Left = 7
+          Top = 219
+          Width = 98
+          Height = 25
+          BevelKind = bkFlat
+          BevelOuter = bvNone
+          Caption = 'Channel'
+          Color = 16771289
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentBackground = False
+          ParentFont = False
+          TabOrder = 6
+        end
+        object pnlPos: TPanel
+          Left = 7
+          Top = 246
+          Width = 98
+          Height = 25
+          BevelKind = bkFlat
+          BevelOuter = bvNone
+          Color = clWhite
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentBackground = False
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = False
+          TabOrder = 7
+        end
       end
     end
     object btnConfig: TAdvSmoothButton
-      Left = 285
+      Left = 296
       Top = 3
       Width = 100
       Height = 34
@@ -1254,9 +1275,9 @@ object TotalForm: TTotalForm
       Visible = False
     end
     object pnlTrayIn: TAdvSmoothPanel
-      Left = 173
-      Top = 6
-      Width = 54
+      Left = 95
+      Top = 22
+      Width = 48
       Height = 14
       Cursor = crDefault
       Margins.Top = 1
@@ -1295,9 +1316,9 @@ object TotalForm: TTotalForm
       TMSStyle = 0
     end
     object pnlTrayOut: TAdvSmoothPanel
-      Left = 227
-      Top = 6
-      Width = 54
+      Left = 144
+      Top = 22
+      Width = 48
       Height = 14
       Cursor = crDefault
       Caption.Text = 'T. Out'
@@ -1333,9 +1354,9 @@ object TotalForm: TTotalForm
       TMSStyle = 0
     end
     object pnlProbeClose: TAdvSmoothPanel
-      Left = 227
+      Left = 242
       Top = 22
-      Width = 54
+      Width = 50
       Height = 14
       Cursor = crDefault
       Caption.Text = 'P. Close'
@@ -1371,9 +1392,9 @@ object TotalForm: TTotalForm
       TMSStyle = 0
     end
     object pnlProbeOpen: TAdvSmoothPanel
-      Left = 173
+      Left = 193
       Top = 22
-      Width = 54
+      Width = 48
       Height = 14
       Cursor = crDefault
       Caption.Text = 'P. Open'
@@ -1441,6 +1462,85 @@ object TotalForm: TTotalForm
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 13
+    end
+    object pnlTrayPosTitle: TAdvSmoothPanel
+      Left = 95
+      Top = 7
+      Width = 97
+      Height = 14
+      Cursor = crDefault
+      Margins.Top = 1
+      Margins.Bottom = 1
+      Caption.Text = 'Tray Position'
+      Caption.Location = plCenterCenter
+      Caption.HTMLFont.Charset = DEFAULT_CHARSET
+      Caption.HTMLFont.Color = clWindowText
+      Caption.HTMLFont.Height = -11
+      Caption.HTMLFont.Name = 'Tahoma'
+      Caption.HTMLFont.Style = []
+      Caption.HTMLLocation = plBottomCenter
+      Caption.HTMLURLColor = clBlack
+      Caption.Font.Charset = DEFAULT_CHARSET
+      Caption.Font.Color = clBlack
+      Caption.Font.Height = -11
+      Caption.Font.Name = 'Tahoma'
+      Caption.Font.Style = [fsBold]
+      Caption.ColorStart = clBlack
+      Caption.ColorEnd = clBlack
+      Caption.LineColor = clBlack
+      Caption.Line = False
+      Caption.TextAlignment = taCenter
+      Fill.Color = clWhite
+      Fill.ColorTo = clWhite
+      Fill.ColorMirror = clWhite
+      Fill.ColorMirrorTo = clWhite
+      Fill.GradientType = gtVertical
+      Fill.GradientMirrorType = gtVertical
+      Fill.BorderColor = 14922381
+      Fill.Rounding = 1
+      Fill.ShadowOffset = 0
+      Fill.Glow = gmNone
+      Version = '1.5.2.1'
+      TabOrder = 14
+      TMSStyle = 0
+    end
+    object pnlTrayPos: TAdvSmoothPanel
+      Left = 193
+      Top = 7
+      Width = 99
+      Height = 14
+      Cursor = crDefault
+      Caption.Text = '1'
+      Caption.Location = plCenterCenter
+      Caption.HTMLFont.Charset = DEFAULT_CHARSET
+      Caption.HTMLFont.Color = clWindowText
+      Caption.HTMLFont.Height = -11
+      Caption.HTMLFont.Name = 'Tahoma'
+      Caption.HTMLFont.Style = []
+      Caption.HTMLURLColor = clBlack
+      Caption.Font.Charset = DEFAULT_CHARSET
+      Caption.Font.Color = clWindowText
+      Caption.Font.Height = -11
+      Caption.Font.Name = 'Tahoma'
+      Caption.Font.Style = [fsBold]
+      Caption.ColorStart = clWhite
+      Caption.ColorEnd = clWhite
+      Caption.LineColor = clBlack
+      Caption.Line = False
+      Caption.TextAlignment = taCenter
+      Fill.Color = clRed
+      Fill.ColorTo = clRed
+      Fill.ColorMirror = clRed
+      Fill.ColorMirrorTo = clRed
+      Fill.GradientType = gtVertical
+      Fill.GradientMirrorType = gtVertical
+      Fill.BorderColor = 14922381
+      Fill.Rounding = 1
+      Fill.ShadowOffset = 0
+      Fill.Glow = gmNone
+      Version = '1.5.2.1'
+      TabOrder = 15
+      TMSStyle = 0
     end
   end
   object GrpMain: TGroupBox

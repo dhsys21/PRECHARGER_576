@@ -31,6 +31,7 @@ __fastcall TTotalForm::TTotalForm(TComponent* Owner)
 	this->Width = pback->Width * 2;
 	this->Height = pback->Height;
 
+    ReadchannelMapping();
 	MakePanel(BaseForm->lblLineNo->Caption);
 
 	testtime = 0;
@@ -51,7 +52,6 @@ void __fastcall TTotalForm::FormShow(TObject *Sender)
     stage.arl = nAuto;
 
 	ReadSystemInfo();
-    ReadchannelMapping();
 	Initialization();
 
 	Timer_PLCConnect->Enabled = true;
@@ -198,9 +198,8 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			panel[index]->BevelKind = bkNone;
 			panel[index]->BevelOuter = bvNone;
 			panel[index]->Tag = index;
-	//		panel[index]->Caption = index;
-
-			panel[index]->Hint = IntToStr(index+1) + " (" + IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index%LINECOUNT)+1) + ")";
+//			panel[index]->Caption = index;
+//			panel[index]->Hint = IntToStr(index+1) + " (" + IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index%LINECOUNT)+1) + ")";
 			panel[index]->ShowHint = true;
 
 			index += 1;
@@ -235,9 +234,8 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			panel[index]->BevelKind = bkNone;
 			panel[index]->BevelOuter = bvNone;
 			panel[index]->Tag = index;
-	//		panel[index]->Caption = index;
-
-			panel[index]->Hint = IntToStr(index+1) + " (" + IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index%LINECOUNT)+1) + ")";
+//			panel[index]->Caption = index;
+//			panel[index]->Hint = IntToStr(index+1) + " (" + IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index%LINECOUNT)+1) + ")";
 			panel[index]->ShowHint = true;
 
 			index += 1;
@@ -272,9 +270,8 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			panel[index]->BevelKind = bkNone;
 			panel[index]->BevelOuter = bvNone;
 			panel[index]->Tag = index;
-	//		panel[index]->Caption = index;
-
-			panel[index]->Hint = IntToStr(index+1) + " (" + IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index%LINECOUNT)+1) + ")";
+//			panel[index]->Caption = index;
+//			panel[index]->Hint = IntToStr(index+1) + " (" + IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index%LINECOUNT)+1) + ")";
 			panel[index]->ShowHint = true;
 
 			index += 1;
@@ -309,9 +306,8 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			panel[index]->BevelKind = bkNone;
 			panel[index]->BevelOuter = bvNone;
 			panel[index]->Tag = index;
-	//		panel[index]->Caption = index;
-
-			panel[index]->Hint = IntToStr(index+1) + " (" + IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index%LINECOUNT)+1) + ")";
+//			panel[index]->Caption = index;
+//			panel[index]->Hint = IntToStr(index+1) + " (" + IntToStr((index/LINECOUNT)+1) + "-" + IntToStr((index%LINECOUNT)+1) + ")";
 			panel[index]->ShowHint = true;
 
 			index += 1;
@@ -326,6 +322,15 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 			}
 		}
 	}
+    //* 채널 위치 -> 릴레이가 12줄이므로 위치를 계산해야 함
+    int ch;
+    for(int index = 0; index < MAXCHANNEL; index++)
+    {
+        ch = chReverseMap[index + 1];
+        if(ch >= 289) ch  = ch - 288;
+        if(panel[index] != NULL)
+            panel[index]->Hint = IntToStr(index + 1) + " : " + IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::Timer_PLCConnectTimer(TObject *Sender)
@@ -1079,7 +1084,6 @@ void __fastcall TTotalForm::DisplayChannelInfo()
 			}
 		}
 	}catch(...){}
-    Label1->Caption = "DisplayChabnnelInfo";
 }
 //---------------------------------------------------------------------------
 AnsiString __fastcall TTotalForm::GetCodeColor(TPanel *pnl, int index)
