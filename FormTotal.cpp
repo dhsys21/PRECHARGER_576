@@ -973,102 +973,101 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 	AnsiString sResult, finalresult, strVolt, strCurr;
 	AnsiString channelno = "", channeldata = "";
 	double volt, curr;
-
+    int channel;
 	try{
-        chStart = (traypos - 1) * (MAXCHANNEL / 2);
-		chEnd = chStart + (MAXCHANNEL / 2);
-		for(int i = chStart; i < chEnd; ++i){
+		for(int i = 0; i < MAXCHANNEL / 2; ++i){
+            channel = chMap[(traypos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
 			if(tray.amf)
 			{
-				if(tray.cell[i] == 1){
+				if(tray.cell[channel] == 1){
 				//* 2024 04 10 충전종료에러 때문에 조건 수정
 				//* volt, curr -> final_volt, final_curr
 				//* 10, 1000 => 100, 500
-					if(real_data.final_result[i] == "0" || real_data.final_result[i] == "2"
-						|| (real_data.final_curr[i] < 100 && real_data.final_volt[i] < 500)){
+					if(real_data.final_result[channel] == "0" || real_data.final_result[channel] == "2"
+						|| (real_data.final_curr[channel] < 100 && real_data.final_volt[channel] < 500)){
 						//* 결과 NG
-						panel[i]->Color = cl_error->Color;
+						panel[channel]->Color = cl_error->Color;
 
       				}
 					else {
 						//* 결과 OK
-						panel[i]->Color = cl_end->Color;
+						panel[channel]->Color = cl_end->Color;
 					}
 				}
 
-				if(m_sTempCurr[i].Pos("-") > 1)
+				if(m_sTempCurr[channel].Pos("-") > 1)
 				{
-					m_sTempCurr[i] = "0.0";
-                    m_sTempVlot[i] = "0.0";
+					m_sTempCurr[channel] = "0.0";
+                    m_sTempVlot[channel] = "0.0";
                 }
 			}
 			else if(tray.ams)
 			{
-				 if(m_sTempCurr[i] != "Cell"
-                 	&& (real_data.status[i] > -2 && BaseForm->StringToDouble(real_data.volt[i],0) > 100)){
-					m_sTempVlot[i] = real_data.volt[i];
-					m_sTempCurr[i] = real_data.curr[i];
+				 if(m_sTempCurr[channel] != "Cell"
+                 	&& (real_data.status[channel] > -2 && BaseForm->StringToDouble(real_data.volt[channel],0) > 100)){
+					m_sTempVlot[channel] = real_data.volt[channel];
+					m_sTempCurr[channel] = real_data.curr[channel];
 
-					if(LimitVolt[i].ToDouble() < real_data.volt[i].ToDouble())
-						LimitVolt[i] = real_data.volt[i];
+					if(LimitVolt[channel].ToDouble() < real_data.volt[channel].ToDouble())
+						LimitVolt[channel] = real_data.volt[channel];
 
-					if(LimitCurr[i].ToDouble() < real_data.curr[i].ToDouble())
-						LimitCurr[i] = real_data.curr[i];
+					if(LimitCurr[channel].ToDouble() < real_data.curr[channel].ToDouble())
+						LimitCurr[channel] = real_data.curr[channel];
 
-					//GetCodeColor(panel[i], i);
+					//GetCodeColor(panel[channel], i);
 				 }
-//                 else if(m_sTempCurr[i] != "Cell"
-//					&& (real_data.status[i] > -2 && BaseForm->StringToDouble(real_data.volt[i],0) <= 100)){
+//                 else if(m_sTempCurr[channel] != "Cell"
+//					&& (real_data.status[channel] > -2 && BaseForm->StringToDouble(real_data.volt[channel],0) <= 100)){
 //					//* 이전값 그대로 표시
 //				 }
 				 else{
-                    m_sTempVlot[i] = real_data.volt[i];
-					m_sTempCurr[i] = real_data.curr[i];
+                    m_sTempVlot[channel] = real_data.volt[channel];
+					m_sTempCurr[channel] = real_data.curr[channel];
 
-					//GetCodeColor(panel[i], i);
+					//GetCodeColor(panel[channel], i);
 				 }
 
                  if(testTime->Caption.ToIntDef(0) > 5)
-					GetCodeColor(panel[i], i);
+					GetCodeColor(panel[channel], channel);
 			}
 
 			if(MeasureInfoForm->Visible && MeasureInfoForm->stage == this->Tag)
 			{
-				if(m_sTempCurr[i].Pos("-") > 1)
+				if(m_sTempCurr[channel].Pos("-") > 1)
 				{
-					MeasureInfoForm->pvolt[i]->Color = MeasureInfoForm->pnormal1->Color;
-					MeasureInfoForm->pcurr[i]->Color = MeasureInfoForm->pnormal2->Color;
+					MeasureInfoForm->pvolt[channel]->Color = MeasureInfoForm->pnormal1->Color;
+					MeasureInfoForm->pcurr[channel]->Color = MeasureInfoForm->pnormal2->Color;
 				}
-				else if(m_sTempCurr[i] == "Cell")
+				else if(m_sTempCurr[channel] == "Cell")
 				{
-					if(panel[i]->Color == cl_error->Color || panel[i]->Color == cl_outflow->Color)
+					if(panel[channel]->Color == cl_error->Color || panel[channel]->Color == cl_outflow->Color)
 					{
-						MeasureInfoForm->pvolt[i]->Color = panel[i]->Color;
-						MeasureInfoForm->pcurr[i]->Color = panel[i]->Color;
+						MeasureInfoForm->pvolt[channel]->Color = panel[channel]->Color;
+						MeasureInfoForm->pcurr[channel]->Color = panel[channel]->Color;
 					}
 					else
 					{
-						MeasureInfoForm->pvolt[i]->Color = cl_no->Color;
-						MeasureInfoForm->pcurr[i]->Color = cl_no->Color;
+						MeasureInfoForm->pvolt[channel]->Color = cl_no->Color;
+						MeasureInfoForm->pcurr[channel]->Color = cl_no->Color;
 					}
 				}
 				else
 				{
-					if(panel[i]->Color == cl_line->Color ||
-						panel[i]->Color == cl_charge->Color || panel[i]->Color == cl_end->Color)
+					if(panel[channel]->Color == cl_line->Color ||
+						panel[channel]->Color == cl_charge->Color || panel[channel]->Color == cl_end->Color)
 					{
-						MeasureInfoForm->pvolt[i]->Color = MeasureInfoForm->pnormal1->Color;
-						MeasureInfoForm->pcurr[i]->Color = MeasureInfoForm->pnormal2->Color;
+						MeasureInfoForm->pvolt[channel]->Color = MeasureInfoForm->pnormal1->Color;
+						MeasureInfoForm->pcurr[channel]->Color = MeasureInfoForm->pnormal2->Color;
 					}
 					else
 					{
-						MeasureInfoForm->pvolt[i]->Color = panel[i]->Color;
-						MeasureInfoForm->pcurr[i]->Color = panel[i]->Color;
+						MeasureInfoForm->pvolt[channel]->Color = panel[channel]->Color;
+						MeasureInfoForm->pcurr[channel]->Color = panel[channel]->Color;
 					}
 				}
 
-				MeasureInfoForm->pvolt[i]->Caption = m_sTempVlot[i];
-				MeasureInfoForm->pcurr[i]->Caption = m_sTempCurr[i];
+				MeasureInfoForm->pvolt[channel]->Caption = m_sTempVlot[channel];
+				MeasureInfoForm->pcurr[channel]->Caption = m_sTempCurr[channel];
 			}
 		}
 	}catch(...){}
@@ -1148,25 +1147,25 @@ void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
 
 	tray.cell_count = 0;
     nTrayPos = BaseForm->StringToInt(pnlTrayPos->Caption->Text, 1);
-    chStart = (nTrayPos - 1) * (MAXCHANNEL / 2);
-	chEnd = chStart + (MAXCHANNEL / 2);
-	for(int i = chStart; i < chEnd; i++)
+    int channel, rchannel;
+	for(int i = 0; i < MAXCHANNEL / 2; i++)
 	{
-		tray.cell[i] = 1;
+        channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
+		tray.cell[channel] = 1;
 		tray.cell_count++;
-		tray.cell_data[i] = i;
+		tray.cell_data[channel] = i;
 	}
 
-    int ch;
-	for(int i = chStart; i < chEnd; i++)
+	for(int i = 0; i < MAXCHANNEL / 2; i++)
 	{
-		m_sTempVlot[i] = i + 1;
-        ch = chReverseMap[i + 1];
-        if(ch >= 289) ch  = ch - 288;
-        m_sTempCurr[i] = IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
+        channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
+        rchannel = chReverseMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i + 1];
+        if(channel >= 289) channel  = channel - 288;
+		m_sTempVlot[channel] = channel;
+        m_sTempCurr[channel] = IntToStr((rchannel - 1)/LINECOUNT + 1) + "-" + IntToStr((rchannel - 1)%LINECOUNT + 1);
 		//m_sTempCurr[i] = IntToStr((i + 20)/20) + "-" + IntToStr((i % 20)+1);;
-		m_sTempVlot_Value[i] = 0;
-		m_sTempCurr_Value[i] = 0;
+		m_sTempVlot_Value[channel] = 0;
+		m_sTempCurr_Value[channel] = 0;
 	}
 
 	pTrayid->Caption = tray.trayid;
@@ -1502,8 +1501,6 @@ void __fastcall TTotalForm::SET_MONDATA(AnsiString runcount, AnsiString runtime,
     //* runtime : BT 부팅이후 시간 (ms)
 
     //* status, voltage, current
-    chStart = (nTrayPos - 1) * (MAXCHANNEL / 2);
-    chEnd = chStart + (MAXCHANNEL / 2);
     startOffset = (nTrayPos - 1) * (MAXCHANNEL / 2);  // 0 or 288
     SetStatus(status);
     SetVoltage(voltage);
@@ -1710,9 +1707,9 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
     //* 400 채널은 208 + 192 -> 200 + 192 + 8
     //* 576 채널은 288 * 2 -> 144 + 144
     //* 트레이 위치에 따라 288. (위치를 1번 이동시킴)
-
     int nResultIndex = 0;
     int MAX_SIZE;
+    int channel;
 
     // "@BT1: "과 ";" 사이의 데이터 추출
     int startPos = 0;
@@ -1731,19 +1728,18 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
 
             // `,`로 분리하여 배열에 저장
             int pos;
-            int ch = 0;
             while ((pos = extracted.Pos(",")) > 0 && nResultIndex < MAX_SIZE) {
-                ch = chMap[startOffset + nResultIndex];
+                channel = chMap[startOffset + nResultIndex];
 
-                real_data.final_result[ch - 1] = extracted.SubString(1, pos - 1).Trim();  // 배열에 추가
+                real_data.final_result[channel - 1] = extracted.SubString(1, pos - 1).Trim();  // 배열에 추가
                 extracted = extracted.SubString(pos + 1, extracted.Length() - pos);
 
                 nResultIndex++;
             }
             if (nResultIndex < MAX_SIZE + 1) {
-                ch = chMap[startOffset + nResultIndex];
+                channel = chMap[startOffset + nResultIndex];
 
-                real_data.final_result[ch - 1] = extracted.Trim();  // 마지막 값 추가
+                real_data.final_result[channel - 1] = extracted.Trim();  // 마지막 값 추가
             }
         }
     }
@@ -1760,19 +1756,18 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
 
             // `,`로 분리하여 배열에 저장
             int pos;
-            int ch = 0;
             while ((pos = extracted.Pos(",")) > 0 && nResultIndex < MAX_SIZE) {
-                ch = chMap[startOffset + nResultIndex];
+                channel = chMap[startOffset + nResultIndex];
 
-                real_data.final_result[ch - 1] = extracted.SubString(1, pos - 1).Trim();  // 배열에 추가
+                real_data.final_result[channel - 1] = extracted.SubString(1, pos - 1).Trim();  // 배열에 추가
                 extracted = extracted.SubString(pos + 1, extracted.Length() - pos);
 
                 nResultIndex++;
             }
             if (nResultIndex < MAX_SIZE + 1) {
-                ch = chMap[startOffset + nResultIndex];
+                channel = chMap[startOffset + nResultIndex];
 
-                real_data.final_result[ch - 1] = extracted.Trim();  // 마지막 값 추가
+                real_data.final_result[channel - 1] = extracted.Trim();  // 마지막 값 추가
             }
         }
     }
@@ -1780,32 +1775,34 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::SetFinalData()
 {
-    for(int nIndex = chStart; nIndex < chEnd; nIndex++){
-		if(real_data.status[nIndex] > -2 && BaseForm->StringToDouble(real_data.volt[nIndex], 0) > 100){
-			real_data.final_status[nIndex] = real_data.status[nIndex];
-            real_data.final_volt[nIndex] = real_data.volt[nIndex];
-            real_data.final_curr[nIndex] = real_data.curr[nIndex];
-            real_data.final_capa[nIndex] = real_data.capa[nIndex];
+    int channel;
+    for(int nIndex = 0; nIndex < MAXCHANNEL / 2; nIndex++){
+        channel = chMap[startOffset + nIndex + 1] - 1;
+		if(real_data.status[channel] > -2 && BaseForm->StringToDouble(real_data.volt[channel], 0) > 100){
+			real_data.final_status[channel] = real_data.status[channel];
+            real_data.final_volt[channel] = real_data.volt[channel];
+            real_data.final_curr[channel] = real_data.curr[channel];
+            real_data.final_capa[channel] = real_data.capa[channel];
 		}
 		//* -2는 무시
 		//* -2는 done 상태로 전압, 전류값이 점점 줄어든다. => 이 값은 final 데이터로 처리하면 안됨.
-		else if(real_data.status[nIndex] < -2){
-			if(BaseForm->StringToDouble(real_data.curr[nIndex], 0) < 100.0){
-				real_data.final_curr[nIndex] = "0";
+		else if(real_data.status[channel] < -2){
+			if(BaseForm->StringToDouble(real_data.curr[channel], 0) < 100.0){
+				real_data.final_curr[channel] = "0";
 			}
 
-			if(BaseForm->StringToDouble(real_data.curr[nIndex], 0) < 100.0
-				&& BaseForm->StringToDouble(real_data.volt[nIndex], 0) < 100.0){
-				real_data.final_volt[nIndex] = "0";
+			if(BaseForm->StringToDouble(real_data.curr[channel], 0) < 100.0
+				&& BaseForm->StringToDouble(real_data.volt[channel], 0) < 100.0){
+				real_data.final_volt[channel] = "0";
 			}
 
-			//* 2024 04 10 009 if(BaseForm->StringToDouble(real_data.volt[nIndex], 0) < 100.0) real_data.final_volt[nIndex] = "0";
-			//* 2024 04 10 001 //else real_data.final_volt[nIndex] = real_data.volt[nIndex];
+			//* 2024 04 10 009 if(BaseForm->StringToDouble(real_data.volt[channel], 0) < 100.0) real_data.final_volt[channel] = "0";
+			//* 2024 04 10 001 //else real_data.final_volt[channel] = real_data.volt[channel];
 
-			//* 2024 04 10 009 if(BaseForm->StringToDouble(real_data.curr[nIndex], 0) < 100.0) real_data.final_curr[nIndex] = "0";
-			//* 2024 04 10 001 //else real_data.final_curr[nIndex] = real_data.curr[nIndex];
+			//* 2024 04 10 009 if(BaseForm->StringToDouble(real_data.curr[channel], 0) < 100.0) real_data.final_curr[channel] = "0";
+			//* 2024 04 10 001 //else real_data.final_curr[channel] = real_data.curr[channel];
 
-            real_data.final_capa[nIndex] = real_data.capa[nIndex];
+            real_data.final_capa[channel] = real_data.capa[channel];
         }
     }
 }

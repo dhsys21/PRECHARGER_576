@@ -373,7 +373,6 @@ private:	// User declarations
 	int NgCount;
     int NgAlarmCount;
     int nTrayPos;
-    int chStart, chEnd;
     int startOffset;
 public:		// User declarations
 	void __fastcall InitMeasureForm();
