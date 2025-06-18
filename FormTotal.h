@@ -319,8 +319,8 @@ private:	// User declarations
 //---------------------------------------------------------------------------
 // MON 데이터 처리
 	void __fastcall ChannelStatus();
-    void __fastcall DisplayChannelInfo(int nTrayPos);
-    void __fastcall WriteMonData();
+    void __fastcall DisplayChannelInfo(int traypos);
+    void __fastcall WriteMonData(int traypos);
     void __fastcall WriteResultFile();
     void __fastcall WriteTrayInfo();
     void __fastcall BadInfomation();
@@ -374,6 +374,7 @@ private:	// User declarations
     int NgAlarmCount;
     int nTrayPos;
     int chStart, chEnd;
+    int startOffset;
 public:		// User declarations
 	void __fastcall InitMeasureForm();
 	void __fastcall InitTrayStruct();

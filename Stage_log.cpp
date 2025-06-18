@@ -307,7 +307,7 @@ void __fastcall TTotalForm::WriteResultFile()
 	FileClose(file_handle);
 }
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::WriteMonData()
+void __fastcall TTotalForm::WriteMonData(int traypos)
 {
     AnsiString dir, filename;
 	int file_handle;
@@ -324,7 +324,7 @@ void __fastcall TTotalForm::WriteMonData()
 		file_handle = FileCreate(filename);
 
         file = "DATETIME,RUNCOUNT";
-    for(int nIndex = 0; nIndex < MAXCHANNEL; nIndex++)
+    for(int nIndex = chStart; nIndex < chEnd; nIndex++)
         file += ",CH" + IntToStr(nIndex+1) + " STATUS,CH" + IntToStr(nIndex+1) + " VOLTAGE,CH" + IntToStr(nIndex+1) + " CURRENT";
     	file += "\r\n";
 	}
@@ -333,7 +333,7 @@ void __fastcall TTotalForm::WriteMonData()
 
     file += Now().FormatString("yyyy/mm/dd hh:nn:ss.zzz") + "," + stage.runcount;
 
-	for(int i = 0; i < MAXCHANNEL; ++i){
+	for(int i = chStart; i < chEnd; ++i){
         file += "," + IntToStr(real_data.status[i]);
         file += "," + FormatFloat("0.0", BaseForm->StringToDouble(real_data.volt[i], 0.0));
         file += "," + FormatFloat("0.0", BaseForm->StringToDouble(real_data.curr[i], 0.0));

@@ -962,7 +962,7 @@ AnsiString __fastcall TTotalForm::GetStatus(AnsiString status)
 	}
 }
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::DisplayChannelInfo(int trayposition)
+void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 {
     if(real_data.step_index == "+1")
 		pstep->Caption = "[1, 1]";
@@ -975,7 +975,7 @@ void __fastcall TTotalForm::DisplayChannelInfo(int trayposition)
 	double volt, curr;
 
 	try{
-        chStart = (trayposition - 1) * (MAXCHANNEL / 2);
+        chStart = (traypos - 1) * (MAXCHANNEL / 2);
 		chEnd = chStart + (MAXCHANNEL / 2);
 		for(int i = chStart; i < chEnd; ++i){
 			if(tray.amf)
@@ -1504,13 +1504,14 @@ void __fastcall TTotalForm::SET_MONDATA(AnsiString runcount, AnsiString runtime,
     //* status, voltage, current
     chStart = (nTrayPos - 1) * (MAXCHANNEL / 2);
     chEnd = chStart + (MAXCHANNEL / 2);
+    startOffset = (nTrayPos - 1) * (MAXCHANNEL / 2);  // 0 or 288
     SetStatus(status);
     SetVoltage(voltage);
     SetCurrent(current);
 
 	//* mon 데이터 저장
     if(stage.status == RUN)
-		WriteMonData();
+		WriteMonData(nTrayPos);
 
     //* update final 데이터 (충전 종료 후 최종 값 저장용)
 	SetFinalData();
@@ -1645,7 +1646,7 @@ void __fastcall TTotalForm::SetStatus(AnsiString strStatus)
         hexStr = strStatus.SubString(nIndex * 4 + 3, 2) + strStatus.SubString(nIndex * 4 + 1, 2);
         int16_t hexValue = strtol(hexStr.c_str(), NULL, 16);
 
-        ch = chMap[nIndex + 1];
+        ch = chMap[startOffset + nIndex + 1];
         real_data.status[ch - 1] = hexValue;
     }
 }
@@ -1663,7 +1664,7 @@ void __fastcall TTotalForm::SetVoltage(AnsiString strVoltage)
         memcpy(&fVal, &hexValue, sizeof(float));
         double dVal = static_cast<double>(fVal) * 1000;
 
-        ch = chMap[nIndex + 1];
+        ch = chMap[startOffset + nIndex + 1];
 		real_data.volt[ch - 1] = FormatFloat("0.0", dVal);
     }
 }
@@ -1681,7 +1682,7 @@ void __fastcall TTotalForm::SetCurrent(AnsiString strCurrent)
         memcpy(&fVal, &hexValue, sizeof(float));
         double dVal = static_cast<double>(fVal) * 1000;
 
-        ch = chMap[nIndex + 1];
+        ch = chMap[startOffset + nIndex + 1];
 		real_data.curr[ch - 1] = FormatFloat("0.0", dVal);//FloatToStr(dVal);
 	}
 }
@@ -1699,7 +1700,7 @@ void __fastcall TTotalForm::SetCapacity(AnsiString strCapacity)
         memcpy(&fVal, &hexValue, sizeof(float));
         double dVal = static_cast<double>(fVal) * 1000;
 
-        ch = chMap[nIndex + 1];
+        ch = chMap[startOffset + nIndex + 1];
         real_data.capa[ch - 1] = FormatFloat("0.0", dVal);
     }
 }
@@ -1732,7 +1733,7 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
             int pos;
             int ch = 0;
             while ((pos = extracted.Pos(",")) > 0 && nResultIndex < MAX_SIZE) {
-                ch = chMap[nResultIndex];
+                ch = chMap[startOffset + nResultIndex];
 
                 real_data.final_result[ch - 1] = extracted.SubString(1, pos - 1).Trim();  // 배열에 추가
                 extracted = extracted.SubString(pos + 1, extracted.Length() - pos);
@@ -1740,7 +1741,7 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
                 nResultIndex++;
             }
             if (nResultIndex < MAX_SIZE + 1) {
-                ch = chMap[nResultIndex];
+                ch = chMap[startOffset + nResultIndex];
 
                 real_data.final_result[ch - 1] = extracted.Trim();  // 마지막 값 추가
             }
@@ -1761,7 +1762,7 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
             int pos;
             int ch = 0;
             while ((pos = extracted.Pos(",")) > 0 && nResultIndex < MAX_SIZE) {
-                ch = chMap[nResultIndex];
+                ch = chMap[startOffset + nResultIndex];
 
                 real_data.final_result[ch - 1] = extracted.SubString(1, pos - 1).Trim();  // 배열에 추가
                 extracted = extracted.SubString(pos + 1, extracted.Length() - pos);
@@ -1769,7 +1770,7 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
                 nResultIndex++;
             }
             if (nResultIndex < MAX_SIZE + 1) {
-                ch = chMap[nResultIndex];
+                ch = chMap[startOffset + nResultIndex];
 
                 real_data.final_result[ch - 1] = extracted.Trim();  // 마지막 값 추가
             }
@@ -1779,7 +1780,7 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::SetFinalData()
 {
-    for(int nIndex = 0; nIndex < MAXCHANNEL; nIndex++){
+    for(int nIndex = chStart; nIndex < chEnd; nIndex++){
 		if(real_data.status[nIndex] > -2 && BaseForm->StringToDouble(real_data.volt[nIndex], 0) > 100){
 			real_data.final_status[nIndex] = real_data.status[nIndex];
             real_data.final_volt[nIndex] = real_data.volt[nIndex];
