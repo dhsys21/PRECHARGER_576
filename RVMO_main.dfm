@@ -9,7 +9,7 @@ object BaseForm: TBaseForm
   VertScrollBar.Range = 83
   VertScrollBar.Visible = False
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Precharger (Ver.250618 003)'
+  Caption = 'Precharger (Ver.250618 004)'
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -1015,7 +1015,7 @@ object BaseForm: TBaseForm
     TabOrder = 8
     Visible = False
     object Image1: TImage
-      Left = 22
+      Left = 23
       Top = 0
       Width = 468
       Height = 197
@@ -6346,9 +6346,9 @@ object BaseForm: TBaseForm
     TMSStyle = 8
   end
   object pstepInfo1: TPanel
-    Left = 250
-    Top = 20
-    Width = 180
+    Left = 1373
+    Top = 31
+    Width = 145
     Height = 30
     BevelKind = bkFlat
     BevelOuter = bvNone
@@ -6363,14 +6363,14 @@ object BaseForm: TBaseForm
     TabOrder = 13
     object rbKorean: TRadioButton
       Tag = 1
-      Left = 7
+      Left = 5
       Top = 4
-      Width = 74
+      Width = 40
       Height = 20
-      Caption = #54620#44397#50612
+      Caption = 'Ko'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -16
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
@@ -6378,19 +6378,34 @@ object BaseForm: TBaseForm
       OnClick = rbKoreanClick
     end
     object rbEnglish: TRadioButton
-      Left = 87
+      Left = 50
       Top = 4
-      Width = 90
+      Width = 40
       Height = 20
-      Caption = 'English'
-      Checked = True
+      Caption = 'En'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -16
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 1
+      OnClick = rbKoreanClick
+    end
+    object rbChinese: TRadioButton
+      Left = 95
+      Top = 4
+      Width = 40
+      Height = 20
+      Caption = 'Cn'
+      Checked = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
       TabStop = True
       OnClick = rbKoreanClick
     end

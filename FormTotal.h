@@ -319,7 +319,7 @@ private:	// User declarations
 //---------------------------------------------------------------------------
 // MON 데이터 처리
 	void __fastcall ChannelStatus();
-    void __fastcall DisplayChannelInfo();
+    void __fastcall DisplayChannelInfo(int nTrayPos);
     void __fastcall WriteMonData();
     void __fastcall WriteResultFile();
     void __fastcall WriteTrayInfo();
@@ -346,7 +346,7 @@ private:	// User declarations
 	void __fastcall ErrorLog();
     void __fastcall ErrorMsg(int err);
     void __fastcall WriteCommLog(AnsiString Type, AnsiString Msg);
-
+    int __fastcall GetTrayPos();
 
 	void __fastcall StageClearAlarm();
 	void __fastcall StageReady();
@@ -372,6 +372,8 @@ private:	// User declarations
 	bool bStatus;
 	int NgCount;
     int NgAlarmCount;
+    int nTrayPos;
+    int chStart, chEnd;
 public:		// User declarations
 	void __fastcall InitMeasureForm();
 	void __fastcall InitTrayStruct();

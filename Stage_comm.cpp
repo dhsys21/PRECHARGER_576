@@ -272,6 +272,11 @@ void __fastcall TTotalForm::CmdDischargeSetStep()
 //---------------------------------------------------------------------------
 // PLC ¸í·É¾î
 //---------------------------------------------------------------------------
+int __fastcall TTotalForm::GetTrayPos()
+{
+    int value = GetPlcValue(PLC_D_PRE_TRAY_POS);
+    return value;
+}
 double __fastcall TTotalForm::GetPlcValue(int plc_address)
 {
     double value = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, plc_address);

@@ -171,7 +171,8 @@ void __fastcall TTotalForm::InitMeasureForm()
 	MeasureInfoForm->pstage->Caption = lblTitle->Caption;
 	MeasureInfoForm->BringToFront();
 	MeasureInfoForm->Visible = true;
-	DisplayChannelInfo();
+	DisplayChannelInfo(1);
+    DisplayChannelInfo(2);
 }
 //---------------------------------------------------------------------------
 // 메인화면 패널 만들기
@@ -385,6 +386,7 @@ void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
         if(GetPlcValue(PLC_D_PRE_TRAY_IN) == 1) tray.trayin = true;
         else tray.trayin = false;
 
+        nTrayPos = GetTrayPos();
 		switch(nSection)
 		{
 			case STEP_WAIT:
@@ -744,7 +746,7 @@ void __fastcall TTotalForm::Timer_FinishChargingTimer(TObject *Sender)
             break;
         case 3:
             //* 마지막 데이터 표시위해 한번 더
-    		DisplayChannelInfo();
+    		DisplayChannelInfo(nTrayPos);
 
             //* final data 저장
             AutoTestFinish();
@@ -848,7 +850,7 @@ void __fastcall TTotalForm::Timer_RebootTimer(TObject *Sender)
 void __fastcall TTotalForm::ChannelStatus()
 {
 	if(tray.channel_charging == true){
-		DisplayChannelInfo();
+		DisplayChannelInfo(nTrayPos);
 	}
 
 	int dTime, dTime2;
@@ -960,7 +962,7 @@ AnsiString __fastcall TTotalForm::GetStatus(AnsiString status)
 	}
 }
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::DisplayChannelInfo()
+void __fastcall TTotalForm::DisplayChannelInfo(int trayposition)
 {
     if(real_data.step_index == "+1")
 		pstep->Caption = "[1, 1]";
@@ -971,8 +973,11 @@ void __fastcall TTotalForm::DisplayChannelInfo()
 	AnsiString sResult, finalresult, strVolt, strCurr;
 	AnsiString channelno = "", channeldata = "";
 	double volt, curr;
+
 	try{
-		for(int i = 0; i < MAXCHANNEL; ++i){
+        chStart = (trayposition - 1) * (MAXCHANNEL / 2);
+		chEnd = chStart + (MAXCHANNEL / 2);
+		for(int i = chStart; i < chEnd; ++i){
 			if(tray.amf)
 			{
 				if(tray.cell[i] == 1){
@@ -1142,17 +1147,24 @@ void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
 		tray.trayid = Now().FormatString("yymmddhhnnss");
 
 	tray.cell_count = 0;
-	for(int i = 0; i < MAXCHANNEL; i++)
+    nTrayPos = BaseForm->StringToInt(pnlTrayPos->Caption->Text, 1);
+    chStart = (nTrayPos - 1) * (MAXCHANNEL / 2);
+	chEnd = chStart + (MAXCHANNEL / 2);
+	for(int i = chStart; i < chEnd; i++)
 	{
 		tray.cell[i] = 1;
 		tray.cell_count++;
 		tray.cell_data[i] = i;
 	}
 
-	for(int i = 0; i < MAXCHANNEL; i++)
+    int ch;
+	for(int i = chStart; i < chEnd; i++)
 	{
 		m_sTempVlot[i] = i + 1;
-		m_sTempCurr[i] = IntToStr((i + 20)/20) + "-" + IntToStr((i % 20)+1);;
+        ch = chReverseMap[i + 1];
+        if(ch >= 289) ch  = ch - 288;
+        m_sTempCurr[i] = IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
+		//m_sTempCurr[i] = IntToStr((i + 20)/20) + "-" + IntToStr((i % 20)+1);;
 		m_sTempVlot_Value[i] = 0;
 		m_sTempCurr_Value[i] = 0;
 	}
@@ -1490,6 +1502,8 @@ void __fastcall TTotalForm::SET_MONDATA(AnsiString runcount, AnsiString runtime,
     //* runtime : BT 부팅이후 시간 (ms)
 
     //* status, voltage, current
+    chStart = (nTrayPos - 1) * (MAXCHANNEL / 2);
+    chEnd = chStart + (MAXCHANNEL / 2);
     SetStatus(status);
     SetVoltage(voltage);
     SetCurrent(current);
@@ -1618,18 +1632,16 @@ void __fastcall TTotalForm::ProcessRPY(AnsiString param)
 void __fastcall TTotalForm::SetRunCount(AnsiString strRuncount)
 {
     AnsiString hexStr = "";
-    for(int nIndex = 0; nIndex < MAXCHANNEL; nIndex++){
-        hexStr = strRuncount;
-        int16_t hexValue = strtol(hexStr.c_str(), NULL, 16);
-        stage.runcount = hexValue;
-    }
+    hexStr = strRuncount;
+    int16_t hexValue = strtol(hexStr.c_str(), NULL, 16);
+    stage.runcount = hexValue;
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::SetStatus(AnsiString strStatus)
 {
     AnsiString hexStr = "";
     int ch = 0;
-    for(int nIndex = 0; nIndex < MAXCHANNEL; nIndex++){
+    for(int nIndex = 0; nIndex < MAXCHANNEL / 2; nIndex++){
         hexStr = strStatus.SubString(nIndex * 4 + 3, 2) + strStatus.SubString(nIndex * 4 + 1, 2);
         int16_t hexValue = strtol(hexStr.c_str(), NULL, 16);
 
@@ -1642,7 +1654,7 @@ void __fastcall TTotalForm::SetVoltage(AnsiString strVoltage)
 {
     AnsiString hexStr = "";
     int ch = 0;
-    for(int nIndex = 0; nIndex < MAXCHANNEL; nIndex++){
+    for(int nIndex = 0; nIndex < MAXCHANNEL / 2; nIndex++){
         hexStr = strVoltage.SubString(nIndex * 8 + 7, 2) + strVoltage.SubString(nIndex * 8 + 5, 2)
         	+ strVoltage.SubString(nIndex * 8 + 3, 2) + strVoltage.SubString(nIndex * 8 + 1, 2);
 
@@ -1660,7 +1672,7 @@ void __fastcall TTotalForm::SetCurrent(AnsiString strCurrent)
 {
     AnsiString hexStr = "";
     int ch = 0;
-    for(int nIndex = 0; nIndex < MAXCHANNEL; nIndex++){
+    for(int nIndex = 0; nIndex < MAXCHANNEL / 2; nIndex++){
         hexStr = strCurrent.SubString(nIndex * 8 + 7, 2) + strCurrent.SubString(nIndex * 8 + 5, 2)
         	+ strCurrent.SubString(nIndex * 8 + 3, 2) + strCurrent.SubString(nIndex * 8 + 1, 2);
 
@@ -1678,7 +1690,7 @@ void __fastcall TTotalForm::SetCapacity(AnsiString strCapacity)
 {
     AnsiString hexStr = "";
     int ch = 0;
-    for(int nIndex = 0; nIndex < MAXCHANNEL; nIndex++){
+    for(int nIndex = 0; nIndex < MAXCHANNEL / 2; nIndex++){
         hexStr = strCapacity.SubString(nIndex * 8 + 7, 2) + strCapacity.SubString(nIndex * 8 + 5, 2)
         	+ strCapacity.SubString(nIndex * 8 + 3, 2) + strCapacity.SubString(nIndex * 8 + 1, 2);
 

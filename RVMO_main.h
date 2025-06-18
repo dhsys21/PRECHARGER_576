@@ -85,6 +85,7 @@ __published:	// IDE-managed Components
 	TButton *Button5;
 	TButton *btnNgCountErr;
 	TCheckBox *chkTest;
+	TRadioButton *rbChinese;
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall ClockTimerTimer(TObject *Sender);
