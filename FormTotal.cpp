@@ -511,12 +511,12 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 			break;
 		case 2:
 			DisplayStatus(nREADY);
-            for(int i = 0; i < 25; i++)
+            for(int i = 0; i < LINECOUNT; i++)
 			{
-				for(int j = 0; j < 16; j++)
+				for(int j = 0; j < LINECOUNT; j++)
 				{
-					tray.cell[i * 16 + j] = GetPlcData(PLC_D_PRE_TRAY_CELL_DATA + i, j);
-                    tray.cell_count += tray.cell[i * 16 + j];
+					tray.cell[i * LINECOUNT + j] = GetPlcData(PLC_D_PRE_TRAY_CELL_DATA + (i * 2), j);
+                    tray.cell_count += tray.cell[i * LINECOUNT + j];
 				}
 			}
 			nStep = 3;
@@ -1201,26 +1201,26 @@ void __fastcall TTotalForm::BadInfomation()
 {
 	int ngCount = 0;
 	NgCount = 0;
-	for(int i = 0; i < 25; ++i){
-		for(int j = 0; j < 16; j++)
+	for(int i = 0; i < LINECOUNT; ++i){
+		for(int j = 0; j < LINECOUNT; j++)
 		{
             //* 셀이 있는데 Fail 이면 1, OK 면 0
             //* measure_result == 1 : NG, == 0 : OK
-			if((tray.cell[(i * 16) + j] == 1) && tray.measure_result[(i * 16) + j] == 1)
+			if((tray.cell[(i * LINECOUNT) + j] == 1) && tray.measure_result[(i * LINECOUNT) + j] == 1)
 			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, true);
-				acc_remeasure[(i * 16) + j] += 1;   // 셀이 있고 에러일 때 count 증가
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (i * 2), j, true);
+				acc_remeasure[(i * LINECOUNT) + j] += 1;   // 셀이 있고 에러일 때 count 증가
 				ngCount++;
 				NgCount++;
 			}
-			else if(tray.cell[(i * 16) + j] == 1 && tray.measure_result[(i * 16) + j] == 0)
+			else if(tray.cell[(i * LINECOUNT) + j] == 1 && tray.measure_result[(i * LINECOUNT) + j] == 0)
 			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, false);
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (i * 2), j, false);
 			}
             //* 셀이 없으면 1.
 			else
 			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, true);
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (i * 2), j, true);
 				ngCount++;
 			}
 		}
@@ -1237,13 +1237,11 @@ void __fastcall TTotalForm::WriteVoltCurrValue()
 	for(int i = 0; i < MAXCHANNEL; i++)
 	{
 		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + (i * 2), FormatFloat("00000", (real_data.final_volt[i].ToDouble() * 10)) % (256 * 256));
-		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + (i * 2) + 1, (real_data.final_volt[i].ToDouble() * 10) / (256 * 256));
 	}
 
 	for(int i = 0; i < MAXCHANNEL; i++)
 	{
 		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + (i * 2), FormatFloat("00000", (real_data.final_curr[i].ToDouble() * 10)) % (256 * 256));
-		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + (i * 2) + 1, (real_data.final_curr[i].ToDouble() * 10) / (256 * 256));
 	}
 
 }
@@ -1696,6 +1694,10 @@ void __fastcall TTotalForm::SetCapacity(AnsiString strCapacity)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
 {
+    //* 400 채널은 208 + 192 -> 200 + 192 + 8
+    //* 576 채널은 288 * 2 -> 144 + 144
+    //* 트레이 위치에 따라 288. (위치를 1번 이동시킴)
+
     int nResultIndex = 0;
     int MAX_SIZE;
 
@@ -1706,7 +1708,7 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
     if(strResult.Pos("@BT1:") > 0) {
     	startPos = strResult.Pos("@BT1:");
 
-        MAX_SIZE = 208;
+        MAX_SIZE = 144;
         nResultIndex = 1;
         real_data.bBT1 = true;
 
@@ -1718,20 +1720,16 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
             int pos;
             int ch = 0;
             while ((pos = extracted.Pos(",")) > 0 && nResultIndex < MAX_SIZE) {
-                if(nResultIndex > 200 && nResultIndex < 209)
-                    ch = chMap[nResultIndex + 192];
-                else
-                    ch = chMap[nResultIndex];
+                ch = chMap[nResultIndex];
+
                 real_data.final_result[ch - 1] = extracted.SubString(1, pos - 1).Trim();  // 배열에 추가
                 extracted = extracted.SubString(pos + 1, extracted.Length() - pos);
 
                 nResultIndex++;
             }
             if (nResultIndex < MAX_SIZE + 1) {
-                if(nResultIndex > 200 && nResultIndex < 209)
-                    ch = chMap[nResultIndex + 192];
-                else
-                    ch = chMap[nResultIndex];
+                ch = chMap[nResultIndex];
+
                 real_data.final_result[ch - 1] = extracted.Trim();  // 마지막 값 추가
             }
         }
@@ -1739,8 +1737,8 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
     else if(strResult.Pos("@BT2:") > 0) {
     	startPos = strResult.Pos("@BT2:");
 
-        MAX_SIZE = 392;
-        nResultIndex = 201;
+        MAX_SIZE = 288;
+        nResultIndex = 145;
         real_data.bBT2 = true;
 
         if (startPos > 0 && endPos > startPos) {

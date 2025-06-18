@@ -173,17 +173,17 @@ typedef struct{
 	unsigned short int stage_status;
 	AnsiString step_index;
 
-	AnsiString volt[MAXCHANNEL];
-	AnsiString final_volt[MAXCHANNEL];
+	AnsiString volt[MAXCHANNEL / 2];
+	AnsiString final_volt[MAXCHANNEL / 2];
 
-	AnsiString curr[MAXCHANNEL];
-	AnsiString final_curr[MAXCHANNEL];
+	AnsiString curr[MAXCHANNEL / 2];
+	AnsiString final_curr[MAXCHANNEL / 2];
 
-	AnsiString capa[MAXCHANNEL];
-	AnsiString final_capa[MAXCHANNEL];
-	
-	int status[MAXCHANNEL];       //* mon status ( > 0 현재step, < 0 에러 상태)
-    int final_status[MAXCHANNEL];
+	AnsiString capa[MAXCHANNEL / 2];
+	AnsiString final_capa[MAXCHANNEL / 2];
+
+	int status[MAXCHANNEL / 2];       //* mon status ( > 0 현재step, < 0 에러 상태)
+    int final_status[MAXCHANNEL / 2];
 
     AnsiString result[MAXCHANNEL];
 	AnsiString final_result[MAXCHANNEL];
