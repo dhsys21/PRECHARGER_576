@@ -667,8 +667,12 @@ void __fastcall TMeasureInfoForm::Timer_SetStep2Timer(TObject *Sender)
 
 void __fastcall TMeasureInfoForm::btnInit1Click(TObject *Sender)
 {
-    TAdvSmoothButton *btn = (TAdvSmoothButton *)Sender;
-    SetChannelInfo(btn->Tag);
+    SetChannelInfo(1);
+}
+//---------------------------------------------------------------------------
+void __fastcall TMeasureInfoForm::btnInit2Click(TObject *Sender)
+{
+    SetChannelInfo(2);
 }
 //---------------------------------------------------------------------------
 

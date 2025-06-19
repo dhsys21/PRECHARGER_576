@@ -6,6 +6,7 @@
 
 #include "FormTotal.h"
 #include "RVMO_main.h"
+#include "Util.h"
 #include <math.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -35,12 +36,9 @@ __fastcall TTotalForm::TTotalForm(TComponent* Owner)
 	MakePanel(BaseForm->lblLineNo->Caption);
 
 	testtime = 0;
-	curr_min = BaseForm->StringToDouble(editCurrMin->Text, 50);
+	curr_min = StringToDouble(editCurrMin->Text, 50);
 
 	no_file_error_count = 0;
-	tray.trayin = false;
-	tray.channel_charging = false;
-	tray.end_charging = false;
 	nQueryIndex = 0;
 }
 //---------------------------------------------------------------------------
@@ -52,8 +50,7 @@ void __fastcall TTotalForm::FormShow(TObject *Sender)
     stage.arl = nAuto;
 
 	ReadSystemInfo();
-	Initialization(1);
-    Initialization(2);
+	Initialization();
 
 	Timer_PLCConnect->Enabled = true;
 	//btnConnectPRECHARGERClick(this);
@@ -82,6 +79,37 @@ void __fastcall TTotalForm::FormShow(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 // 구조체 초기화 : 트레이 정보, 재측정 정보
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::InitData(int traypos)
+{
+//    unsigned short int stage_status;
+//	AnsiString step_index;
+//
+//	AnsiString volt[MAXCHANNEL];
+//	AnsiString final_volt[MAXCHANNEL / 2];
+//
+//	AnsiString curr[MAXCHANNEL / 2];
+//	AnsiString final_curr[MAXCHANNEL / 2];
+//
+//	AnsiString capa[MAXCHANNEL / 2];
+//	AnsiString final_capa[MAXCHANNEL / 2];
+//
+//	int status[MAXCHANNEL / 2];       //* mon status ( > 0 현재step, < 0 에러 상태)
+//    int final_status[MAXCHANNEL / 2];
+//
+//    AnsiString result[MAXCHANNEL / 2];
+//	AnsiString final_result[MAXCHANNEL / 2];
+//    bool bBT1; //* bt1 응답 읽음
+//    bool bBT2; //* bt2 응답 읽음
+//
+//	unsigned int step_time;
+//	unsigned int test_time;
+//    for(int i = 0; i < CHANNELCOUNT; i++){
+//        tray[traypos].stage_status = 0;
+//        tray[traypos].step_index = "";
+//        tray[traypos].volt[
+//    }
+}
 void __fastcall TTotalForm::InitTrayStruct(int traypos)
 {
 	this->WriteRemeasureInfo();
@@ -89,20 +117,31 @@ void __fastcall TTotalForm::InitTrayStruct(int traypos)
     memset(&real_data, 0, sizeof(real_data));
     memset(&charge, 0, sizeof(config));
 
-	for(int i=0; i < MAXCHANNEL; ++i){
-		tray.cell[i] = 0;	//CELL INFO
-		tray.measure_result[i] = 0;
-        tray.error_time_count[i] = 0;
+    int channel, rchannel;
+	for(int i=0; i < MAXCHANNEL / 2; ++i){
+        channel = chMap[(traypos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
+        rchannel = chReverseMap[channel + 1];
+        if(rchannel >= 289) rchannel  = rchannel - 288;
 
-		panel[i]->Caption = "";
-		panel[i]->Color = cl_line->Color;
+		tray.cell[channel] = 0;	//CELL INFO
+		tray.measure_result[channel] = 0;
+        tray.error_time_count[channel] = 0;
 
-		LimitVolt[i] = 0;
-        LimitCurr[i] = 0;
+		panel[channel]->Caption = "";
+		panel[channel]->Color = cl_line->Color;
+
+		LimitVolt[channel] = 0;
+        LimitCurr[channel] = 0;
 	}
 
-    //MeasureInfoForm->btnInitClick(this);
-    MeasureInfoForm->btnInit1Click(this);
+    if(traypos == 1) MeasureInfoForm->btnInit1Click(this);
+    else if(traypos == 2) MeasureInfoForm->btnInit2Click(this);
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::Initialization()
+{
+    Initialization(1);
+    Initialization(2);
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::Initialization(int traypos)
@@ -1009,7 +1048,7 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 			else if(tray.ams)
 			{
 				 if(m_sTempCurr[channel] != "Cell"
-                 	&& (real_data.status[channel] > -2 && BaseForm->StringToDouble(real_data.volt[channel],0) > 100)){
+                 	&& (real_data.status[channel] > -2 && StringToDouble(real_data.volt[channel],0) > 100)){
 					m_sTempVlot[channel] = real_data.volt[channel];
 					m_sTempCurr[channel] = real_data.curr[channel];
 
@@ -1084,14 +1123,14 @@ AnsiString __fastcall TTotalForm::GetCodeColor(TPanel *pnl, int index)
 	TColor clr = clBlack;
 	AnsiString str;
 
-	if(tray.cell[index] == 0 && BaseForm->StringToDouble(real_data.volt[index], 0) > 500
+	if(tray.cell[index] == 0 && StringToDouble(real_data.volt[index], 0) > 500
 		&& MeasureInfoForm->n_bManualStart == false)
 		clr = cl_outflow->Color;		// 유출
 	else if(tray.cell[index] == 0) clr = cl_no->Color;
 	else {
         //* 2025 03 05 status 0 : idle, -2 : done, -4, -5 : abort, -6 : chan exit, -7 : HW Fail
 		if(real_data.status[index] < -2
-			|| (BaseForm->StringToDouble(real_data.curr[index], 0) < 100 && BaseForm->StringToDouble(real_data.volt[index], 0) < 500))
+			|| (StringToDouble(real_data.curr[index], 0) < 100 && StringToDouble(real_data.volt[index], 0) < 500))
 			clr = cl_error->Color;
 		else
 			clr = cl_charge->Color;
@@ -1107,7 +1146,7 @@ AnsiString __fastcall TTotalForm::GetCodeColor2(TPanel *pnl, int index)
 	AnsiString str;
 	if(real_data.status[index] >= 0){
 //		int code = StrToInt(real_data.status_code[index]);
-		int code = BaseForm->StringToInt(real_data.status[index], 1);
+		int code = StringToInt(real_data.status[index], 1);
 
 		switch(code){
 			case chstNone:
@@ -1116,7 +1155,7 @@ AnsiString __fastcall TTotalForm::GetCodeColor2(TPanel *pnl, int index)
 				break;
 			case chstRunning:		// 충전 Step
 				//if(tray.cell[index] == 0 && m_sTempVlot[index].ToDouble() > 500 && MeasureInfoForm->n_bManualStart == false)
-                if(tray.cell[index] == 0 && BaseForm->StringToDouble(m_sTempVlot[index], 0) > 500 && MeasureInfoForm->n_bManualStart == false)
+                if(tray.cell[index] == 0 && StringToDouble(m_sTempVlot[index], 0) > 500 && MeasureInfoForm->n_bManualStart == false)
 				{
 					clr = cl_outflow->Color;		// 유출
 				}
@@ -1152,7 +1191,7 @@ void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
 		tray.trayid = Now().FormatString("yymmddhhnnss");
 
 	tray.cell_count = 0;
-    nTrayPos = BaseForm->StringToInt(pnlTrayPos->Caption->Text, 1);
+    nTrayPos = StringToInt(pnlTrayPos->Caption->Text, 1);
     int channel, rchannel;
 	for(int i = 0; i < MAXCHANNEL / 2; i++)
 	{
@@ -1266,10 +1305,10 @@ void __fastcall TTotalForm::WriteVoltCurrValue()
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::WriteMINMAX(int stage_num)
 {
-	currMin = BaseForm->StringToDouble(editCurrMin->Text, 50);
-	setChargeVolt = BaseForm->StringToDouble(editChargeVolt->Text, 4200);
-	setChargeCurr = BaseForm->StringToDouble(editChargeCurrent->Text, 200);
-	setChargeTime = BaseForm->StringToDouble(editChargeTime->Text, 60);
+	currMin = StringToDouble(editCurrMin->Text, 50);
+	setChargeVolt = StringToDouble(editChargeVolt->Text, 4200);
+	setChargeCurr = StringToDouble(editChargeCurrent->Text, 200);
+	setChargeTime = StringToDouble(editChargeTime->Text, 60);
 	//* 2021 02 05
 	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_CURRENT_MIN, currMin);
 	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_CHARGE_VOLTAGE, setChargeVolt);
@@ -1591,15 +1630,15 @@ void __fastcall TTotalForm::SET_SENDATA(AnsiString eqstatus, AnsiString runcount
     //* BT SETTING (time, current, voltage)
     //* PRECHARGE2,+30,+1.23000000E+00,+4.00000000E+00#PRECHARGE2,+30,+1.23000000E+00,+4.00000000E+00
     if(btset1.size() == 4){
-        charge[0].time = BaseForm->StringToInt(btset1[1], 180);
-        charge[0].curr = BaseForm->StringToDouble(btset1[2], 1.23);
-        charge[0].volt = BaseForm->StringToDouble(btset1[3], 4);
+        charge[0].time = StringToInt(btset1[1], 180);
+        charge[0].curr = StringToDouble(btset1[2], 1.23);
+        charge[0].volt = StringToDouble(btset1[3], 4);
     }
 
     if(btset2.size() == 4){
-        charge[1].time = BaseForm->StringToInt(btset2[1], 180);
-        charge[1].curr = BaseForm->StringToDouble(btset2[2], 1.23);
-        charge[1].volt = BaseForm->StringToDouble(btset2[3], 4);
+        charge[1].time = StringToInt(btset2[1], 180);
+        charge[1].curr = StringToDouble(btset2[2], 1.23);
+        charge[1].volt = StringToDouble(btset2[3], 4);
     }
 
     lblSet1->Caption = FormatFloat("0", charge[0].volt * 1000.0) + "mV "
@@ -1785,7 +1824,7 @@ void __fastcall TTotalForm::SetFinalData()
     int channel;
     for(int nIndex = 0; nIndex < MAXCHANNEL / 2; nIndex++){
         channel = chMap[startOffset + nIndex + 1] - 1;
-		if(real_data.status[channel] > -2 && BaseForm->StringToDouble(real_data.volt[channel], 0) > 100){
+		if(real_data.status[channel] > -2 && StringToDouble(real_data.volt[channel], 0) > 100){
 			real_data.final_status[channel] = real_data.status[channel];
             real_data.final_volt[channel] = real_data.volt[channel];
             real_data.final_curr[channel] = real_data.curr[channel];
@@ -1794,12 +1833,12 @@ void __fastcall TTotalForm::SetFinalData()
 		//* -2는 무시
 		//* -2는 done 상태로 전압, 전류값이 점점 줄어든다. => 이 값은 final 데이터로 처리하면 안됨.
 		else if(real_data.status[channel] < -2){
-			if(BaseForm->StringToDouble(real_data.curr[channel], 0) < 100.0){
+			if(StringToDouble(real_data.curr[channel], 0) < 100.0){
 				real_data.final_curr[channel] = "0";
 			}
 
-			if(BaseForm->StringToDouble(real_data.curr[channel], 0) < 100.0
-				&& BaseForm->StringToDouble(real_data.volt[channel], 0) < 100.0){
+			if(StringToDouble(real_data.curr[channel], 0) < 100.0
+				&& StringToDouble(real_data.volt[channel], 0) < 100.0){
 				real_data.final_volt[channel] = "0";
 			}
 
@@ -2139,7 +2178,7 @@ void __fastcall TTotalForm::FormClose(TObject *Sender, TCloseAction &Action)
 void __fastcall TTotalForm::btnSaveConfigClick(TObject *Sender)
 {
 	//if(editMaxChargeCurrent->Text.ToDouble() <= 2500)
-    if(BaseForm->StringToDouble(editMaxChargeCurrent->Text, 1200) <= 3000)
+    if(StringToDouble(editMaxChargeCurrent->Text, 1200) <= 3000)
 	{
 		if(stage.arl == nLocal && nSection == STEP_WAIT && nStep == 0)
 		{

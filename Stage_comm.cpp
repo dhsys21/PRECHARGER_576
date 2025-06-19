@@ -1,5 +1,6 @@
 #include "FormTotal.h"
 #include "RVMO_main.h"
+#include "Util.h"
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::MakeData(int tx_mode, AnsiString cmd, AnsiString param)
 {
@@ -230,8 +231,8 @@ void __fastcall TTotalForm::CmdSetStep()
 //---------------------------------------------------------------------------
 bool __fastcall TTotalForm::CmdCheckSet()
 {
-    int time1 = BaseForm->StringToInt(charge[0].time, 0);
-    int time2 = BaseForm->StringToInt(charge[1].time, 0);
+    int time1 = StringToInt(charge[0].time, 0);
+    int time2 = StringToInt(charge[1].time, 0);
     double curr1 = charge[0].curr * 1000;
     double curr2 = charge[1].curr * 1000;
     double volt1 = charge[0].volt * 1000;
@@ -265,7 +266,13 @@ void __fastcall TTotalForm::CmdDischargeSetStep()
 // 컨트롤러 명령어
 //---------------------------------------------------------------------------
 
+//---------------------------------------------------------------------------
+// 트레이 위치에 따른 채널 매핑 가져오기
+//---------------------------------------------------------------------------
 
+//---------------------------------------------------------------------------
+// 트레이 위치에 따른 채널 매핑 가져오기
+//---------------------------------------------------------------------------
 
 
 

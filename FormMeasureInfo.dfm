@@ -1103,7 +1103,7 @@ object MeasureInfoForm: TMeasureInfoForm
       ParentFont = False
       TabOrder = 8
       Version = '2.1.1.5'
-      OnClick = btnInit1Click
+      OnClick = btnInit2Click
       TMSStyle = 8
     end
   end

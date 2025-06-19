@@ -57,6 +57,7 @@ const int NOA = 25; // noanswer
 //---------------------------------------------------------------------------
 const int CONTCOUNT 	= 1;
 const int MAXCHANNEL 	= 576;
+const int CHANNELCOUNT  = 288;
 const int LINECOUNT		= 24;
 
 const int SEND 			= 1;
@@ -173,17 +174,17 @@ typedef struct{
 	unsigned short int stage_status;
 	AnsiString step_index;
 
-	AnsiString volt[MAXCHANNEL / 2];
-	AnsiString final_volt[MAXCHANNEL / 2];
+	AnsiString volt[MAXCHANNEL];
+	AnsiString final_volt[MAXCHANNEL];
 
-	AnsiString curr[MAXCHANNEL / 2];
-	AnsiString final_curr[MAXCHANNEL / 2];
+	AnsiString curr[MAXCHANNEL];
+	AnsiString final_curr[MAXCHANNEL];
 
-	AnsiString capa[MAXCHANNEL / 2];
-	AnsiString final_capa[MAXCHANNEL / 2];
+	AnsiString capa[MAXCHANNEL];
+	AnsiString final_capa[MAXCHANNEL];
 
-	int status[MAXCHANNEL / 2];       //* mon status ( > 0 현재step, < 0 에러 상태)
-    int final_status[MAXCHANNEL / 2];
+	int status[MAXCHANNEL];       //* mon status ( > 0 현재step, < 0 에러 상태)
+    int final_status[MAXCHANNEL];
 
     AnsiString result[MAXCHANNEL];
 	AnsiString final_result[MAXCHANNEL];

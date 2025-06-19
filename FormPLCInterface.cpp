@@ -5,6 +5,7 @@
 #pragma hdrstop
 
 #include "RVMO_main.h"
+#include "Util.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -229,8 +230,8 @@ void __fastcall TForm_PLCInterface::btnWriteNgValueClick(TObject *Sender)
 
 void __fastcall TForm_PLCInterface::btnWriteIrOcvValueClick(TObject *Sender)
 {
-	double voltage_base = BaseForm->StringToDouble(editVoltage->Text, 1);
-	double current_base = BaseForm->StringToDouble(editCurrent->Text, 1);
+	double voltage_base = StringToDouble(editVoltage->Text, 1);
+	double current_base = StringToDouble(editCurrent->Text, 1);
 
 	// ir value 2 Word
 	// 2 Word :  value / (65536 / 2) => 윗 주소에 쓰기, value % (65536 /2 ) => 아래 주소에 쓰기 // herald 2017 11 30

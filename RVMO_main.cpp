@@ -272,7 +272,7 @@ void __fastcall TBaseForm::btnDisConnectPLCClick(TObject *Sender)
 //{
 //    double dVal;
 //
-//}bool TBaseForm::WaitForMilliSeconds(int milliseconds)
+//}bool __fastcall TBaseForm::WaitForMilliSeconds(int milliseconds)
 {
     TDateTime startTime = Now();
 
@@ -282,19 +282,19 @@ void __fastcall TBaseForm::btnDisConnectPLCClick(TObject *Sender)
     }
     return true;
 }
-int __fastcall TBaseForm::StringToInt(UnicodeString str, int def)
-{
-	int iVal;
-	if(TryStrToInt(str, iVal) == true) return iVal;
-	else return def;
-}
+//int __fastcall TBaseForm::StringToInt(UnicodeString str, int def)
+//{
+//	int iVal;
+//	if(TryStrToInt(str, iVal) == true) return iVal;
+//	else return def;
+//}
 //---------------------------------------------------------------------------
-double __fastcall TBaseForm::StringToDouble(UnicodeString str, double def)
-{
-	double dVal;
-	if(TryStrToFloat(str, dVal) == true) return dVal;
-	else return def;
-}
+//double __fastcall TBaseForm::StringToDouble(UnicodeString str, double def)
+//{
+//	double dVal;
+//	if(TryStrToFloat(str, dVal) == true) return dVal;
+//	else return def;
+//}
 //---------------------------------------------------------------------------
 vector<int> __fastcall TBaseForm::StringToVector(UnicodeString str)
 {

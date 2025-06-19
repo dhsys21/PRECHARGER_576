@@ -231,18 +231,22 @@
         <CppCompile Include="Stage_log.cpp">
             <BuildOrder>10</BuildOrder>
         </CppCompile>
+        <CppCompile Include="Util.cpp">
+            <DependentOn>Util.h</DependentOn>
+            <BuildOrder>19</BuildOrder>
+        </CppCompile>
         <LibFiles Include="visa32.lib" Condition="'$(Platform)'=='Win32'">
             <BuildOrder>20</BuildOrder>
             <IgnorePath>true</IgnorePath>
         </LibFiles>
-        <FormResources Include="ModPLC.dfm"/>
         <FormResources Include="RVMO_main.dfm"/>
-        <FormResources Include="FormGraph.dfm"/>
+        <FormResources Include="ModPLC.dfm"/>
         <FormResources Include="FormLanguage.dfm"/>
-        <FormResources Include="FormError.dfm"/>
         <FormResources Include="FormMeasureInfo.dfm"/>
-        <FormResources Include="FormRemeasure.dfm"/>
+        <FormResources Include="FormGraph.dfm"/>
+        <FormResources Include="FormError.dfm"/>
         <FormResources Include="FormTotal.dfm"/>
+        <FormResources Include="FormRemeasure.dfm"/>
         <FormResources Include="FormNgCountError.dfm"/>
         <FormResources Include="FormPLCInterface.dfm"/>
         <BuildConfiguration Include="Release">

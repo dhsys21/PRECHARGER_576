@@ -1,6 +1,6 @@
 #include "FormTotal.h"
 #include "RVMO_main.h"
-
+#include "Util.h"
 //---------------------------------------------------------------------------
 // 환경설정 파일 저장 / 읽기
 //---------------------------------------------------------------------------
@@ -55,9 +55,9 @@ bool __fastcall TTotalForm::ReadSystemInfo()
 	editChargeCurrent->Text = ini->ReadString("PRECHARGE", "CURRENT", "1000");
 	editChargeTime->Text = ini->ReadString("PRECHARGE", "TIME", "60");
 
-	config.volt = BaseForm->StringToDouble(editChargeVolt->Text, 4200);
-	config.curr = BaseForm->StringToDouble(editChargeCurrent->Text, 1000);
-    config.time = BaseForm->StringToInt(editChargeTime->Text, 60);
+	config.volt = StringToDouble(editChargeVolt->Text, 4200);
+	config.curr = StringToDouble(editChargeCurrent->Text, 1000);
+    config.time = StringToInt(editChargeTime->Text, 60);
 
 	editCurrMin->Text = ini->ReadString("MINCURRENT", "CURRENT", 100);
 
@@ -340,8 +340,8 @@ void __fastcall TTotalForm::WriteMonData(int traypos)
 	for(int i = 0; i < MAXCHANNEL / 2; ++i){
         channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i] - 1;
         file += "," + IntToStr(real_data.status[channel]);
-        file += "," + FormatFloat("0.0", BaseForm->StringToDouble(real_data.volt[channel], 0.0));
-        file += "," + FormatFloat("0.0", BaseForm->StringToDouble(real_data.curr[channel], 0.0));
+        file += "," + FormatFloat("0.0", StringToDouble(real_data.volt[channel], 0.0));
+        file += "," + FormatFloat("0.0", StringToDouble(real_data.curr[channel], 0.0));
 	}
     file += "\r\n";
 
@@ -410,7 +410,7 @@ void __fastcall TTotalForm::WriteRemeasureInfo()	// Tray가 Vacancy 상태일때 기록
 	AnsiString title = "REMEASURE" + IntToStr(this->Tag);
 	retest_info = "";
 	int nRemeasureAlarmCount = 0;
-	config.remeasure_alarm_cnt = BaseForm->StringToInt(RemeasureForm->pcolor2->Caption, 3);
+	config.remeasure_alarm_cnt = StringToInt(RemeasureForm->pcolor2->Caption, 3);
 
 	retest_info = "";
 	for(int index=0; index<MAXCHANNEL; ++index){

@@ -376,7 +376,9 @@ private:	// User declarations
     int startOffset;
 public:		// User declarations
 	void __fastcall InitMeasureForm();
+    void __fastcall InitData(int traypos);
 	void __fastcall InitTrayStruct(int traypos);
+    void __fastcall Initialization();
     void __fastcall Initialization(int traypos);
     void __fastcall WriteMINMAX(int stage_num);
 	void __fastcall PLCInitialization();
@@ -420,8 +422,6 @@ public:		// User declarations
 	AnsiString __fastcall convertCondition(AnsiString condition);
 	AnsiString __fastcall convertCondition2(int iCondition);
 
-	PRECHARGE_CONFIG precharge;
-	CHARGE_CONFIG charge[2];
 	int nQueryIndex;
 	int nCount;
 
@@ -446,10 +446,16 @@ public:		// User declarations
 
 // Define.h structure 데이터
 	REAL_TIME real_data;
-	STAGE_INFO stage;
-	CONFIG config;
-	MAX_CONFIG max_config;					// 환경 설정
-	TRAY_INFO tray;
+    TRAY_INFO tray;
+
+    //* BT 설비 2개를 다루기 위한 배열 2개
+	CHARGE_CONFIG charge[2];
+
+    //* 1개만 사용
+    STAGE_INFO stage;
+	MAX_CONFIG max_config;
+    CONFIG config;
+    PRECHARGE_CONFIG precharge;
 
 	TPanel *panel[MAXCHANNEL];
 	int stageno;

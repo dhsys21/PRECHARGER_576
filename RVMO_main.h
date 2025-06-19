@@ -141,9 +141,9 @@ public:		// User declarations
 	void __fastcall DecErrorCount();
     void __fastcall SetColorPanel(TAdvSmoothPanel* pnl, bool bOn);
 
-    bool WaitForMilliSeconds(int milliseconds);
-	int __fastcall StringToInt(UnicodeString str, int def);
-	double __fastcall StringToDouble(UnicodeString str, double def);
+    bool __fastcall WaitForMilliSeconds(int milliseconds);
+	//int __fastcall StringToInt(UnicodeString str, int def);
+	//double __fastcall StringToDouble(UnicodeString str, double def);
     vector<int> __fastcall StringToVector(UnicodeString str);
     AnsiString __fastcall HexToAscii(AnsiString hex);
     AnsiString __fastcall HexToAscii(AnsiString hex, int length);
