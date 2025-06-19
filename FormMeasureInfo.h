@@ -107,6 +107,8 @@ __published:	// IDE-managed Components
 	TAdvSmoothButton *btnDisCharge;
 	TTimer *Timer_SetStep;
 	TTimer *Timer_SetStep2;
+	TAdvSmoothButton *btnInit1;
+	TAdvSmoothButton *btnInit2;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall btnAutoClick(TObject *Sender);
 	void __fastcall btnProbeClick(TObject *Sender);
@@ -133,6 +135,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnDisChargeSetClick(TObject *Sender);
 	void __fastcall Timer_SetStepTimer(TObject *Sender);
 	void __fastcall Timer_SetStep2Timer(TObject *Sender);
+	void __fastcall btnInit1Click(TObject *Sender);
 
 private:	// User declarations
 	void __fastcall MakePanel(AnsiString type);
@@ -152,7 +155,7 @@ public:		// User declarations
     int nSetCount;
     void __fastcall SetStep();
     void __fastcall SetChannelInfo();
-
+    void __fastcall SetChannelInfo(int traypos);
     bool n_bManualStart;
 
 	__fastcall TMeasureInfoForm(TComponent* Owner);

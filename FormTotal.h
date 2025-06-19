@@ -376,8 +376,8 @@ private:	// User declarations
     int startOffset;
 public:		// User declarations
 	void __fastcall InitMeasureForm();
-	void __fastcall InitTrayStruct();
-    void __fastcall Initialization();
+	void __fastcall InitTrayStruct(int traypos);
+    void __fastcall Initialization(int traypos);
     void __fastcall WriteMINMAX(int stage_num);
 	void __fastcall PLCInitialization();
 	void __fastcall DisplayStatus(int status);

@@ -89,7 +89,8 @@ void __fastcall TTotalForm::CmdTrayOut_Original()
 //--------------------------------------------------------------------------
 void __fastcall TTotalForm::CmdManualMod(bool Set)
 {
-	this->InitTrayStruct();
+	this->InitTrayStruct(1);
+    this->InitTrayStruct(2);
 
 	if(Set){ //* Manual
 		DisplayStatus(nManual);

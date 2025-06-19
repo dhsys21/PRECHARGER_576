@@ -52,7 +52,8 @@ void __fastcall TTotalForm::FormShow(TObject *Sender)
     stage.arl = nAuto;
 
 	ReadSystemInfo();
-	Initialization();
+	Initialization(1);
+    Initialization(2);
 
 	Timer_PLCConnect->Enabled = true;
 	//btnConnectPRECHARGERClick(this);
@@ -81,7 +82,7 @@ void __fastcall TTotalForm::FormShow(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 // 구조체 초기화 : 트레이 정보, 재측정 정보
-void __fastcall TTotalForm::InitTrayStruct()
+void __fastcall TTotalForm::InitTrayStruct(int traypos)
 {
 	this->WriteRemeasureInfo();
 	memset(&tray, 0, sizeof(tray));
@@ -100,25 +101,28 @@ void __fastcall TTotalForm::InitTrayStruct()
         LimitCurr[i] = 0;
 	}
 
-    MeasureInfoForm->btnInitClick(this);
+    //MeasureInfoForm->btnInitClick(this);
+    MeasureInfoForm->btnInit1Click(this);
 }
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::Initialization()
+void __fastcall TTotalForm::Initialization(int traypos)
 {
-    int ch;
-	for(int i = 0; i < MAXCHANNEL; i++)
+    int channel, rchannel;
+	for(int i = 0; i < MAXCHANNEL / 2; i++)
 	{
-		m_sTempVlot[i] = i + 1;
-        ch = chReverseMap[i + 1];
-        if(ch >= 289) ch  = ch - 288;
-        m_sTempCurr[i] = IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
-		//m_sTempCurr[i] = IntToStr((i+LINECOUNT)/LINECOUNT) + "-" + IntToStr((i%LINECOUNT)+1);;
-		m_sTempVlot_Value[i] = 0;
-		m_sTempCurr_Value[i] = 0;
+        channel = chMap[(traypos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
+        rchannel = chReverseMap[channel + 1];
+        if(rchannel >= 289) rchannel  = rchannel - 288;
 
-        real_data.result[i] = "";
-        real_data.final_result[i] = "";
-		real_data.status[i] = 0;
+        m_sTempVlot[channel] = channel + 1;
+        m_sTempCurr[channel] = IntToStr((rchannel - 1)/LINECOUNT + 1) + "-" + IntToStr((rchannel - 1)%LINECOUNT + 1);
+
+		m_sTempVlot_Value[channel] = 0;
+		m_sTempCurr_Value[channel] = 0;
+
+        real_data.result[channel] = "";
+        real_data.final_result[channel] = "";
+		real_data.status[channel] = 0;
 	}
 
 	dt1StartTime = StrToDateTime(Now().FormatString("yyyy/mm/dd hh:nn:ss"));
@@ -126,7 +130,7 @@ void __fastcall TTotalForm::Initialization()
     testTime->Caption = "0";
 
 	PLCInitialization();
-	this->InitTrayStruct();
+	this->InitTrayStruct(traypos);
 
 	nSection = STEP_WAIT;
 	nStep = 0;
@@ -145,15 +149,15 @@ void __fastcall TTotalForm::PLCInitialization()
 	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_NG_COUNT, 0);
 
 	Mod_PLC->PLC_Write_Result = true;
-	for(int i = 0; i < 25; i++)
+	for(int i = 0; i < LINECOUNT; i++)
 	{
-		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, 0);
+		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (i * 2), 0);
 	}
 
 	for(int i = 0; i < MAXCHANNEL; i++)
 	{
-		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + (i * 2), 0);
-		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + (i * 2), 0);
+		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + i, 0);
+		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + i, 0);
 
 	}
 
@@ -482,7 +486,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 					DisplayProcess(sTrayIn, "AutoInspection_Wait", "PreCharger Tray In ...");
 
 					m_dateTime = Now();
-					Initialization();
+					Initialization(nTrayPos);
 					nStep = 1;
 				}
 			}
@@ -1141,7 +1145,7 @@ AnsiString __fastcall TTotalForm::GetCodeColor2(TPanel *pnl, int index)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
 {
-	InitTrayStruct();
+	InitTrayStruct(nTrayPos);
 	tray.trayid = str_id.Trim();
 
 	if(tray.trayid.IsEmpty())
@@ -1250,12 +1254,12 @@ void __fastcall TTotalForm::WriteVoltCurrValue()
     Mod_PLC->PLC_Write_Result = true;
 	for(int i = 0; i < MAXCHANNEL; i++)
 	{
-		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + (i * 2), FormatFloat("00000", (real_data.final_volt[i].ToDouble() * 10)) % (256 * 256));
+		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + i, FormatFloat("00000", (real_data.final_volt[i].ToDouble() * 10)) % (256 * 256));
 	}
 
 	for(int i = 0; i < MAXCHANNEL; i++)
 	{
-		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + (i * 2), FormatFloat("00000", (real_data.final_curr[i].ToDouble() * 10)) % (256 * 256));
+		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + i, FormatFloat("00000", (real_data.final_curr[i].ToDouble() * 10)) % (256 * 256));
 	}
 
 }
@@ -2157,7 +2161,8 @@ void __fastcall TTotalForm::btnInitClick(TObject *Sender)
 {
 	WritePLCLog("Init", "Initialization()");
 
-	Initialization();
+	Initialization(1);
+    Initialization(2);
 }
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

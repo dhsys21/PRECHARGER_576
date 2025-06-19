@@ -197,6 +197,26 @@ void __fastcall TMeasureInfoForm::SetChannelInfo()
     btnDisCharge->Caption = "SetChannelInfo";
 }
 //---------------------------------------------------------------------------
+void __fastcall TMeasureInfoForm::SetChannelInfo(int traypos)
+{
+    //* 채널 위치 -> 릴레이가 12줄이므로 위치를 계산해야 함
+    int channel, rchannel;
+    for(int index = 0; index < MAXCHANNEL / 2; index++){
+        channel = BaseForm->nForm[stage]->chMap[(traypos - 1) * (MAXCHANNEL / 2) + index + 1] - 1;
+        rchannel = BaseForm->nForm[stage]->chReverseMap[(traypos - 1) * (MAXCHANNEL / 2) + index + 1];
+        if(rchannel >= 289) rchannel  = rchannel - 288;
+
+        pvolt[channel]->Caption = IntToStr(channel + 1);
+        pvolt[channel]->Color = pnormal1->Color;
+
+        pcurr[channel]->Caption = IntToStr((rchannel - 1)/LINECOUNT + 1) + "-" + IntToStr((rchannel - 1)%LINECOUNT + 1);
+        pcurr[channel]->Hint = "CH " + IntToStr((rchannel - 1)/LINECOUNT + 1) + "-" + IntToStr((rchannel - 1)%LINECOUNT + 1);
+        pcurr[channel]->Color = pnormal2->Color;
+        pcurr[channel]->Refresh();
+    }
+    //btnDisCharge->Caption = "SetChannelInfo";
+}
+//---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)
 {
 	int nx, ny, nw, nh;
@@ -641,6 +661,14 @@ void __fastcall TMeasureInfoForm::Timer_SetStep2Timer(TObject *Sender)
         default:
             break;
     }
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMeasureInfoForm::btnInit1Click(TObject *Sender)
+{
+    TAdvSmoothButton *btn = (TAdvSmoothButton *)Sender;
+    SetChannelInfo(btn->Tag);
 }
 //---------------------------------------------------------------------------
 

@@ -866,7 +866,7 @@ object MeasureInfoForm: TMeasureInfoForm
     Left = 1050
     Top = 8
     Width = 200
-    Height = 174
+    Height = 189
     Caption = 'CHANNEL INFOMATION'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -942,17 +942,23 @@ object MeasureInfoForm: TMeasureInfoForm
       TabOrder = 3
     end
     object chkGraph: TCheckBox
-      Left = 5
-      Top = 149
+      Left = 8
+      Top = 91
       Width = 97
       Height = 17
       Caption = 'Graph'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
       TabOrder = 4
       OnClick = chkGraphClick
     end
     object btnInit: TAdvSmoothButton
-      Left = 5
-      Top = 103
+      Left = 10
+      Top = 113
       Width = 85
       Height = 34
       Appearance.Font.Charset = DEFAULT_CHARSET
@@ -988,9 +994,9 @@ object MeasureInfoForm: TMeasureInfoForm
       TMSStyle = 8
     end
     object btnSave: TAdvSmoothButton
-      Left = 103
-      Top = 103
-      Width = 90
+      Left = 105
+      Top = 113
+      Width = 85
       Height = 34
       Appearance.Font.Charset = DEFAULT_CHARSET
       Appearance.Font.Color = clWindowText
@@ -1022,6 +1028,82 @@ object MeasureInfoForm: TMeasureInfoForm
       TabOrder = 6
       Version = '2.1.1.5'
       OnClick = btnSaveClick
+      TMSStyle = 8
+    end
+    object btnInit1: TAdvSmoothButton
+      Tag = 1
+      Left = 10
+      Top = 149
+      Width = 85
+      Height = 34
+      Appearance.Font.Charset = DEFAULT_CHARSET
+      Appearance.Font.Color = clWindowText
+      Appearance.Font.Height = -11
+      Appearance.Font.Name = 'Tahoma'
+      Appearance.Font.Style = [fsBold]
+      Appearance.Spacing = 0
+      Appearance.Rounding = 3
+      Appearance.WordWrapping = False
+      Status.Caption = '0'
+      Status.Appearance.Fill.Color = clRed
+      Status.Appearance.Fill.ColorMirror = clNone
+      Status.Appearance.Fill.ColorMirrorTo = clNone
+      Status.Appearance.Fill.GradientType = gtSolid
+      Status.Appearance.Fill.GradientMirrorType = gtSolid
+      Status.Appearance.Fill.BorderColor = clGray
+      Status.Appearance.Fill.Rounding = 0
+      Status.Appearance.Fill.ShadowOffset = 0
+      Status.Appearance.Fill.Glow = gmNone
+      Status.Appearance.Font.Charset = DEFAULT_CHARSET
+      Status.Appearance.Font.Color = clWhite
+      Status.Appearance.Font.Height = -11
+      Status.Appearance.Font.Name = 'Tahoma'
+      Status.Appearance.Font.Style = []
+      BevelColor = clMedGray
+      Caption = 'Init 1'
+      Color = clWhite
+      ParentFont = False
+      TabOrder = 7
+      Version = '2.1.1.5'
+      OnClick = btnInit1Click
+      TMSStyle = 8
+    end
+    object btnInit2: TAdvSmoothButton
+      Tag = 2
+      Left = 105
+      Top = 149
+      Width = 85
+      Height = 34
+      Appearance.Font.Charset = DEFAULT_CHARSET
+      Appearance.Font.Color = clWindowText
+      Appearance.Font.Height = -11
+      Appearance.Font.Name = 'Tahoma'
+      Appearance.Font.Style = [fsBold]
+      Appearance.Spacing = 0
+      Appearance.Rounding = 3
+      Appearance.WordWrapping = False
+      Status.Caption = '0'
+      Status.Appearance.Fill.Color = clRed
+      Status.Appearance.Fill.ColorMirror = clNone
+      Status.Appearance.Fill.ColorMirrorTo = clNone
+      Status.Appearance.Fill.GradientType = gtSolid
+      Status.Appearance.Fill.GradientMirrorType = gtSolid
+      Status.Appearance.Fill.BorderColor = clGray
+      Status.Appearance.Fill.Rounding = 0
+      Status.Appearance.Fill.ShadowOffset = 0
+      Status.Appearance.Fill.Glow = gmNone
+      Status.Appearance.Font.Charset = DEFAULT_CHARSET
+      Status.Appearance.Font.Color = clWhite
+      Status.Appearance.Font.Height = -11
+      Status.Appearance.Font.Name = 'Tahoma'
+      Status.Appearance.Font.Style = []
+      BevelColor = clMedGray
+      Caption = 'Init 2'
+      Color = clWhite
+      ParentFont = False
+      TabOrder = 8
+      Version = '2.1.1.5'
+      OnClick = btnInit1Click
       TMSStyle = 8
     end
   end
