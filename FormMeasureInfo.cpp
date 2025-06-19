@@ -185,12 +185,16 @@ void __fastcall TMeasureInfoForm::SetChannelInfo()
     int ch;
     for(int index = 0; index < MAXCHANNEL; index++){
         ch = BaseForm->nForm[stage]->chReverseMap[index + 1];
-        if(ch >= 289)
-        	ch  = ch - 288;
+        if(ch >= 289) ch  = ch - 288;
+        pvolt[index]->Caption = IntToStr(index + 1);
+        pvolt[index]->Color = pnormal1->Color;
+
         pcurr[index]->Caption = IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
         pcurr[index]->Hint = "CH " + IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
+        pcurr[index]->Color = pnormal2->Color;
         pcurr[index]->Refresh();
     }
+    btnDisCharge->Caption = "SetChannelInfo";
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)
@@ -434,12 +438,14 @@ void __fastcall TMeasureInfoForm::btnSaveClick(TObject *Sender)
 
 void __fastcall TMeasureInfoForm::btnInitClick(TObject *Sender)
 {
-	for(int i = 0; i < MAXCHANNEL; ++i){
-		pvolt[i]->Caption = IntToStr(i+1);
-		pvolt[i]->Color = pnormal1->Color;
-		pcurr[i]->Caption = IntToStr((i+LINECOUNT)/LINECOUNT) + "-" + IntToStr((i%LINECOUNT)+1);
-		pcurr[i]->Color = pnormal2->Color;
-	}
+    SetChannelInfo();
+//	for(int i = 0; i < MAXCHANNEL; ++i){
+//		pvolt[i]->Caption = IntToStr(i+1);
+//		pvolt[i]->Color = pnormal1->Color;
+//		pcurr[i]->Caption = IntToStr((i+LINECOUNT)/LINECOUNT) + "-" + IntToStr((i%LINECOUNT)+1);
+//		pcurr[i]->Color = pnormal2->Color;
+//	}
+//    btnDisCharge->Caption = "btnInit";
 }
 //---------------------------------------------------------------------------
 

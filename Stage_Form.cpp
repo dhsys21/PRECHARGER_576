@@ -120,6 +120,7 @@ void __fastcall TTotalForm::DisplayTrayInfo()
 		MeasureInfoForm->pcurr[index]->Caption = sCurr;
 		MeasureInfoForm->pvolt[index]->Caption = sVolt;
 	}
+    //pnlPos->Caption = "DisplayTrayInfo()";
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::ErrorMsg(int err)

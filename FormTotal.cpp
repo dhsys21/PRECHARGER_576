@@ -704,6 +704,7 @@ void __fastcall TTotalForm::Timer_ManualInspectionTimer(TObject *Sender)
 		case 2:
 			CmdAutoTest();
 			WriteCommLog("ASB", "SetTrayID (" + tray.trayid + ")");
+            Timer_ManualInspection->Enabled = false;
 			nManualStep++;
 			break;
 		default:
@@ -1071,6 +1072,7 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 			}
 		}
 	}catch(...){}
+    //pnlPos->Caption = "DisplayChannelInfo()";
 }
 //---------------------------------------------------------------------------
 AnsiString __fastcall TTotalForm::GetCodeColor(TPanel *pnl, int index)
@@ -1158,9 +1160,10 @@ void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
 
 	for(int i = 0; i < MAXCHANNEL / 2; i++)
 	{
-        channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
+        //channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
+        channel = (nTrayPos - 1) * (MAXCHANNEL / 2) + i;
         rchannel = chReverseMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i + 1];
-        if(channel >= 289) channel  = channel - 288;
+        if(rchannel >= 289) rchannel  = rchannel - 288;
 		m_sTempVlot[channel] = channel;
         m_sTempCurr[channel] = IntToStr((rchannel - 1)/LINECOUNT + 1) + "-" + IntToStr((rchannel - 1)%LINECOUNT + 1);
 		//m_sTempCurr[i] = IntToStr((i + 20)/20) + "-" + IntToStr((i % 20)+1);;
