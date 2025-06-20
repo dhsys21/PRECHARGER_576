@@ -116,7 +116,8 @@ typedef struct{
     bool end_charging;
 	AnsiString trayid;
 	int cell[MAXCHANNEL];
-	int cell_count;
+	int cell_count1;
+    int cell_count2;
 	int measure_result[MAXCHANNEL];
 	int error_time_count[MAXCHANNEL];
 	AnsiString cell_data[MAXCHANNEL];

@@ -335,7 +335,7 @@ private:	// User declarations
 	void __fastcall MakePanel(AnsiString type);
 	bool __fastcall ErrorCheck();
 	void __fastcall DisplayProcess(int status, AnsiString Status_Step, AnsiString msg, bool bError = false);
-    void __fastcall DisplayTrayInfo();
+    void __fastcall DisplayTrayInfo(int traypos);
 
 //---------------------------------------------------------------------------
 // 로그 파일 관련 생성
@@ -444,6 +444,7 @@ public:		// User declarations
     double __fastcall GetPlcValue(int plc_address);
     int __fastcall GetPlcData(int plc_address, int bit_num);
     void __fastcall SetPcValue(int pc_address, int value);
+    double __fastcall GetPcValue(int pc_address);
 
 // Define.h structure 데이터
 	REAL_TIME real_data;

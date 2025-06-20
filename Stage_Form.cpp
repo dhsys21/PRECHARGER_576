@@ -94,12 +94,14 @@ void __fastcall TTotalForm::DisplayStatus(int status)
 	else if(stage.arl == nAuto || status >= 23)VisibleBox(GrpMain);
 }
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::DisplayTrayInfo()
+void __fastcall TTotalForm::DisplayTrayInfo(int traypos)
 {
 	TColor clr;
 	AnsiString sCurr, sVolt;
-	for(int index = 0; index < MAXCHANNEL; index++){
-		if(tray.cell[index] == 1){
+    int channel;
+	for(int index = 0; index < CHANNELCOUNT; index++){
+        channel = GetChMap(this->Tag, traypos, index) - 1;
+		if(tray.cell[channel] == 1){
 			clr = clLine;
 			sCurr = "";
             sVolt = "";
@@ -110,15 +112,15 @@ void __fastcall TTotalForm::DisplayTrayInfo()
 			sCurr = "CELL";
 			sVolt = "NO";
 
-			m_sTempVlot[index] = "No";
-			m_sTempCurr[index] = "Cell";
+			m_sTempVlot[channel] = "No";
+			m_sTempCurr[channel] = "Cell";
 		}
 
-		panel[index]->Color = clr;
-		MeasureInfoForm->pcurr[index]->Color = clr;
-		MeasureInfoForm->pvolt[index]->Color = clr;
-		MeasureInfoForm->pcurr[index]->Caption = sCurr;
-		MeasureInfoForm->pvolt[index]->Caption = sVolt;
+		panel[channel]->Color = clr;
+		MeasureInfoForm->pcurr[channel]->Color = clr;
+		MeasureInfoForm->pvolt[channel]->Color = clr;
+		MeasureInfoForm->pcurr[channel]->Caption = sCurr;
+		MeasureInfoForm->pvolt[channel]->Caption = sVolt;
 	}
     //pnlPos->Caption = "DisplayTrayInfo()";
 }

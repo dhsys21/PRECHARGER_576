@@ -104,6 +104,7 @@ void __fastcall TTotalForm::InitRealData(int traypos)
         real_data.final_result[channel] = "";
     }
 }
+//---------------------------------------------------------------------------
 void __fastcall TTotalForm::InitTrayInfo(int traypos)
 {
     int channel;
@@ -120,7 +121,13 @@ void __fastcall TTotalForm::InitTrayInfo(int traypos)
     tray.lot_id = "";
     tray.cell_model = "";
     tray.lot_number = "";
-    tray.cell_count = 0;
+    if(traypos == 1){
+        tray.cell_count1 = 0;
+        tray.cell_count2 = 0;
+    } else if(traypos == 2){
+        tray.cell_count2 = 0;
+    }
+
     for(int i = 0; i < CHANNELCOUNT; i++){
         channel = GetChMap(this->Tag, traypos, i) - 1;
         tray.cell[channel] = 0;
@@ -130,6 +137,7 @@ void __fastcall TTotalForm::InitTrayInfo(int traypos)
         tray.cell_serial[channel] = "";
     }
 }
+//---------------------------------------------------------------------------
 void __fastcall TTotalForm::InitChargeConfig()
 {
     charge[0].volt = 0.0;
@@ -142,12 +150,14 @@ void __fastcall TTotalForm::InitChargeConfig()
     charge[1].time = 0;
     charge[1].failvolt = 0.0;
 }
+//---------------------------------------------------------------------------
 void __fastcall TTotalForm::InitData(int traypos)
 {
     InitRealData(traypos);
     InitTrayInfo(traypos);
     InitChargeConfig();
 }
+//---------------------------------------------------------------------------
 void __fastcall TTotalForm::InitTrayStruct(int traypos)
 {
 	this->WriteRemeasureInfo();
@@ -218,7 +228,6 @@ void __fastcall TTotalForm::PLCInitialization()
 	{
 		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + i, 0);
 		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + i, 0);
-
 	}
 
 	WriteMINMAX(Tag);
@@ -418,12 +427,12 @@ void __fastcall TTotalForm::Timer_PLCConnectTimer(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
 {
-	if(stage.arl == nAuto && Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_STAGE_AUTO_READY) == 0){
+	if(stage.arl == nAuto && GetPcValue(PC_D_PRE_STAGE_AUTO_READY) == 0){
         SetPcValue(PC_D_PRE_STAGE_AUTO_READY, 1);
 		PreChargerStatus = "PreCharger STAGE AUTO READY = 1";
 		WritePLCLog("PreCharger STAGE AUTO/MANUAL", PreChargerStatus);
 	}
-	else if(stage.arl == nLocal && Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_STAGE_AUTO_READY) == 1){
+	else if(stage.arl == nLocal && GetPcValue(PC_D_PRE_STAGE_AUTO_READY) == 1){
         SetPcValue(PC_D_PRE_STAGE_AUTO_READY, 0);
 		PreChargerStatus = "PreCharger STAGE AUTO READY = 0";
 		WritePLCLog("PreCharger STAGE AUTO/MANUAL", PreChargerStatus);
@@ -525,10 +534,11 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 {
 	AnsiString trayid;
 	int trayin = 0;
+    int channel;
 
 	switch(nStep)
 	{
-		case 0:
+		case 0: //* Tray In 확인
             trayin = GetPlcValue(PLC_D_PRE_TRAY_IN);
 			if(trayin)
 			{
@@ -555,7 +565,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 				DisplayProcess(sReady, "AutoInspection_Wait", " PreCharger is ready... ");
 			}
 			break;
-		case 1:
+		case 1:  //* BCR 리딩
             trayid = GetPlcValue(PLC_D_PRE_TRAY_ID, 10);
 			pTrayid->Caption = trayid;
 			DisplayStatus(nREADY);
@@ -565,7 +575,6 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 				DisplayProcess(sBarcode, "AutoInspection_Wait", "BCR OK ...(" + trayid + ")");
 				editTrayId->Text = trayid;
 				tray.trayid = trayid;
-				tray.cell_count = 0;
 				nStep = 2;
 			}
 			else
@@ -574,26 +583,41 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 				return;
 			}
 			break;
-		case 2:
+		case 2: //* CELL 정보 (유무) 확인. cell 갯수 계산
 			DisplayStatus(nREADY);
+            //* Cell 정보 가져오기. 1 => 셀있음, 0 => 셀없음
             for(int i = 0; i < LINECOUNT; i++)
 			{
 				for(int j = 0; j < LINECOUNT; j++)
 				{
 					tray.cell[i * LINECOUNT + j] = GetPlcData(PLC_D_PRE_TRAY_CELL_DATA + (i * 2), j);
-                    tray.cell_count += tray.cell[i * LINECOUNT + j];
 				}
 			}
+
+            //* Cell 갯수. tray pos 1 => cell_count1, tray pos 2 => cell_count2
+            tray.cell_count1 = 0;
+            tray.cell_count2 = 0;
+            for(int i = 0; i < CHANNELCOUNT; i++){
+                channel = GetChMap(this->Tag, nTrayPos, i);
+                if(nTrayPos == 1)
+                	tray.cell_count1 += tray.cell[channel];
+                else if(nTrayPos == 2)
+                    tray.cell_count2 += tray.cell[channel];
+            }
 			nStep = 3;
 			break;
-		case 3:
-
-			if(tray.cell_count > 0)
+		case 3:  //* Tray 정보 표시
+			if((nTrayPos == 1 && tray.cell_count1 > 0) || (nTrayPos == 2 && tray.cell_count2 > 0))
 			{
 				WriteTrayInfo();
-				DisplayTrayInfo();
-				DisplayProcess(sProbeDown, "AutoInspection_Wait", " PROBE IS CLOSED ... ");
+                if(nTrayPos == 1){
+                    DisplayTrayInfo(1);
+                    DisplayTrayInfo(2);
+                }else if(nTrayPos == 2){
+                    DisplayTrayInfo(2);
+                }
 
+				DisplayProcess(sProbeDown, "AutoInspection_Wait", " PROBE IS CLOSED ... ");
                 SetPcValue(PC_D_PRE_PROB_CLOSE, 1);
 
 				WriteCommLog("AutoInspection_Wait", "PC_INTERFACE_PROB_CLOSE ...");
@@ -1199,32 +1223,29 @@ AnsiString __fastcall TTotalForm::GetCodeColor2(TPanel *pnl, int index)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
 {
+    nTrayPos = StringToInt(pnlTrayPos->Caption->Text, 1);
 	InitTrayStruct(nTrayPos);
 	tray.trayid = str_id.Trim();
+    if(tray.trayid.IsEmpty()) tray.trayid = Now().FormatString("yymmddhhnnss");
 
-	if(tray.trayid.IsEmpty())
-		tray.trayid = Now().FormatString("yymmddhhnnss");
+	tray.cell_count1 = 0;
+    tray.cell_count2 = 0;
 
-	tray.cell_count = 0;
-    nTrayPos = StringToInt(pnlTrayPos->Caption->Text, 1);
-    int channel, rchannel;
-	for(int i = 0; i < MAXCHANNEL / 2; i++)
+    int channel;
+	for(int i = 0; i < MAXCHANNEL; i++)
 	{
-        channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
-		tray.cell[channel] = 1;
-		tray.cell_count++;
-		tray.cell_data[channel] = i;
+        tray.cell[i] = 1;
+		tray.cell_data[i] = i;
 	}
+    tray.cell_count1 = CHANNELCOUNT;
+    tray.cell_count2 = CHANNELCOUNT;
 
-	for(int i = 0; i < MAXCHANNEL / 2; i++)
+	for(int i = 0; i < CHANNELCOUNT; i++)
 	{
-        //channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
-        channel = (nTrayPos - 1) * (MAXCHANNEL / 2) + i;
-        rchannel = chReverseMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i + 1];
-        if(rchannel >= 289) rchannel  = rchannel - 288;
+        channel = GetChMap(this->Tag, nTrayPos, i) - 1;
 		m_sTempVlot[channel] = channel;
-        m_sTempCurr[channel] = IntToStr((rchannel - 1)/LINECOUNT + 1) + "-" + IntToStr((rchannel - 1)%LINECOUNT + 1);
-		//m_sTempCurr[i] = IntToStr((i + 20)/20) + "-" + IntToStr((i % 20)+1);;
+        m_sTempCurr[channel] = GetChPosF(this->Tag, channel) + "-" + GetChPosR(this->Tag, channel);
+
 		m_sTempVlot_Value[channel] = 0;
 		m_sTempCurr_Value[channel] = 0;
 	}
