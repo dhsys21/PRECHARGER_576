@@ -14,6 +14,7 @@
 #include "FormLanguage.h"
 #include "FormNgCountError.h"
 #include "FormGraph.h"
+#include "Util.h"
 #include <jpeg.hpp>
 #include <Graphics.hpp>
 #include "mmsystem.h"

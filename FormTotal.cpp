@@ -86,7 +86,7 @@ void __fastcall TTotalForm::InitRealData(int traypos)
     real_data.step_time = 0;
     real_data.test_time = 0;
     for(int i = 0; i < CHANNELCOUNT; i++){
-        channel = GetChMap(chMap, traypos, i) - 1;
+        channel = GetChMap(this->Tag, traypos, i) - 1;
 
         real_data.volt[channel] = 0.0;
         real_data.final_volt[channel] = 0.0;
@@ -122,7 +122,7 @@ void __fastcall TTotalForm::InitTrayInfo(int traypos)
     tray.lot_number = "";
     tray.cell_count = 0;
     for(int i = 0; i < CHANNELCOUNT; i++){
-        channel = GetChMap(chMap, traypos, i) - 1;
+        channel = GetChMap(this->Tag, traypos, i) - 1;
         tray.cell[channel] = 0;
         tray.measure_result[channel] = 0;
         tray.error_time_count[channel] = 0;
@@ -155,7 +155,7 @@ void __fastcall TTotalForm::InitTrayStruct(int traypos)
 
     int channel;
 	for(int i=0; i < CHANNELCOUNT; ++i){
-        channel = GetChMap(chMap, traypos, i) - 1;
+        channel = GetChMap(this->Tag, traypos, i) - 1;
 
 		panel[channel]->Caption = "";
 		panel[channel]->Color = cl_line->Color;
@@ -176,18 +176,13 @@ void __fastcall TTotalForm::Initialization(int traypos)
     int channel;
 	for(int i = 0; i < CHANNELCOUNT; i++)
 	{
-        channel = GetChMap(chMap, traypos, i) - 1;
+        channel = GetChMap(this->Tag, traypos, i) - 1;
 
         m_sTempVlot[channel] = channel + 1;
-        m_sTempCurr[channel] = IntToStr(GetChPosF(chReverseMap, channel))	+ "-"
-        	+ IntToStr(GetChPosR(chReverseMap, channel));
+        m_sTempCurr[channel] = GetChPosF(this->Tag, channel) + "-" + GetChPosR(this->Tag, channel);
 
 		m_sTempVlot_Value[channel] = 0;
 		m_sTempCurr_Value[channel] = 0;
-
-        real_data.result[channel] = "";
-        real_data.final_result[channel] = "";
-		real_data.status[channel] = 0;
 	}
 
 	dt1StartTime = StrToDateTime(Now().FormatString("yyyy/mm/dd hh:nn:ss"));
@@ -227,7 +222,6 @@ void __fastcall TTotalForm::PLCInitialization()
 	}
 
 	WriteMINMAX(Tag);
-
 }
 //---------------------------------------------------------------------------
 // 측정정보보기 버튼
@@ -403,8 +397,7 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
     {
         if(panel[index] != NULL)
             panel[index]->Hint = IntToStr(index + 1) + " : "
-            	+ IntToStr(GetChPosF(chReverseMap, index))
-                + "-" + IntToStr(GetChPosR(chReverseMap, index));
+            	+ GetChPosF(chReverseMap, index) + "-" + GetChPosR(chReverseMap, index);
     }
 }
 //---------------------------------------------------------------------------
@@ -1048,7 +1041,7 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 	try{
 		for(int i = 0; i < MAXCHANNEL / 2; ++i){
             //channel = chMap[(traypos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
-            channel = GetChMap(chMap, traypos, i) - 1;
+            channel = GetChMap(this->Tag, traypos, i) - 1;
 			if(tray.amf)
 			{
 				if(tray.cell[channel] == 1){

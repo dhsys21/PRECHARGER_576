@@ -12,7 +12,9 @@
 
 int __fastcall StringToInt(UnicodeString str, int def);
 double __fastcall StringToDouble(UnicodeString str, double def);
-int GetChMap(int* chMap, int trayPos, int index);
-int GetChRMap(int* chReverseMap, int trayPos, int index);
-int GetChPosF(int* chReverseMap, int index);
-int GetChPosR(int* chReverseMap, int index);
+int GetChMap(int stage, int trayPos, int index);
+int GetChRMap(int stage, int trayPos, int index);
+AnsiString GetChPosF(int stage, int index);
+AnsiString GetChPosF(int* chReverseMap, int index);
+AnsiString GetChPosR(int stage, int index);
+AnsiString GetChPosR(int* chReverseMap, int index);
