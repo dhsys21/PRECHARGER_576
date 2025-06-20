@@ -4,7 +4,7 @@ object Form_PLCInterface: TForm_PLCInterface
   BorderStyle = bsSingle
   Caption = 'PLC Interface'
   ClientHeight = 951
-  ClientWidth = 1899
+  ClientWidth = 1594
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,7 +20,7 @@ object Form_PLCInterface: TForm_PLCInterface
   object GroupBox2: TGroupBox
     Left = 4
     Top = 8
-    Width = 1886
+    Width = 1580
     Height = 935
     Caption = 'PreCharger 1 (PLC - PC INTERFACE)'
     Font.Charset = DEFAULT_CHARSET
@@ -32,22 +32,22 @@ object Form_PLCInterface: TForm_PLCInterface
     TabOrder = 0
     OnClick = GroupBox2Click
     object ListView_PC: TListView
-      Left = 950
+      Left = 795
       Top = 47
-      Width = 920
+      Width = 775
       Height = 870
       Columns = <
         item
           Caption = 'PC_Address'
-          Width = 200
+          Width = 160
         end
         item
           Caption = 'PC_Name'
-          Width = 300
+          Width = 240
         end
         item
           Caption = 'PC_Value'
-          Width = 400
+          Width = 350
         end>
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -64,20 +64,20 @@ object Form_PLCInterface: TForm_PLCInterface
     object ListView_PLC: TListView
       Left = 15
       Top = 47
-      Width = 920
+      Width = 770
       Height = 870
       Columns = <
         item
           Caption = 'PLC_Address'
-          Width = 200
+          Width = 160
         end
         item
           Caption = 'PLC_Name'
-          Width = 300
+          Width = 240
         end
         item
           Caption = 'PLC_Value'
-          Width = 400
+          Width = 350
         end>
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -93,7 +93,7 @@ object Form_PLCInterface: TForm_PLCInterface
     end
   end
   object Panel1: TPanel
-    Left = 544
+    Left = 384
     Top = 192
     Width = 809
     Height = 313

@@ -19,3 +19,33 @@ double __fastcall StringToDouble(UnicodeString str, double def)
 	else return def;
 }
 //---------------------------------------------------------------------------
+// Channel Mapping
+int GetChannel(int* chMap, int trayPos, int index)
+{
+    int offset = (trayPos - 1) * (MAXCHANNEL / 2);
+    return chMap[offset + index + 1];
+}
+//---------------------------------------------------------------------------
+// Reverse Channel Mapping
+int GetRChannel(int* chReverseMap, int trayPos, int index)
+{
+    int offset = (trayPos - 1) * (MAXCHANNEL / 2);
+    return chReverseMap[offset + index + 1];
+}
+//---------------------------------------------------------------------------
+// Get Channel Position Front
+int GetChPosF(int* chReverseMap, int index)
+{
+    int rch = chReverseMap[index + 1];
+    if(rch >= 289) rch  = rch - 288;
+    return (rch - 1) / LINECOUNT + 1;
+}
+//---------------------------------------------------------------------------
+// Get Channel Position Rear
+int GetChPosR(int* chReverseMap, int index)
+{
+    int rch = chReverseMap[index + 1];
+    if(rch >= 289) rch  = rch - 288;
+    return (rch - 1) % LINECOUNT + 1;
+}
+//---------------------------------------------------------------------------

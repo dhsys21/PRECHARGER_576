@@ -35,11 +35,7 @@ __fastcall TTotalForm::TTotalForm(TComponent* Owner)
     ReadchannelMapping();
 	MakePanel(BaseForm->lblLineNo->Caption);
 
-	testtime = 0;
 	curr_min = StringToDouble(editCurrMin->Text, 50);
-
-	no_file_error_count = 0;
-	nQueryIndex = 0;
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::FormShow(TObject *Sender)
@@ -223,8 +219,8 @@ void __fastcall TTotalForm::InitMeasureForm()
 void __fastcall TTotalForm::MakePanel(AnsiString type)
 {
 	int nx, ny, nw, nh;
-    nh = (pBase->Height-25)/LINECOUNT;
-    nw = (pBase->Width-25)/LINECOUNT;
+    nh = (pBase->Height - 25) / LINECOUNT;
+    nw = (pBase->Width - 25) / LINECOUNT;
 
 	if(type == "3") //* 왼쪽 위가 1번, 오른쪽 방향으로 1 -> 24
 	{
@@ -371,13 +367,12 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 		}
 	}
     //* 채널 위치 -> 릴레이가 12줄이므로 위치를 계산해야 함
-    int ch;
     for(int index = 0; index < MAXCHANNEL; index++)
     {
-        ch = chReverseMap[index + 1];
-        if(ch >= 289) ch  = ch - 288;
         if(panel[index] != NULL)
-            panel[index]->Hint = IntToStr(index + 1) + " : " + IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
+            panel[index]->Hint = IntToStr(index + 1) + " : "
+            	+ IntToStr(GetChPosF(chReverseMap, index))
+                + "-" + IntToStr(GetChPosR(chReverseMap, index));
     }
 }
 //---------------------------------------------------------------------------

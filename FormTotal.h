@@ -421,8 +421,6 @@ public:		// User declarations
 // 충전 셋팅
 	AnsiString __fastcall convertCondition(AnsiString condition);
 	AnsiString __fastcall convertCondition2(int iCondition);
-
-	int nQueryIndex;
 	int nCount;
 
 //---------------------------------------------------------------------------
@@ -461,8 +459,6 @@ public:		// User declarations
 	int stageno;
 	int nSection, nStep, nStep_Count, nManualStep, nFinishStep, nRStep;
     int nSetStepCount, nRStepCount;
-
-	int testtime;
     bool n_bMeasureStart;
 
 	AnsiString OldPLCStatus, PLCStatus, OldErrorCheckStatus, ErrorCheckStatus, OldPreChargerStatus, PreChargerStatus;
@@ -483,7 +479,6 @@ public:		// User declarations
 	double curr_min;
 	TDateTime dt1StartTime, dt1FinishTime, dt1CurrentTime, diff, dt2ChargingTime;
 
-	int no_file_error_count;
     int nFinishCount;
 	int mon_count;
 
