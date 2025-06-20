@@ -20,14 +20,14 @@ double __fastcall StringToDouble(UnicodeString str, double def)
 }
 //---------------------------------------------------------------------------
 // Channel Mapping
-int GetChannel(int* chMap, int trayPos, int index)
+int GetChMap(int* chMap, int trayPos, int index)
 {
     int offset = (trayPos - 1) * (MAXCHANNEL / 2);
     return chMap[offset + index + 1];
 }
 //---------------------------------------------------------------------------
 // Reverse Channel Mapping
-int GetRChannel(int* chReverseMap, int trayPos, int index)
+int GetChRMap(int* chReverseMap, int trayPos, int index)
 {
     int offset = (trayPos - 1) * (MAXCHANNEL / 2);
     return chReverseMap[offset + index + 1];

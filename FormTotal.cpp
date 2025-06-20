@@ -76,10 +76,9 @@ void __fastcall TTotalForm::FormShow(TObject *Sender)
 //---------------------------------------------------------------------------
 // 구조체 초기화 : 트레이 정보, 재측정 정보
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::InitData(int traypos)
+void __fastcall TTotalForm::InitRealData(int traypos)
 {
     int channel;
-    //* real_data(REAL_TIME) 초기화 시작
     real_data.stage_status = 0;
     real_data.step_index = "";
     real_data.bBT1 = false;
@@ -87,7 +86,7 @@ void __fastcall TTotalForm::InitData(int traypos)
     real_data.step_time = 0;
     real_data.test_time = 0;
     for(int i = 0; i < CHANNELCOUNT; i++){
-        channel = GetChannel(chMap, traypos, i) - 1;
+        channel = GetChMap(chMap, traypos, i) - 1;
 
         real_data.volt[channel] = 0.0;
         real_data.final_volt[channel] = 0.0;
@@ -104,9 +103,10 @@ void __fastcall TTotalForm::InitData(int traypos)
         real_data.result[channel] = "";
         real_data.final_result[channel] = "";
     }
-    //* real_data(REAL_TIME) 초기화 종료
-
-    //* tray(TRAY_INFO) 초기화 시작
+}
+void __fastcall TTotalForm::InitTrayInfo(int traypos)
+{
+    int channel;
     tray.rst = false;
     tray.set = false;
     tray.ams = false;
@@ -122,16 +122,16 @@ void __fastcall TTotalForm::InitData(int traypos)
     tray.lot_number = "";
     tray.cell_count = 0;
     for(int i = 0; i < CHANNELCOUNT; i++){
-        channel = GetChannel(chMap, traypos, i) - 1;
+        channel = GetChMap(chMap, traypos, i) - 1;
         tray.cell[channel] = 0;
         tray.measure_result[channel] = 0;
         tray.error_time_count[channel] = 0;
         tray.cell_data[channel] = "";
         tray.cell_serial[channel] = "";
     }
-    //* tray(TRAY_INFO) 초기화 종료
-
-    //* charge(CHARGE_CONFIG) 초기화  - BT1, BT2 2개의 셋팅
+}
+void __fastcall TTotalForm::InitChargeConfig()
+{
     charge[0].volt = 0.0;
     charge[0].curr = 0.0;
     charge[0].time = 0;
@@ -141,7 +141,12 @@ void __fastcall TTotalForm::InitData(int traypos)
     charge[1].curr = 0.0;
     charge[1].time = 0;
     charge[1].failvolt = 0.0;
-    //* charge(CHARGE_CONFIG) 초기화
+}
+void __fastcall TTotalForm::InitData(int traypos)
+{
+    InitRealData(traypos);
+    InitTrayInfo(traypos);
+    InitChargeConfig();
 }
 void __fastcall TTotalForm::InitTrayStruct(int traypos)
 {
@@ -150,7 +155,7 @@ void __fastcall TTotalForm::InitTrayStruct(int traypos)
 
     int channel;
 	for(int i=0; i < CHANNELCOUNT; ++i){
-        channel = GetChannel(chMap, traypos, i) - 1;
+        channel = GetChMap(chMap, traypos, i) - 1;
 
 		panel[channel]->Caption = "";
 		panel[channel]->Color = cl_line->Color;
@@ -171,7 +176,7 @@ void __fastcall TTotalForm::Initialization(int traypos)
     int channel;
 	for(int i = 0; i < CHANNELCOUNT; i++)
 	{
-        channel = GetChannel(chMap, traypos, i) - 1;
+        channel = GetChMap(chMap, traypos, i) - 1;
 
         m_sTempVlot[channel] = channel + 1;
         m_sTempCurr[channel] = IntToStr(GetChPosF(chReverseMap, channel))	+ "-"
@@ -228,13 +233,15 @@ void __fastcall TTotalForm::PLCInitialization()
 // 측정정보보기 버튼
 void __fastcall TTotalForm::InitMeasureForm()
 {
-    memset(&real_data, 0, sizeof(real_data));
-
 	MeasureInfoForm->stage = this->Tag;
 	MeasureInfoForm->Tag = this->Tag;
 	MeasureInfoForm->pstage->Caption = lblTitle->Caption;
 	MeasureInfoForm->BringToFront();
 	MeasureInfoForm->Visible = true;
+
+    InitRealData(1);
+    InitRealData(2);
+
 	DisplayChannelInfo(1);
     DisplayChannelInfo(2);
 }
@@ -1040,7 +1047,8 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
     int channel;
 	try{
 		for(int i = 0; i < MAXCHANNEL / 2; ++i){
-            channel = chMap[(traypos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
+            //channel = chMap[(traypos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
+            channel = GetChMap(chMap, traypos, i) - 1;
 			if(tray.amf)
 			{
 				if(tray.cell[channel] == 1){

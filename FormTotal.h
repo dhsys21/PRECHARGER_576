@@ -377,6 +377,9 @@ private:	// User declarations
 public:		// User declarations
 	void __fastcall InitMeasureForm();
     void __fastcall InitData(int traypos);
+    void __fastcall InitRealData(int traypos);
+    void __fastcall InitTrayInfo(int traypos);
+    void __fastcall InitChargeConfig();
 	void __fastcall InitTrayStruct(int traypos);
     void __fastcall Initialization();
     void __fastcall Initialization(int traypos);
