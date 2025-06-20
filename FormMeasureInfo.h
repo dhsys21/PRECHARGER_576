@@ -114,7 +114,6 @@ __published:	// IDE-managed Components
 	void __fastcall btnProbeClick(TObject *Sender);
 	void __fastcall ChInfoMouseEnter(TObject *Sender);
 	void __fastcall ChInfoMouseLeave(TObject *Sender);
-	void __fastcall Panel19Click(TObject *Sender);
 	void __fastcall Panel35Click(TObject *Sender);
 	void __fastcall btnProbeOpenClick(TObject *Sender);
 	void __fastcall probeTimerTimer(TObject *Sender);

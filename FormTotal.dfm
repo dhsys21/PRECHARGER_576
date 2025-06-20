@@ -74,7 +74,7 @@ object TotalForm: TTotalForm
       Height = 34
       Appearance.Font.Charset = DEFAULT_CHARSET
       Appearance.Font.Color = clWindowText
-      Appearance.Font.Height = -13
+      Appearance.Font.Height = -15
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
@@ -111,7 +111,7 @@ object TotalForm: TTotalForm
       Height = 34
       Appearance.Font.Charset = DEFAULT_CHARSET
       Appearance.Font.Color = clWindowText
-      Appearance.Font.Height = -13
+      Appearance.Font.Height = -15
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
@@ -860,7 +860,7 @@ object TotalForm: TTotalForm
           Height = 50
           Appearance.Font.Charset = DEFAULT_CHARSET
           Appearance.Font.Color = clWindowText
-          Appearance.Font.Height = -13
+          Appearance.Font.Height = -15
           Appearance.Font.Name = 'Tahoma'
           Appearance.Font.Style = [fsBold]
           Appearance.Spacing = 0
@@ -1225,7 +1225,7 @@ object TotalForm: TTotalForm
       Height = 34
       Appearance.Font.Charset = DEFAULT_CHARSET
       Appearance.Font.Color = clWindowText
-      Appearance.Font.Height = -16
+      Appearance.Font.Height = -15
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
@@ -1295,7 +1295,7 @@ object TotalForm: TTotalForm
       Caption.Font.Color = clWindowText
       Caption.Font.Height = -11
       Caption.Font.Name = 'Tahoma'
-      Caption.Font.Style = [fsBold]
+      Caption.Font.Style = []
       Caption.ColorStart = clWhite
       Caption.ColorEnd = clWhite
       Caption.LineColor = clBlack
@@ -1333,7 +1333,7 @@ object TotalForm: TTotalForm
       Caption.Font.Color = clWindowText
       Caption.Font.Height = -11
       Caption.Font.Name = 'Tahoma'
-      Caption.Font.Style = [fsBold]
+      Caption.Font.Style = []
       Caption.ColorStart = clWhite
       Caption.ColorEnd = clWhite
       Caption.LineColor = clBlack
@@ -1371,7 +1371,7 @@ object TotalForm: TTotalForm
       Caption.Font.Color = clWindowText
       Caption.Font.Height = -11
       Caption.Font.Name = 'Tahoma'
-      Caption.Font.Style = [fsBold]
+      Caption.Font.Style = []
       Caption.ColorStart = clWhite
       Caption.ColorEnd = clWhite
       Caption.LineColor = clBlack
@@ -1409,7 +1409,7 @@ object TotalForm: TTotalForm
       Caption.Font.Color = clWindowText
       Caption.Font.Height = -11
       Caption.Font.Name = 'Tahoma'
-      Caption.Font.Style = [fsBold]
+      Caption.Font.Style = []
       Caption.ColorStart = clWhite
       Caption.ColorEnd = clWhite
       Caption.LineColor = clBlack
@@ -1484,7 +1484,7 @@ object TotalForm: TTotalForm
       Caption.Font.Color = clBlack
       Caption.Font.Height = -11
       Caption.Font.Name = 'Tahoma'
-      Caption.Font.Style = [fsBold]
+      Caption.Font.Style = []
       Caption.ColorStart = clBlack
       Caption.ColorEnd = clBlack
       Caption.LineColor = clBlack
@@ -1522,7 +1522,7 @@ object TotalForm: TTotalForm
       Caption.Font.Color = clWindowText
       Caption.Font.Height = -11
       Caption.Font.Name = 'Tahoma'
-      Caption.Font.Style = [fsBold]
+      Caption.Font.Style = []
       Caption.ColorStart = clWhite
       Caption.ColorEnd = clWhite
       Caption.LineColor = clBlack

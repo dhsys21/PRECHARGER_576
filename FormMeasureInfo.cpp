@@ -5,6 +5,7 @@
 
 #include "FormMeasureInfo.h"
 #include "RVMO_main.h"
+#include "Util.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "AdvSmoothButton"
@@ -181,20 +182,8 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::SetChannelInfo()
 {
-    //* 채널 위치 -> 릴레이가 12줄이므로 위치를 계산해야 함
-    int ch;
-    for(int index = 0; index < MAXCHANNEL; index++){
-        ch = BaseForm->nForm[stage]->chReverseMap[index + 1];
-        if(ch >= 289) ch  = ch - 288;
-        pvolt[index]->Caption = IntToStr(index + 1);
-        pvolt[index]->Color = pnormal1->Color;
-
-        pcurr[index]->Caption = IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
-        pcurr[index]->Hint = "CH " + IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
-        pcurr[index]->Color = pnormal2->Color;
-        pcurr[index]->Refresh();
-    }
-    btnDisCharge->Caption = "SetChannelInfo";
+    SetChannelInfo(1);
+    SetChannelInfo(2);
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::SetChannelInfo(int traypos)
@@ -202,19 +191,19 @@ void __fastcall TMeasureInfoForm::SetChannelInfo(int traypos)
     //* 채널 위치 -> 릴레이가 12줄이므로 위치를 계산해야 함
     int channel, rchannel;
     for(int index = 0; index < MAXCHANNEL / 2; index++){
-        channel = BaseForm->nForm[stage]->chMap[(traypos - 1) * (MAXCHANNEL / 2) + index + 1] - 1;
-        rchannel = BaseForm->nForm[stage]->chReverseMap[(traypos - 1) * (MAXCHANNEL / 2) + index + 1];
-        if(rchannel >= 289) rchannel  = rchannel - 288;
+        channel = GetChannel(BaseForm->nForm[stage]->chMap, traypos, index) - 1;
 
         pvolt[channel]->Caption = IntToStr(channel + 1);
         pvolt[channel]->Color = pnormal1->Color;
 
-        pcurr[channel]->Caption = IntToStr((rchannel - 1)/LINECOUNT + 1) + "-" + IntToStr((rchannel - 1)%LINECOUNT + 1);
-        pcurr[channel]->Hint = "CH " + IntToStr((rchannel - 1)/LINECOUNT + 1) + "-" + IntToStr((rchannel - 1)%LINECOUNT + 1);
+        pcurr[channel]->Caption = IntToStr(GetChPosF(BaseForm->nForm[stage]->chReverseMap, channel))
+        	+ "-" + IntToStr(GetChPosR(BaseForm->nForm[stage]->chReverseMap, channel));
+        pcurr[channel]->Hint = "CH " + IntToStr(GetChPosF(BaseForm->nForm[stage]->chReverseMap, channel))
+        	+ "-" + IntToStr(GetChPosR(BaseForm->nForm[stage]->chReverseMap, channel));
         pcurr[channel]->Color = pnormal2->Color;
         pcurr[channel]->Refresh();
     }
-    //btnDisCharge->Caption = "SetChannelInfo";
+    btnDisCharge->Caption = "SetChannelInfo";
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)
@@ -386,12 +375,8 @@ void __fastcall TMeasureInfoForm::ChInfoMouseEnter(TObject *Sender)
 	int index;
 	index = pnl->Tag;
 	pch->Caption = index + 1;
-	//ppos->Caption = IntToStr((index+LINECOUNT)/LINECOUNT) + "-" + IntToStr((index%LINECOUNT)+1);
-
-    int ch = BaseForm->nForm[stage]->chReverseMap[index + 1];
-    if(ch >= 289)
-    	ch  = ch - 288;
-    ppos->Caption = IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
+    ppos->Caption = IntToStr(GetChPosF(BaseForm->nForm[stage]->chReverseMap, index)) + "-"
+    	+ IntToStr(GetChPosR(BaseForm->nForm[stage]->chReverseMap, index));
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::ChInfoMouseLeave(TObject *Sender)
@@ -400,23 +385,11 @@ void __fastcall TMeasureInfoForm::ChInfoMouseLeave(TObject *Sender)
 	ppos->Caption = "";
 }
 //---------------------------------------------------------------------------
-
-void __fastcall TMeasureInfoForm::Panel19Click(TObject *Sender)
-{
-	for(int i=0; i<MAXCHANNEL; ++i){
-		pvolt[i]->Caption = IntToStr(i+1);
-		pcurr[i]->Caption = IntToStr((i+LINECOUNT)/LINECOUNT) + "-" + IntToStr((i%LINECOUNT)+1);
-	}
-}
 void __fastcall TMeasureInfoForm::Panel35Click(TObject *Sender)
 {
 	pLocal->Visible = true;
 }
 //---------------------------------------------------------------------------
-
-
-
-
 void __fastcall TMeasureInfoForm::probeTimerTimer(TObject *Sender)
 {
     if(BaseForm->nForm[stage]->GetPlcValue(PLC_D_PRE_PROB_CLOSE))
@@ -425,7 +398,6 @@ void __fastcall TMeasureInfoForm::probeTimerTimer(TObject *Sender)
         BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_PROB_OPEN, 0);
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TMeasureInfoForm::btnSaveClick(TObject *Sender)
 {
     AnsiString str, FileName;
@@ -459,17 +431,8 @@ void __fastcall TMeasureInfoForm::btnSaveClick(TObject *Sender)
 void __fastcall TMeasureInfoForm::btnInitClick(TObject *Sender)
 {
     SetChannelInfo();
-//	for(int i = 0; i < MAXCHANNEL; ++i){
-//		pvolt[i]->Caption = IntToStr(i+1);
-//		pvolt[i]->Color = pnormal1->Color;
-//		pcurr[i]->Caption = IntToStr((i+LINECOUNT)/LINECOUNT) + "-" + IntToStr((i%LINECOUNT)+1);
-//		pcurr[i]->Color = pnormal2->Color;
-//	}
-//    btnDisCharge->Caption = "btnInit";
 }
 //---------------------------------------------------------------------------
-
-
 void __fastcall TMeasureInfoForm::chkGraphClick(TObject *Sender)
 {
     if(chkGraph->Checked){
@@ -495,7 +458,6 @@ void __fastcall TMeasureInfoForm::btnAutoClick(TObject *Sender)
 	n_bManualStart = true;
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TMeasureInfoForm::btnStopClick(TObject *Sender)
 {
 	BaseForm->nForm[stage]->Timer_ManualInspection->Enabled = false;
@@ -527,7 +489,6 @@ void __fastcall TMeasureInfoForm::btnSetPrechargerClick(TObject *Sender)
     BaseForm->nForm[stage]->PreChargeSet();
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TMeasureInfoForm::GroupBox3Click(TObject *Sender)
 {
     if(GroupBox3->Height == 456) GroupBox3->Height = 230;
@@ -543,20 +504,17 @@ void __fastcall TMeasureInfoForm::btnRBTClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TMeasureInfoForm::btnReportClick(TObject *Sender)
 {
     BaseForm->nForm[stage]->InitMeasureForm();
     BaseForm->nForm[stage]->CmdReport();
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TMeasureInfoForm::btnCALClick(TObject *Sender)
 {
     BaseForm->nForm[stage]->CmdCAL();
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TMeasureInfoForm::btnSTCClick(TObject *Sender)
 {
     BaseForm->nForm[stage]->CmdSTC();
@@ -567,7 +525,6 @@ void __fastcall TMeasureInfoForm::btnENAClick(TObject *Sender)
     BaseForm->nForm[stage]->CmdEna();
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TMeasureInfoForm::btnDSTClick(TObject *Sender)
 {
     BaseForm->nForm[stage]->CmdDST();
@@ -577,8 +534,6 @@ void __fastcall TMeasureInfoForm::btnDSTClick(TObject *Sender)
 //---------------------------------------------------------------------------
 // 컨트롤러 명령어
 //---------------------------------------------------------------------------
-
-
 void __fastcall TMeasureInfoForm::btnDisChargeSetClick(TObject *Sender)
 {
     BaseForm->nForm[stage]->SetSystemInfo();
@@ -588,7 +543,6 @@ void __fastcall TMeasureInfoForm::btnDisChargeSetClick(TObject *Sender)
     BaseForm->nForm[stage]->CmdEna();
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TMeasureInfoForm::SetStep()
 {
      nStep = 0;
@@ -629,7 +583,6 @@ void __fastcall TMeasureInfoForm::Timer_SetStepTimer(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TMeasureInfoForm::Timer_SetStep2Timer(TObject *Sender)
 {
     nSetCount++;
@@ -663,8 +616,6 @@ void __fastcall TMeasureInfoForm::Timer_SetStep2Timer(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
-
-
 void __fastcall TMeasureInfoForm::btnInit1Click(TObject *Sender)
 {
     SetChannelInfo(1);
@@ -675,4 +626,3 @@ void __fastcall TMeasureInfoForm::btnInit2Click(TObject *Sender)
     SetChannelInfo(2);
 }
 //---------------------------------------------------------------------------
-

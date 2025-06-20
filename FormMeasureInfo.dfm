@@ -520,7 +520,6 @@ object MeasureInfoForm: TMeasureInfoForm
       ParentFont = False
       TabOrder = 19
       Visible = False
-      OnClick = Panel19Click
     end
     object Panel21: TPanel
       Left = 59

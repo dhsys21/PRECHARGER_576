@@ -78,56 +78,82 @@ void __fastcall TTotalForm::FormShow(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::InitData(int traypos)
 {
-//    unsigned short int stage_status;
-//	AnsiString step_index;
-//
-//	AnsiString volt[MAXCHANNEL];
-//	AnsiString final_volt[MAXCHANNEL / 2];
-//
-//	AnsiString curr[MAXCHANNEL / 2];
-//	AnsiString final_curr[MAXCHANNEL / 2];
-//
-//	AnsiString capa[MAXCHANNEL / 2];
-//	AnsiString final_capa[MAXCHANNEL / 2];
-//
-//	int status[MAXCHANNEL / 2];       //* mon status ( > 0 현재step, < 0 에러 상태)
-//    int final_status[MAXCHANNEL / 2];
-//
-//    AnsiString result[MAXCHANNEL / 2];
-//	AnsiString final_result[MAXCHANNEL / 2];
-//    bool bBT1; //* bt1 응답 읽음
-//    bool bBT2; //* bt2 응답 읽음
-//
-//	unsigned int step_time;
-//	unsigned int test_time;
-//    for(int i = 0; i < CHANNELCOUNT; i++){
-//        tray[traypos].stage_status = 0;
-//        tray[traypos].step_index = "";
-//        tray[traypos].volt[
-//    }
+    int channel;
+    //* real_data(REAL_TIME) 초기화 시작
+    real_data.stage_status = 0;
+    real_data.step_index = "";
+    real_data.bBT1 = false;
+    real_data.bBT2 = false;
+    real_data.step_time = 0;
+    real_data.test_time = 0;
+    for(int i = 0; i < CHANNELCOUNT; i++){
+        channel = GetChannel(chMap, traypos, i) - 1;
+
+        real_data.volt[channel] = 0.0;
+        real_data.final_volt[channel] = 0.0;
+
+        real_data.curr[channel] = 0.0;
+        real_data.final_curr[channel] = 0.0;
+
+        real_data.capa[channel] = 0.0;
+        real_data.final_capa[channel] = 0.0;
+
+        real_data.status[channel] = 0;
+        real_data.final_status[channel] = 0;
+
+        real_data.result[channel] = "";
+        real_data.final_result[channel] = "";
+    }
+    //* real_data(REAL_TIME) 초기화 종료
+
+    //* tray(TRAY_INFO) 초기화 시작
+    tray.rst = false;
+    tray.set = false;
+    tray.ams = false;
+    tray.amf = false;
+    tray.trayin = false;
+    tray.channel_charging = false;
+    tray.end_charging = false;
+    tray.trayid = "";
+    tray.mdl_name = "";
+    tray.batch_id = "";
+    tray.lot_id = "";
+    tray.cell_model = "";
+    tray.lot_number = "";
+    tray.cell_count = 0;
+    for(int i = 0; i < CHANNELCOUNT; i++){
+        channel = GetChannel(chMap, traypos, i) - 1;
+        tray.cell[channel] = 0;
+        tray.measure_result[channel] = 0;
+        tray.error_time_count[channel] = 0;
+        tray.cell_data[channel] = "";
+        tray.cell_serial[channel] = "";
+    }
+    //* tray(TRAY_INFO) 초기화 종료
+
+    //* charge(CHARGE_CONFIG) 초기화  - BT1, BT2 2개의 셋팅
+    charge[0].volt = 0.0;
+    charge[0].curr = 0.0;
+    charge[0].time = 0;
+    charge[0].failvolt = 0.0;
+
+    charge[1].volt = 0.0;
+    charge[1].curr = 0.0;
+    charge[1].time = 0;
+    charge[1].failvolt = 0.0;
+    //* charge(CHARGE_CONFIG) 초기화
 }
 void __fastcall TTotalForm::InitTrayStruct(int traypos)
 {
 	this->WriteRemeasureInfo();
-	memset(&tray, 0, sizeof(tray));
-    memset(&real_data, 0, sizeof(real_data));
-    memset(&charge, 0, sizeof(config));
+    InitData(traypos);
 
-    int channel, rchannel;
-	for(int i=0; i < MAXCHANNEL / 2; ++i){
-        channel = chMap[(traypos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
-        rchannel = chReverseMap[channel + 1];
-        if(rchannel >= 289) rchannel  = rchannel - 288;
-
-		tray.cell[channel] = 0;	//CELL INFO
-		tray.measure_result[channel] = 0;
-        tray.error_time_count[channel] = 0;
+    int channel;
+	for(int i=0; i < CHANNELCOUNT; ++i){
+        channel = GetChannel(chMap, traypos, i) - 1;
 
 		panel[channel]->Caption = "";
 		panel[channel]->Color = cl_line->Color;
-
-		LimitVolt[channel] = 0;
-        LimitCurr[channel] = 0;
 	}
 
     if(traypos == 1) MeasureInfoForm->btnInit1Click(this);
@@ -142,15 +168,14 @@ void __fastcall TTotalForm::Initialization()
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::Initialization(int traypos)
 {
-    int channel, rchannel;
-	for(int i = 0; i < MAXCHANNEL / 2; i++)
+    int channel;
+	for(int i = 0; i < CHANNELCOUNT; i++)
 	{
-        channel = chMap[(traypos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
-        rchannel = chReverseMap[channel + 1];
-        if(rchannel >= 289) rchannel  = rchannel - 288;
+        channel = GetChannel(chMap, traypos, i) - 1;
 
         m_sTempVlot[channel] = channel + 1;
-        m_sTempCurr[channel] = IntToStr((rchannel - 1)/LINECOUNT + 1) + "-" + IntToStr((rchannel - 1)%LINECOUNT + 1);
+        m_sTempCurr[channel] = IntToStr(GetChPosF(chReverseMap, channel))	+ "-"
+        	+ IntToStr(GetChPosR(chReverseMap, channel));
 
 		m_sTempVlot_Value[channel] = 0;
 		m_sTempCurr_Value[channel] = 0;
@@ -1046,12 +1071,6 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
                  	&& (real_data.status[channel] > -2 && StringToDouble(real_data.volt[channel],0) > 100)){
 					m_sTempVlot[channel] = real_data.volt[channel];
 					m_sTempCurr[channel] = real_data.curr[channel];
-
-					if(LimitVolt[channel].ToDouble() < real_data.volt[channel].ToDouble())
-						LimitVolt[channel] = real_data.volt[channel];
-
-					if(LimitCurr[channel].ToDouble() < real_data.curr[channel].ToDouble())
-						LimitCurr[channel] = real_data.curr[channel];
 
 					//GetCodeColor(panel[channel], i);
 				 }

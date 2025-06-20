@@ -493,7 +493,6 @@ public:		// User declarations
 
 	AnsiString m_sTempVlot[MAXCHANNEL], m_sTempCurr[MAXCHANNEL];
 	AnsiString m_sTempVlot_Value[MAXCHANNEL], m_sTempCurr_Value[MAXCHANNEL];
-	AnsiString LimitVolt[MAXCHANNEL], LimitCurr[MAXCHANNEL];
 
 	int currMin, setChargeVolt, setChargeCurr, setChargeTime;
 
