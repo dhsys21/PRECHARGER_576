@@ -1,2 +1,4 @@
 channel status(stop) -> cmdautostop -> timerfinishcharging -> AutoTestFinish -> setresultlist -> cmdforsestop(probe open)
 probe open -> CmdTrayOut -> BadInfomation && ngcount error check && write result file -> tray out
+
+=> 측정을 하지 않고 BadInfomation을 하면 어떻게 되는지 확인필요
