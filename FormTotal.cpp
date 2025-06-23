@@ -121,11 +121,16 @@ void __fastcall TTotalForm::InitTrayInfo(int traypos)
     tray.lot_id = "";
     tray.cell_model = "";
     tray.lot_number = "";
-    if(traypos == 1){
+    if(traypos == 1){ //* position 1이 첫번째 측정위치일때
         tray.cell_count1 = 0;
         tray.cell_count2 = 0;
+
+        tray.pos1_complete = false;
+        tray.pos2_complete = false;
     } else if(traypos == 2){
         tray.cell_count2 = 0;
+
+        tray.pos2_complete = false;
     }
 
     for(int i = 0; i < CHANNELCOUNT; i++){
@@ -586,6 +591,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 		case 2: //* CELL 정보 (유무) 확인. cell 갯수 계산
 			DisplayStatus(nREADY);
             //* Cell 정보 가져오기. 1 => 셀있음, 0 => 셀없음
+            //* Cell 정보는 tray pos 상관없이 전체를 가져옴.
             for(int i = 0; i < LINECOUNT; i++)
 			{
 				for(int j = 0; j < LINECOUNT; j++)
@@ -594,7 +600,8 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 				}
 			}
 
-            //* Cell 갯수. tray pos 1 => cell_count1, tray pos 2 => cell_count2
+            //* Cell 갯수. tray pos 별 갯수. 갯수가 0이면 바로 종료
+            //* tray pos 1 => cell_count1, tray pos 2 => cell_count2
             tray.cell_count1 = 0;
             tray.cell_count2 = 0;
             for(int i = 0; i < CHANNELCOUNT; i++){
@@ -607,33 +614,51 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 			nStep = 3;
 			break;
 		case 3:  //* Tray 정보 표시
-			if((nTrayPos == 1 && tray.cell_count1 > 0) || (nTrayPos == 2 && tray.cell_count2 > 0))
+            //* tray pos 1 이고 셀 갯수가 1개 이상이면 측정. 셀 갯수가 0개면 종료
+            //* tray pos 2 이고 셀 갯수가 1개 이상이면 측정. 셀 갯수가 0개면 종료
+            if(tray.cell_count1 == 0 && tray.cell_count2 == 0){
+                DisplayProcess(sBarcode, "AutoInspection_Wait", " NO CELL ... ", true);
+				return;
+            }
+            else if(nTrayPos == 1 && tray.cell_count1 == 0){
+                //* probe open, tray pos 1 complete
+                tray.pos1_complete = true;
+            	SetPcValue(PC_D_PRE_PROB_OPEN, 1);
+                nStep = 4;
+            }
+            else if(nTrayPos == 2 && tay.cell_count2 == 0){
+                //* probe open tray pos 2 complete
+                tray.pos2_complete = true;
+            	SetPcValue(PC_D_PRE_PROB_OPEN, 1);
+                nStep = 4;
+            }
+			else if((nTrayPos == 1 && tray.cell_count1 > 0) || (nTrayPos == 2 && tray.cell_count2 > 0))
 			{
 				WriteTrayInfo();
                 if(nTrayPos == 1){
+                    tray.pos1_complete = false;
+
                     DisplayTrayInfo(1);
                     DisplayTrayInfo(2);
                 }else if(nTrayPos == 2){
+                    tray.pos2_complete = false;
+
                     DisplayTrayInfo(2);
                 }
 
 				DisplayProcess(sProbeDown, "AutoInspection_Wait", " PROBE IS CLOSED ... ");
                 SetPcValue(PC_D_PRE_PROB_CLOSE, 1);
 
-				WriteCommLog("AutoInspection_Wait", "PC_INTERFACE_PROB_CLOSE ...");
-				WritePLCLog("AutoInspection_Wait", "PC_D_PRE_PROB_CLOSE = 1");
+				WriteCommLog("AutoInspection_Wait", "Tray Position : " + IntToStr(nTrayPos) + " -> PC_INTERFACE_PROB_CLOSE ...");
+				WritePLCLog("AutoInspection_Wait", "Tray Position : " + IntToStr(nTrayPos) + " -> PC_D_PRE_PROB_CLOSE = 1");
 
 				nSection = STEP_MEASURE;
 				nStep = 0;
 			}
-			else
-			{
-				DisplayProcess(sBarcode, "AutoInspection_Wait", " NO CELL ... ", true);
-
-				return;
-			}
-
 			break;
+        case 4:
+            
+        	break;
 		default:
 			break;
 	}
@@ -644,7 +669,7 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 	//* Charging
 	if(tray.ams == true && tray.amf == false){
         SetPcValue(PC_D_PRE_CHARGING, 1);
-		DisplayProcess(sCharge, "AutoInspection_Measure", " Start charging ... ");
+		DisplayProcess(sCharge, "AutoInspection_Measure", "Tray Position : " + IntToStr(nTrayPos) + " -> Start charging ... ");
 	}
 	else{
         SetPcValue(PC_D_PRE_CHARGING, 0);
@@ -659,7 +684,7 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 			if(plc_probe_close == 1 && plc_tray_in == 1)
 			{
 				DisplayStatus(nRUN);
-				DisplayProcess(sProbeDown, "AutoInspection_Measure", "PLC - PROBE CLOSED");
+				DisplayProcess(sProbeDown, "AutoInspection_Measure", "Tray Position : " + IntToStr(nTrayPos) + " -> PLC - PROBE CLOSED");
 
                 SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
 
@@ -712,16 +737,40 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 			if(plc_probe_open == 1 && tray.amf == true)
 			{
 				DisplayProcess(sProbeOpen, "AutoInspection_Measure", " PLC - PROBE IS OPEN ... ");
-				WriteCommLog("AutoInspection_Measure", "PreCharger Finish... ");
+				WriteCommLog("AutoInspection_Measure",
+                	"PreCharging Complete -> Tray Position : " + IntToStr(nTrayPos));
 
                 SetPcValue(PC_D_PRE_PROB_OPEN, 0);
+                if(nTrayPos == 1) {
+                	tray.pos1_complete = true;
 
+                    SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 1);
+                    nStep = 5;
+                }
+                else if(nTrayPos == 2) {
+                	tray.pos2_complete = true;
+
+                    nStep = 5;
+                }
+			}
+			break;
+        case 5:
+            if(tray.pos1_complete == true && tray.pos2_complete == true){
                 //* NG count 후 셋팅값(20개) 이상이면 에러창
+                WriteCommLog("AutoInspection_Measure", "PreCharger Finish... ");
 				CmdTrayOut();
 				nStep = 0;
 				nSection = STEP_FINISH;
-			}
-			break;
+            }
+            else{
+                if(nTrayPos == 2){
+                    SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 0);
+
+                	nSection = STEP_WAIT;
+                	nStep = 0;
+                }
+            }
+        	break;
 		default:
 			break;
 	}
@@ -752,7 +801,7 @@ void __fastcall TTotalForm::AutoInspection_Finish()
 				editTrayId->Text = "";
 
 				nSection = STEP_WAIT;
-				nStep = 0;
+				nStep = 3;
 			}
 			break;
 		default:

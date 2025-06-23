@@ -21,7 +21,6 @@
 #include "AdvSmoothButton.hpp"
 #include "AdvSmoothPanel.hpp"
 #include "Modplc.h"
-#include "ModKeysight.h"
 #include "ModVisa.h"
 #include "ModVisaArray.h"
 #include "ModVisaThread.h"

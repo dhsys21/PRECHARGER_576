@@ -118,6 +118,8 @@ typedef struct{
 	int cell[MAXCHANNEL];
 	int cell_count1;
     int cell_count2;
+    bool pos1_complete;
+    bool pos2_complete;
 	int measure_result[MAXCHANNEL];
 	int error_time_count[MAXCHANNEL];
 	AnsiString cell_data[MAXCHANNEL];

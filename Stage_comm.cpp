@@ -55,7 +55,7 @@ void __fastcall TTotalForm::CmdTrayOut()
     BadInfomation();
 
 	// 자동검사 9(끝). 트레이 방출
-	if(NgCount == tray.cell_count || NgCount > editNGAlarmCount->Text.ToIntDef(10)){
+	if(NgCount == tray.cell_count1 || NgCount > editNGAlarmCount->Text.ToIntDef(10)){
 		//NgAlarmCount++;
         Form_Error->DisplayErrorMessage(this->Tag, nNgErr);
 		Form_Error->Tag = this->Tag;
@@ -66,13 +66,6 @@ void __fastcall TTotalForm::CmdTrayOut()
 //		LoadTrayInfo(tray.trayid);
 		WriteResultFile(nTrayPos);
 
-//		cell_serial_filename = (UnicodeString)TRAY_PATH2 + tray.trayid + ".Tray";
-//		if(FileExists(cell_serial_filename)){
-//            WritePLCLog("Delete CELL SERIAL Filename", cell_serial_filename);
-//			DeleteFile(cell_serial_filename);
-//		}
-
-        //Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_TRAY_OUT, 1);
         if(BaseForm->chkTest->Checked == false)
         	SetPcValue(PC_D_PRE_TRAY_OUT, 1);
 		DisplayStatus(nFinish);
@@ -302,7 +295,7 @@ void __fastcall TTotalForm::SetPcValue(int pc_address, int value)
 //---------------------------------------------------------------------------
 double __fastcall TTotalForm::GetPcValue(int pc_address)
 {
-    double value = Mod_PLC->GetDouble(Mod_PLC->pl_Interface_Data, pc_address);
+    double value = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, pc_address);
     return value;
 }
 //---------------------------------------------------------------------------
