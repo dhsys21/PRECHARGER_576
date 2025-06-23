@@ -1,7 +1,9 @@
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
+#include <System.Classes.hpp>
 #include <DateUtils.hpp>
+#include <System.Threading.hpp>
 #pragma hdrstop
 
 #include "FormTotal.h"
@@ -600,6 +602,9 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 				}
 			}
 
+            //* Tray Info 저장
+            WriteTrayInfo();
+
             //* Cell 갯수. tray pos 별 갯수. 갯수가 0이면 바로 종료
             //* tray pos 1 => cell_count1, tray pos 2 => cell_count2
             tray.cell_count1 = 0;
@@ -626,7 +631,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
             	SetPcValue(PC_D_PRE_PROB_OPEN, 1);
                 nStep = 4;
             }
-            else if(nTrayPos == 2 && tay.cell_count2 == 0){
+            else if(nTrayPos == 2 && tray.cell_count2 == 0){
                 //* probe open tray pos 2 complete
                 tray.pos2_complete = true;
             	SetPcValue(PC_D_PRE_PROB_OPEN, 1);
@@ -634,7 +639,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
             }
 			else if((nTrayPos == 1 && tray.cell_count1 > 0) || (nTrayPos == 2 && tray.cell_count2 > 0))
 			{
-				WriteTrayInfo();
+				//* WriteTrayInfo();
                 if(nTrayPos == 1){
                     tray.pos1_complete = false;
 
@@ -657,7 +662,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 			}
 			break;
         case 4:
-            
+            //* 해당 트레이 위치에서 셀이 없을 때 처리
         	break;
 		default:
 			break;
@@ -685,7 +690,6 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 			{
 				DisplayStatus(nRUN);
 				DisplayProcess(sProbeDown, "AutoInspection_Measure", "Tray Position : " + IntToStr(nTrayPos) + " -> PLC - PROBE CLOSED");
-
                 SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
 
 				tray.rst = false;
@@ -744,17 +748,31 @@ void __fastcall TTotalForm::AutoInspection_Measure()
                 if(nTrayPos == 1) {
                 	tray.pos1_complete = true;
 
+                    SetPcValue(PC_D_PRE_COMPLETE1, 1);
                     SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 1);
                     nStep = 5;
                 }
                 else if(nTrayPos == 2) {
                 	tray.pos2_complete = true;
 
-                    nStep = 5;
+                    SetPcValue(PC_D_PRE_COMPLETE2, 1);
+                    nStep = 6;
                 }
 			}
 			break;
         case 5:
+            if(GetPCValue(PC_D_PRE_COMPLETE1) == 1 && GetPcValue(PC_D_PRE_TRAY_POS_MOVE) == 1)
+                nStep = 7;
+            else{
+                SetPcValue(PC_D_PRE_COMPLETE1, 1);
+                SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 1);
+            }
+        	break;
+        case 6:
+            if(GetPcValue(PC_D_PRE_COMPLETE2) == 1) nStep = 7;
+            else SetPcValue(PC_D_PRE_COMPLETE2, 1);
+            break;
+        case 7:
             if(tray.pos1_complete == true && tray.pos2_complete == true){
                 //* NG count 후 셋팅값(20개) 이상이면 에러창
                 WriteCommLog("AutoInspection_Measure", "PreCharger Finish... ");
@@ -763,6 +781,7 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 				nSection = STEP_FINISH;
             }
             else{
+                //* 트레이가 2번째 위치로 옮겨 졌으면 probe close 부터 다시 시작
                 if(nTrayPos == 2){
                     SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 0);
 

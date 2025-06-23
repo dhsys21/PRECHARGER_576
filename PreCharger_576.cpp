@@ -4,14 +4,14 @@
 #pragma hdrstop
 #include <tchar.h>
 //---------------------------------------------------------------------------
-USEFORM("ModPLC.cpp", Mod_PLC); /* TDataModule: File Type */
 USEFORM("RVMO_main.cpp", BaseForm);
-USEFORM("FormGraph.cpp", Form_Graph);
+USEFORM("ModPLC.cpp", Mod_PLC); /* TDataModule: File Type */
 USEFORM("FormLanguage.cpp", Form_Language);
-USEFORM("FormError.cpp", Form_Error);
 USEFORM("FormMeasureInfo.cpp", MeasureInfoForm);
-USEFORM("FormRemeasure.cpp", RemeasureForm);
+USEFORM("FormGraph.cpp", Form_Graph);
+USEFORM("FormError.cpp", Form_Error);
 USEFORM("FormTotal.cpp", TotalForm);
+USEFORM("FormRemeasure.cpp", RemeasureForm);
 USEFORM("FormNgCountError.cpp", Form_NgCountError);
 USEFORM("FormPLCInterface.cpp", Form_PLCInterface);
 //---------------------------------------------------------------------------

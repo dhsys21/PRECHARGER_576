@@ -1,0 +1,2 @@
+channel status(stop) -> cmdautostop -> timerfinishcharging -> AutoTestFinish -> setresultlist -> cmdforsestop(probe open)
+probe open -> CmdTrayOut -> BadInfomation && ngcount error check && write result file -> tray out
