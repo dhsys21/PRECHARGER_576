@@ -761,7 +761,7 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 			}
 			break;
         case 5:
-            if(GetPCValue(PC_D_PRE_COMPLETE1) == 1 && GetPcValue(PC_D_PRE_TRAY_POS_MOVE) == 1)
+            if(GetPcValue(PC_D_PRE_COMPLETE1) == 1 && GetPcValue(PC_D_PRE_TRAY_POS_MOVE) == 1)
                 nStep = 7;
             else{
                 SetPcValue(PC_D_PRE_COMPLETE1, 1);
@@ -2368,10 +2368,20 @@ void __fastcall TTotalForm::ShowPLCSignal(TAdvSmoothPanel *advPanel, bool bOn)
 		advPanel->Fill->ColorTo = BaseForm->poff->Color;
 	}
 }
-
-
-
-
-
-
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::pnlTrayPosClick(TObject *Sender)
+{
+    Edit1->Visible = !Edit1->Visible;
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::Edit1KeyPress(TObject *Sender, System::WideChar &Key)
+{
+    if(Key == VK_RETURN){
+        if(Edit1->Text == "1" || Edit1->Text == "2"){
+            pnlTrayPos->Caption->Text = Edit1->Text;
+            Edit1->Visible = false;
+        }
+	}
+}
+//---------------------------------------------------------------------------
 

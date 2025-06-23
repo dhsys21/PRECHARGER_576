@@ -235,6 +235,7 @@ __published:	// IDE-managed Components
 	TPanel *pnlPos;
 	TAdvSmoothPanel *pnlTrayPosTitle;
 	TAdvSmoothPanel *pnlTrayPos;
+	TEdit *Edit1;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnSaveConfigClick(TObject *Sender);
 	void __fastcall BitmapBtn5Click(TObject *Sender);
@@ -272,6 +273,8 @@ __published:	// IDE-managed Components
 	void __fastcall Timer_FinishChargingTimer(TObject *Sender);
 	void __fastcall Timer_ResetTimer(TObject *Sender);
 	void __fastcall Timer_RebootTimer(TObject *Sender);
+	void __fastcall pnlTrayPosClick(TObject *Sender);
+	void __fastcall Edit1KeyPress(TObject *Sender, System::WideChar &Key);
 
 private:	// User declarations
 //---------------------------------------------------------------------------

@@ -1539,6 +1539,7 @@ object TotalForm: TTotalForm
       Fill.ShadowOffset = 0
       Fill.Glow = gmNone
       Version = '1.5.2.1'
+      OnClick = pnlTrayPosClick
       TabOrder = 15
       TMSStyle = 0
     end
@@ -5878,6 +5879,24 @@ object TotalForm: TTotalForm
     ParentFont = False
     TabOrder = 7
     Visible = False
+  end
+  object Edit1: TEdit
+    Left = 301
+    Top = 8
+    Width = 36
+    Height = 29
+    Alignment = taCenter
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -17
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ImeName = 'Microsoft Office IME 2007'
+    ParentFont = False
+    TabOrder = 8
+    Text = '2'
+    Visible = False
+    OnKeyPress = Edit1KeyPress
   end
   object Timer_AutoInspection: TTimer
     OnTimer = Timer_AutoInspectionTimer
