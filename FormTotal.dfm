@@ -5881,7 +5881,7 @@ object TotalForm: TTotalForm
     Visible = False
   end
   object Edit1: TEdit
-    Left = 301
+    Left = 295
     Top = 8
     Width = 36
     Height = 29
