@@ -186,6 +186,15 @@ void __fastcall TTotalForm::Initialization()
 {
     Initialization(1);
     Initialization(2);
+
+    ngCount = 0; //* 셀이 있는데 fail이거나 셀이 없는 경우
+	NgCount = 0; //* 셀이 있는데 fail이면
+    dt1StartTime = StrToDateTime(Now().FormatString("yyyy/mm/dd hh:nn:ss"));
+    testTime->Caption = "0";
+    nSection = STEP_WAIT;
+	nStep = 0;
+
+    bStatus = false;
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::Initialization(int traypos)
@@ -202,17 +211,8 @@ void __fastcall TTotalForm::Initialization(int traypos)
 		m_sTempCurr_Value[channel] = 0;
 	}
 
-	dt1StartTime = StrToDateTime(Now().FormatString("yyyy/mm/dd hh:nn:ss"));
-	dt2ChargingTime = StrToDateTime(Now().FormatString("yyyy/mm/dd hh:nn:ss"));
-    testTime->Caption = "0";
-
 	PLCInitialization(traypos);
 	this->InitTrayStruct(traypos);
-
-	nSection = STEP_WAIT;
-	nStep = 0;
-
-    bStatus = false;
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::PLCInitialization(int traypos)
@@ -1435,8 +1435,6 @@ void __fastcall TTotalForm::SetResultList()
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::BadInfomation()
 {
-	int ngCount = 0;
-	NgCount = 0;
 	for(int i = 0; i < LINECOUNT; ++i){
 		for(int j = 0; j < LINECOUNT; j++)
 		{
@@ -2379,8 +2377,7 @@ void __fastcall TTotalForm::btnInitClick(TObject *Sender)
 {
 	WritePLCLog("Init", "Initialization()");
 
-	Initialization(1);
-    Initialization(2);
+	Initialization();
 }
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

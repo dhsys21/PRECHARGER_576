@@ -373,7 +373,8 @@ private:	// User declarations
 
 	TPanel *pProcess[8];
 	bool bStatus;
-	int NgCount;
+	int NgCount; //* 셀이 있는데 fail이면
+    int ngCount; //* 셀이 있는데 fail이거나 셀이 없는 경우
     int NgAlarmCount;
     int nTrayPos;
     int startOffset;
@@ -484,7 +485,7 @@ public:		// User declarations
 	int chReverseMap[MAXCHANNEL + 1];
 
 	double curr_min;
-	TDateTime dt1StartTime, dt1FinishTime, dt1CurrentTime, diff, dt2ChargingTime;
+	TDateTime dt1StartTime, dt1FinishTime, dt1CurrentTime;
 
     int nFinishCount;
 	int mon_count;
