@@ -191,9 +191,6 @@ void __fastcall TForm_PLCInterface::GroupBox2Click(TObject *Sender)
     Panel1->Visible = !Panel1->Visible;
 }
 //---------------------------------------------------------------------------
-
-
-
 void __fastcall TForm_PLCInterface::btnWriteValueClick(TObject *Sender)
 {
 	int address = cbAddress->Text.ToIntDef(41000);
@@ -201,7 +198,6 @@ void __fastcall TForm_PLCInterface::btnWriteValueClick(TObject *Sender)
 	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, address - 41000, value);
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TForm_PLCInterface::btnWriteNgValueClick(TObject *Sender)
 {
     AnsiString strIrocvNg = editIrOcvNg->Text;

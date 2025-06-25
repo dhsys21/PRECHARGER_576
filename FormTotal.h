@@ -387,7 +387,7 @@ public:		// User declarations
     void __fastcall Initialization();
     void __fastcall Initialization(int traypos);
     void __fastcall WriteMINMAX(int stage_num);
-	void __fastcall PLCInitialization();
+	void __fastcall PLCInitialization(int traypos);
 	void __fastcall DisplayStatus(int status);
 
 	void __fastcall AutoInspection_Wait();

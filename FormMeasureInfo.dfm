@@ -863,7 +863,7 @@ object MeasureInfoForm: TMeasureInfoForm
   end
   object gbChInfo: TGroupBox
     Left = 1050
-    Top = 8
+    Top = 0
     Width = 200
     Height = 189
     Caption = 'CHANNEL INFOMATION'

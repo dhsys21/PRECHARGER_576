@@ -4,7 +4,7 @@ object Form_PLCInterface: TForm_PLCInterface
   BorderStyle = bsSingle
   Caption = 'PLC Interface'
   ClientHeight = 951
-  ClientWidth = 1594
+  ClientWidth = 1304
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,9 +18,9 @@ object Form_PLCInterface: TForm_PLCInterface
   PixelsPerInch = 96
   TextHeight = 13
   object GroupBox2: TGroupBox
-    Left = 4
+    Left = 6
     Top = 8
-    Width = 1580
+    Width = 1295
     Height = 935
     Caption = 'PreCharger 1 (PLC - PC INTERFACE)'
     Font.Charset = DEFAULT_CHARSET
@@ -32,22 +32,22 @@ object Form_PLCInterface: TForm_PLCInterface
     TabOrder = 0
     OnClick = GroupBox2Click
     object ListView_PC: TListView
-      Left = 795
+      Left = 652
       Top = 47
-      Width = 775
+      Width = 635
       Height = 870
       Columns = <
         item
           Caption = 'PC_Address'
-          Width = 160
+          Width = 120
         end
         item
           Caption = 'PC_Name'
-          Width = 240
+          Width = 200
         end
         item
           Caption = 'PC_Value'
-          Width = 350
+          Width = 290
         end>
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -62,22 +62,22 @@ object Form_PLCInterface: TForm_PLCInterface
       ViewStyle = vsReport
     end
     object ListView_PLC: TListView
-      Left = 15
+      Left = 16
       Top = 47
-      Width = 770
+      Width = 630
       Height = 870
       Columns = <
         item
           Caption = 'PLC_Address'
-          Width = 160
+          Width = 120
         end
         item
           Caption = 'PLC_Name'
-          Width = 240
+          Width = 200
         end
         item
           Caption = 'PLC_Value'
-          Width = 350
+          Width = 290
         end>
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -93,8 +93,8 @@ object Form_PLCInterface: TForm_PLCInterface
     end
   end
   object Panel1: TPanel
-    Left = 384
-    Top = 192
+    Left = 248
+    Top = 184
     Width = 809
     Height = 313
     BorderStyle = bsSingle
