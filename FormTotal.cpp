@@ -2033,7 +2033,8 @@ void __fastcall TTotalForm::SetFinalData()
 {
     int channel;
     for(int nIndex = 0; nIndex < MAXCHANNEL / 2; nIndex++){
-        channel = chMap[startOffset + nIndex + 1] - 1;
+        //channel = chMap[startOffset + nIndex + 1] - 1;
+        channel = GetChMap(this->Tag, nTrayPos, nIndex) - 1;
 		if(real_data.status[channel] > -2 && StringToDouble(real_data.volt[channel], 0) > 100){
 			real_data.final_status[channel] = real_data.status[channel];
             real_data.final_volt[channel] = real_data.volt[channel];

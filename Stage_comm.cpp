@@ -99,13 +99,13 @@ void __fastcall TTotalForm::CmdManualMod(bool Set)
         if(Timer_AutoInspection->Enabled == false)
             Timer_AutoInspection->Enabled = true;
     }
-
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::AutoTestFinish(int traypos)
 {
     tray.ams = false;
 	SetResultList(traypos);
+    //* 트레이 위치 이동 없을 때
 	if(MeasureInfoForm->n_bManualStart == true)
 	{
 		WriteResultFile(nTrayPos);

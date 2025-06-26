@@ -249,6 +249,8 @@ void __fastcall TTotalForm::WriteTrayInfo()
 }
 
 //---------------------------------------------------------------------------
+//* 첫번째 트레이 위치에서는 절반만 결과 저장.
+//* 두번째 트레이 위치에서는 모든 결과 저장.
 void __fastcall TTotalForm::WriteResultFile(int traypos)
 {
 	int file_handle;
@@ -283,7 +285,8 @@ void __fastcall TTotalForm::WriteResultFile(int traypos)
 
     int channel;
 	for(int i = 0; i < MAXCHANNEL; ++i){
-        channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i] - 1;
+        //channel = GetChMap(this->Tag, traypos, i) - 1;
+        channel = i;
         cell_id = tray.cell_serial[channel];
 		volt = real_data.final_volt[channel];
 		curr = real_data.final_curr[channel];
@@ -309,6 +312,66 @@ void __fastcall TTotalForm::WriteResultFile(int traypos)
 	FileWrite(file_handle, file.c_str(), file.Length());
 	FileClose(file_handle);
 }
+//* 트레이 위치별 결과 저장.
+//void __fastcall TTotalForm::WriteResultFile(int traypos)
+//{
+//	int file_handle;
+//	AnsiString filename;
+//	AnsiString dir;
+//	AnsiString cell, cell_id, volt, curr, ok_ng;
+//
+//	dir = (AnsiString)DATA_PATH + Now().FormatString("yyyymmdd") + "\\" + lblTitle->Caption + "\\";
+//	ForceDirectories((AnsiString)dir);
+//
+//	filename =  dir + tray.trayid +  "-" + Now().FormatString("yymmddhhnnss") + "_TP" + IntToStr(traypos) + ".csv";
+//
+//	if(FileExists(filename)){
+//		DeleteFile(filename);
+//	}
+//
+//	file_handle = FileCreate(filename);
+//	FileSeek(file_handle, 0, 0);
+//
+//	AnsiString file;
+//	file = "TRAY ID," + tray.trayid + "\r\n";
+//    file = "TRAY POSITION," + IntToStr(traypos) + "\r\n";
+//	file = file + "ARRIVE TIME," + m_dateTime.FormatString("yyyy/mm/dd hh:nn:ss") + "\r\n";
+//	file = file + "FINISH TIME," + Now().FormatString("yyyy/mm/dd hh:nn:ss") + "\r\n";
+//	file = file + "VOLTAGE," + FormatFloat("0", config.volt) + "\r\n";
+//	file = file + "CURRENT," + FormatFloat("0", config.curr) + "\r\n";
+//	file = file + "TIME," + FormatFloat("0", config.time) + "\r\n";
+//
+//	file += "CH,CELL,CELL ID,VOLT,CURR,RESULT\r\n";
+//
+//    int channel;
+//	for(int i = 0; i < CHANNELCOUNT; ++i){
+//        channel = GetChMap(this->Tag, traypos, i) - 1;
+//        cell_id = tray.cell_serial[channel];
+//		volt = real_data.final_volt[channel];
+//		curr = real_data.final_curr[channel];
+//
+//		if(tray.cell[channel] == 1)
+//		{
+//			if(tray.measure_result[channel] == 0) ok_ng = "OK";
+//			else ok_ng = "NG";
+//
+//			cell = "O";
+//		}
+//		else if(tray.cell[channel] == 0)
+//		{
+//			if(tray.measure_result[channel] == 0) ok_ng = "OUT FLOW";
+//			else ok_ng = "NG (No Cell)";
+//
+//			cell = "X";
+//		}
+//
+//		file = file + IntToStr(channel + 1) + "," + cell + "," + cell_id + "," + volt + "," + curr + "," + ok_ng + "\r\n";
+//	}
+//
+//	FileWrite(file_handle, file.c_str(), file.Length());
+//	FileClose(file_handle);
+//}
+//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::WriteMonData(int traypos)
 {
@@ -328,8 +391,8 @@ void __fastcall TTotalForm::WriteMonData(int traypos)
 		file_handle = FileCreate(filename);
 
     file = "DATETIME,RUNCOUNT";
-    for(int nIndex = 0; nIndex < MAXCHANNEL / 2; nIndex++)
-        channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + nIndex];
+    for(int nIndex = 0; nIndex < CHANNELCOUNT; nIndex++)
+        channel = GetChMap(this->Tag, traypos, nIndex);
         file += ",CH" + IntToStr(channel) + " STATUS,CH" + IntToStr(channel) + " VOLTAGE,CH" + IntToStr(channel) + " CURRENT";
     	file += "\r\n";
 	}
@@ -337,8 +400,8 @@ void __fastcall TTotalForm::WriteMonData(int traypos)
 	FileSeek(file_handle, 0, 2);
 
     file += Now().FormatString("yyyy/mm/dd hh:nn:ss.zzz") + "," + stage.runcount;
-	for(int i = 0; i < MAXCHANNEL / 2; ++i){
-        channel = chMap[(nTrayPos - 1) * (MAXCHANNEL / 2) + i] - 1;
+	for(int i = 0; i < CHANNELCOUNT; ++i){
+        channel = GetChMap(this->Tag, traypos, i) - 1;
         file += "," + IntToStr(real_data.status[channel]);
         file += "," + FormatFloat("0.0", StringToDouble(real_data.volt[channel], 0.0));
         file += "," + FormatFloat("0.0", StringToDouble(real_data.curr[channel], 0.0));
@@ -377,12 +440,12 @@ void __fastcall TTotalForm::ReadRemeasureInfo()
 	RemeasureForm->pcolor2->Caption = config.remeasure_alarm_cnt;
 
 	if(retest_info == "-1"){	// 파일이 존재하지 않으면
-		for(int index=0; index<MAXCHANNEL; ++index){
+		for(int index = 0; index < MAXCHANNEL; ++index){
 			acc_remeasure[index] = 0; 	// 모두 0으로
 		}
 	}
 	else{
-		for(int index=0; index<MAXCHANNEL; ++index){
+		for(int index = 0; index < MAXCHANNEL; ++index){
 			pos = retest_info.Pos("_");
 			acc_remeasure[index] = retest_info.SubString(1,pos-1).ToIntDef(0);
             if(acc_remeasure[index] >= config.remeasure_alarm_cnt)
@@ -413,7 +476,7 @@ void __fastcall TTotalForm::WriteRemeasureInfo()	// Tray가 Vacancy 상태일때 기록
 	config.remeasure_alarm_cnt = StringToInt(RemeasureForm->pcolor2->Caption, 3);
 
 	retest_info = "";
-	for(int index=0; index<MAXCHANNEL; ++index){
+	for(int index = 0; index < MAXCHANNEL; ++index){
 		retest_info =  retest_info + acc_remeasure[index] + "_";
 
 		if(acc_remeasure[index] >= config.remeasure_alarm_cnt)
