@@ -203,7 +203,7 @@ void __fastcall TForm_PLCInterface::btnWriteNgValueClick(TObject *Sender)
     AnsiString strIrocvNg = editIrOcvNg->Text;
 	vector<int> ngchannels = BaseForm->StringToVector(strIrocvNg);
 
-    ngCount = 0;
+    int ngCount = 0;
 	for(int i = 0; i < LINECOUNT; ++i){
 		for(int j = 0; j < LINECOUNT; j++)
 		{

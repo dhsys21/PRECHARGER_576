@@ -977,7 +977,7 @@ void __fastcall TTotalForm::Timer_FinishChargingTimer(TObject *Sender)
     		DisplayChannelInfo(nTrayPos);
 
             //* final data 정리
-            AutoTestFinish();
+            AutoTestFinish(nTrayPos);
             nFinishStep = 4;
             break;
         case 4:
@@ -1404,31 +1404,66 @@ void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
         ShowMessage("Equipment is not connected!");
 }
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::SetResultList()
+void __fastcall TTotalForm::SetResultList(int traypos)
 {
-	for(int index = 0; index < MAXCHANNEL; ++index)
+    int channel;
+	for(int index = 0; index < CHANNELCOUNT; ++index)
 	{
+        channel = GetChMap(this->Tag, traypos, index) - 1;
         //* 셀이 있을 때 NONE(0), FAIL(2) 은 NG (셀이 있는데 충전이 안되거나 에러가 나면 불량
-		if(tray.cell[index] == 1)
+		if(tray.cell[channel] == 1)
 		{
-			if(real_data.final_result[index] == "0" || real_data.final_result[index] == "2")
-				tray.measure_result[index] = 1;
+			if(real_data.final_result[channel] == "0" || real_data.final_result[channel] == "2")
+				tray.measure_result[channel] = 1;
 			else
-				tray.measure_result[index] = 0;
+				tray.measure_result[channel] = 0;
 		}
         //* 셀이 없을 때 RUNNING(1), OK(4) 는 NG (셀이 없으면 충전이 안되어야 함.)
-		else if(tray.cell[index] == 0)
+		else if(tray.cell[channel] == 0)
 		{
-			if(real_data.final_result[index] == "1" || real_data.final_result[index] == "4")
-				tray.measure_result[index] = 1;
+			if(real_data.final_result[channel] == "1" || real_data.final_result[channel] == "4")
+				tray.measure_result[channel] = 1;
 			else
-            	tray.measure_result[index] = 0;
+            	tray.measure_result[channel] = 0;
         }
 	}
 
 	CmdForceStop();
 }
 //---------------------------------------------------------------------------
+// 트레이 위치 변경이 없을 때 버전
+void __fastcall TTotalForm::BadInfomation2()
+{
+    int channel, index;
+	for(int i = 0; i < LINECOUNT / 2; ++i){
+		for(int j = 0; j < LINECOUNT; j++)
+		{
+            index = startOffset + (i * LINECOUNT + j + 1);
+            channel = chMap[index] - 1;
+            //* 셀이 있는데 Fail 이면 1, OK 면 0
+            //* measure_result == 1 : NG, == 0 : OK
+			if((tray.cell[channel] == 1) && tray.measure_result[channel] == 1)
+			{
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / LINECOUNT) * 2, channel % LINECOUNT, true);
+				acc_remeasure[channel] += 1;   // 셀이 있고 에러일 때 count 증가
+				ngCount++;
+				NgCount++;
+			}
+			else if(tray.cell[channel] == 1 && tray.measure_result[channel] == 0)
+			{
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / LINECOUNT) * 2, channel % LINECOUNT, false);
+			}
+            //* 셀이 없으면 1.
+			else
+			{
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / LINECOUNT) * 2, channel % LINECOUNT, true);
+				ngCount++;
+			}
+		}
+	}
+
+	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_COUNT, ngCount);
+}
 void __fastcall TTotalForm::BadInfomation()
 {
     int channel, index;
@@ -2287,6 +2322,8 @@ void __fastcall TTotalForm::btnTrayOutClick(TObject *Sender)
 //		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_TRAY_OUT, 1);
         SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
         SetPcValue(PC_D_PRE_PROB_OPEN, 1);
+        SetPcValue(PC_D_PRE_COMPLETE2, 1);
+        SetPcValue(PC_D_PRE_COMPLETE2, 1);
         SetPcValue(PC_D_PRE_TRAY_OUT, 1);
 
 		nStep = 0;

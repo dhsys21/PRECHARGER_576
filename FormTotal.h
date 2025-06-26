@@ -327,8 +327,9 @@ private:	// User declarations
     void __fastcall WriteResultFile(int traypos);
     void __fastcall WriteTrayInfo();
     void __fastcall BadInfomation();
+    void __fastcall BadInfomation2();
 	void __fastcall WriteVoltCurrValue();
-	void __fastcall SetResultList();
+	void __fastcall SetResultList(int traypos);
 
 //------------ Æû °ü·Ã -------------------//
 	TGroupBox *CurrentGrp;
@@ -400,7 +401,7 @@ public:		// User declarations
 	void __fastcall CmdForceStop();
 	void __fastcall CmdForceStop_Original();
 	void __fastcall CmdManualMod(bool Set);
-    void __fastcall AutoTestFinish();
+    void __fastcall AutoTestFinish(int traypos);
 	void __fastcall ReadchannelMapping();
 
 //---------------------------------------------------------------------------

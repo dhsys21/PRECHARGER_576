@@ -102,10 +102,10 @@ void __fastcall TTotalForm::CmdManualMod(bool Set)
 
 }
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::AutoTestFinish()
+void __fastcall TTotalForm::AutoTestFinish(int traypos)
 {
     tray.ams = false;
-	SetResultList();
+	SetResultList(traypos);
 	if(MeasureInfoForm->n_bManualStart == true)
 	{
 		WriteResultFile(nTrayPos);

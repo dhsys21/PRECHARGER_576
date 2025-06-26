@@ -23,14 +23,14 @@ double __fastcall StringToDouble(UnicodeString str, double def)
 // Channel Mapping
 int GetChMap(int stage, int trayPos, int index)
 {
-    int offset = (trayPos - 1) * (MAXCHANNEL / 2);
+    int offset = (trayPos - 1) * CHANNELCOUNT;
     return BaseForm->nForm[stage]->chMap[offset + index + 1];
 }
 //---------------------------------------------------------------------------
 // Reverse Channel Mapping
 int GetChRMap(int stage, int trayPos, int index)
 {
-    int offset = (trayPos - 1) * (MAXCHANNEL / 2);
+    int offset = (trayPos - 1) * CHANNELCOUNT;
     return BaseForm->nForm[stage]->chReverseMap[offset + index + 1];
 }
 //---------------------------------------------------------------------------
