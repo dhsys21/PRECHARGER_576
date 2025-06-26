@@ -55,7 +55,7 @@ void __fastcall TTotalForm::CmdTrayOut()
     BadInfomation();
 
 	// 자동검사 9(끝). 트레이 방출
-	if(NgCount == tray.cell_count1 || NgCount > editNGAlarmCount->Text.ToIntDef(10)){
+	if(NgCount == (tray.cell_count1 + tray.cell_count2) || NgCount > editNGAlarmCount->Text.ToIntDef(10)){
 		//NgAlarmCount++;
         Form_Error->DisplayErrorMessage(this->Tag, nNgErr);
 		Form_Error->Tag = this->Tag;
@@ -198,7 +198,7 @@ void __fastcall TTotalForm::CmdSTC()
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::CmdReport()
 {
-    AnsiString CMD = "STAT:CELL:REP? (@1001:1032,2001:2032,3001:3032,4001:4032,5001:5032,6001:6032,7001:7016)";
+    AnsiString CMD = "STAT:CELL:REP? (@1001:1032,2001:2032,3001:3032,4001:4032,5001:5016)";
     CMD = "TRB" + CMD + "\n";
     SendData(CMD);
     LASTCMD = "REP";

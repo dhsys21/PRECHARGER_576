@@ -373,8 +373,8 @@ private:	// User declarations
 
 	TPanel *pProcess[8];
 	bool bStatus;
-	int NgCount; //* 셀이 있는데 fail이면
-    int ngCount; //* 셀이 있는데 fail이거나 셀이 없는 경우
+	int NgCount; //* 셀이 있는데 fail 이면
+    int ngCount; //* 셀이 있는데 fail 이거나 셀이 없는 경우
     int NgAlarmCount;
     int nTrayPos;
     int startOffset;

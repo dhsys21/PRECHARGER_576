@@ -236,10 +236,6 @@ void __fastcall TTotalForm::PLCInitialization(int traypos)
 
     int channel, index;
 	Mod_PLC->PLC_Write_Result = true;
-//	for(int i = 0; i < LINECOUNT; i++)
-//	{
-//		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (i * 2), 0);
-//	}
     for(int i = 0; i < LINECOUNT / 2; i++)
 	{
 		for(int j = 0; j < LINECOUNT; j++)
@@ -487,6 +483,7 @@ void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
         else tray.trayin = false;
 
         nTrayPos = GetTrayPos();
+        startOffset = (nTrayPos - 1) * CHANNELCOUNT;  // 0 or 288
 		switch(nSection)
 		{
 			case STEP_WAIT:
@@ -1206,7 +1203,7 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 	double volt, curr;
     int channel;
 	try{
-		for(int i = 0; i < MAXCHANNEL / 2; ++i){
+		for(int i = 0; i < CHANNELCOUNT; ++i){
             //channel = chMap[(traypos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
             channel = GetChMap(this->Tag, traypos, i) - 1;
 			if(tray.amf)
@@ -1219,7 +1216,6 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 						|| (real_data.final_curr[channel] < 100 && real_data.final_volt[channel] < 500)){
 						//* 결과 NG
 						panel[channel]->Color = cl_error->Color;
-
       				}
 					else {
 						//* 결과 OK
@@ -1420,7 +1416,7 @@ void __fastcall TTotalForm::SetResultList()
 			else
 				tray.measure_result[index] = 0;
 		}
-        //* 셀이 없을 때 RUNNING91), OK(4) 는 NG (셀이 없으면 충전이 안되어야 함.)
+        //* 셀이 없을 때 RUNNING(1), OK(4) 는 NG (셀이 없으면 충전이 안되어야 함.)
 		else if(tray.cell[index] == 0)
 		{
 			if(real_data.final_result[index] == "1" || real_data.final_result[index] == "4")
@@ -1435,26 +1431,29 @@ void __fastcall TTotalForm::SetResultList()
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::BadInfomation()
 {
-	for(int i = 0; i < LINECOUNT; ++i){
+    int channel, index;
+	for(int i = 0; i < LINECOUNT / 2; ++i){
 		for(int j = 0; j < LINECOUNT; j++)
 		{
+            index = startOffset + (i * LINECOUNT + j + 1);
+            channel = chMap[index] - 1;
             //* 셀이 있는데 Fail 이면 1, OK 면 0
             //* measure_result == 1 : NG, == 0 : OK
-			if((tray.cell[(i * LINECOUNT) + j] == 1) && tray.measure_result[(i * LINECOUNT) + j] == 1)
+			if((tray.cell[channel] == 1) && tray.measure_result[channel] == 1)
 			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (i * 2), j, true);
-				acc_remeasure[(i * LINECOUNT) + j] += 1;   // 셀이 있고 에러일 때 count 증가
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / LINECOUNT) * 2, channel % LINECOUNT, true);
+				acc_remeasure[channel] += 1;   // 셀이 있고 에러일 때 count 증가
 				ngCount++;
 				NgCount++;
 			}
-			else if(tray.cell[(i * LINECOUNT) + j] == 1 && tray.measure_result[(i * LINECOUNT) + j] == 0)
+			else if(tray.cell[channel] == 1 && tray.measure_result[channel] == 0)
 			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (i * 2), j, false);
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / LINECOUNT) * 2, channel % LINECOUNT, false);
 			}
             //* 셀이 없으면 1.
 			else
 			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (i * 2), j, true);
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / LINECOUNT) * 2, channel % LINECOUNT, true);
 				ngCount++;
 			}
 		}
@@ -1724,7 +1723,6 @@ void __fastcall TTotalForm::SET_MONDATA(AnsiString runcount, AnsiString runtime,
     //* runtime : BT 부팅이후 시간 (ms)
 
     //* status, voltage, current
-    startOffset = (nTrayPos - 1) * (MAXCHANNEL / 2);  // 0 or 288
     SetStatus(status);
     SetVoltage(voltage);
     SetCurrent(current);
