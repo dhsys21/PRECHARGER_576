@@ -18,6 +18,7 @@ class TForm_Language : public TForm
 __published:	// IDE-managed Components
 	TValueListEditor *VLE_KOREAN;
 	TValueListEditor *VLE_ENGLISH;
+	TValueListEditor *VLE_CHINESE;
 private:	// User declarations
 public:		// User declarations
 	__fastcall TForm_Language(TComponent* Owner);

@@ -191,4 +191,51 @@ object Form_Language: TForm_Language
       18
       18)
   end
+  object VLE_CHINESE: TValueListEditor
+    Left = 424
+    Top = 24
+    Width = 321
+    Height = 265
+    Strings.Strings = (
+      'SAVE='#20445#23384
+      'CANCEL='#21462#28040
+      'CONFIG='#37197#32622
+      'MANUAL= '#25163#21160
+      'AUTO='#33258#21160
+      'RESET='#37325#32622
+      'TRAYOUT='#25176#30424#21462#20986
+      'TRAYID='#25176#30424'ID'
+      'STATUS='#29366#24577
+      'PROCESS='#36807#31243
+      'CHANNEL='#36890#36947
+      'IR=IR'
+      'OCV=OCV'
+      'REMEAINFO='#19981#33391#20449#24687
+      'INIT= '#21021#22987#21270
+      'OK='#30830#23450
+      'msgTooManyNG='#19981#33391#21697#36807#22810#65292#35831#26816#26597#12290)
+    TabOrder = 2
+    ColWidths = (
+      150
+      148)
+    RowHeights = (
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18)
+  end
 end

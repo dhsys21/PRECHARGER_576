@@ -9,7 +9,7 @@ object BaseForm: TBaseForm
   VertScrollBar.Range = 83
   VertScrollBar.Visible = False
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Precharger (Ver.250627 001)'
+  Caption = 'Precharger (Ver.250627 003)'
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -6393,6 +6393,7 @@ object BaseForm: TBaseForm
       OnClick = rbKoreanClick
     end
     object rbChinese: TRadioButton
+      Tag = 2
       Left = 95
       Top = 4
       Width = 40

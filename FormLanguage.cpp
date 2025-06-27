@@ -20,6 +20,7 @@ void __fastcall TForm_Language::LanguageChange(int LangIndex)
     TValueListEditor *vle;
     if(LangIndex == 0) vle = VLE_ENGLISH;
     else if(LangIndex == 1) vle = VLE_KOREAN;
+    else if(LangIndex == 2) vle = VLE_CHINESE;
 
 	//-------------------------------------------------------------------------
 	// 				COMPONENT
