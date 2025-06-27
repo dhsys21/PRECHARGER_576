@@ -198,5 +198,9 @@ typedef struct{
 	unsigned int test_time;
 }REAL_TIME;
 
+typedef struct{
+    int originalIndex; // i °ª
+    int mappedChannel; // GetChMap(...) °á°ú
+}CHANNELINFO;
 
 #endif

@@ -12,6 +12,7 @@
 
 int __fastcall StringToInt(UnicodeString str, int def);
 double __fastcall StringToDouble(UnicodeString str, double def);
+bool compareChannelInfoByMappedChannel(const CHANNELINFO& a, const CHANNELINFO& b);
 int GetChMap(int stage, int trayPos, int index);
 int GetChRMap(int stage, int trayPos, int index);
 AnsiString GetChPosF(int stage, int index);

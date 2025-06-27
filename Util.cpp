@@ -20,6 +20,11 @@ double __fastcall StringToDouble(UnicodeString str, double def)
 	else return def;
 }
 //---------------------------------------------------------------------------
+bool compareChannelInfoByMappedChannel(const CHANNELINFO& a, const CHANNELINFO& b)
+{
+    return a.mappedChannel < b.mappedChannel;
+}
+//---------------------------------------------------------------------------
 // Channel Mapping
 int GetChMap(int stage, int trayPos, int index)
 {

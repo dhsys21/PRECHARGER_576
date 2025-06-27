@@ -324,6 +324,7 @@ private:	// User declarations
 	void __fastcall ChannelStatus();
     void __fastcall DisplayChannelInfo(int traypos);
     void __fastcall WriteMonData(int traypos);
+    void __fastcall WriteMonDataSort(int traypos);
     void __fastcall WriteResultFile(int traypos);
     void __fastcall WriteTrayInfo();
     void __fastcall BadInfomation();
