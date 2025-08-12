@@ -26,27 +26,32 @@ const int DEVCODE_W			=	0xB4;		//	링크 레지스터
 //	Index 구분
 //---------------------------------------------------------------------------
 const int PLC_INDEX_INTERFACE[1]				= { 1 };
-const int PC_INDEX_INTERFACE					=		11;
+const int PC_INDEX_INTERFACE					= 	11;
 //---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
 //	시작 번지(통합)
 //---------------------------------------------------------------------------
-const int PLC_D_INTERFACE_START_DEV_NUM	 			=	{40000};
+const int PLC_D_INTERFACE_START_DEV_NUM	 			=	{33000};
 const int PLC_D_INTERFACE_LEN	 					= 	100;
+const int PLC_D_CELL_SERIAL_NUM                     =	{80000};
+const int PLC_D_CELL_SERIAL_LEN                     =   5760; //* 총 5760 word. 822 * 7번 읽어야 함
+const int PLC_D_CELL_SERIAL_READLEN                 =   822;  //* 길이 테스트 필요
 //----------------------------------------------------------------------------
 
-const int PC_D_INTERFACE_START_DEV_NUM				=	{41000};
-const int PC_D_INTERFACE_LEN  						= 	870;
-
-const int PC_D_INTERFACE_CURRENT					=	{42000};
-const int PC_D_INTERFACE_CURRENT_LEN				= 	800;
+const int PC_D_INTERFACE_START_DEV_NUM				=	{34000};
+const int PC_D_INTERFACE_LEN  						= 	100;
+const int PC_D_INTERFACE_VOLTAGE                    =   38100;
+const int PC_D_INTERFACE_VOLTAGE_LEN                =   600;
+const int PC_D_INTERFACE_CURRENT					=	{35000};
+const int PC_D_INTERFACE_CURRENT_LEN				= 	600;
 //----------------------------------------------------------------------------
 
 
 //---------------------------------------------------------------------------
 //	PLC - PC Interface
 //---------------------------------------------------------------------------
+// PLC - PRECHARGER - 33000
 const int PLC_D_HEART_BEAT				   			=	0;
 const int PLC_D_AUTO_MANUAL			   				=	1;
 const int PLC_D_PRE_ERROR		   	  				=	2;
@@ -57,11 +62,14 @@ const int PLC_D_PRE_TRAY_POS	                    =   6;
 
 const int PLC_D_PRE_TRAY_ID    	  			        =   10;
 
-// TRAY INFO
+// TRAY INFO - 576
 const int PLC_D_PRE_TRAY_CELL_DATA				   	=	30;
+// CELL SERIAL TRAY ID   - D80000
+const int PLC_D_PRE_CELL_SERIAL                  	=   0;
 //---------------------------------------------------------------------------
 //	PC - PLC Interface
 //---------------------------------------------------------------------------
+// PC - PRECHARGER - 34000
 const int PC_D_HEART_BEAT			  				=	0;
 const int PC_D_PRE_STAGE_AUTO_READY     	        =   1;
 const int PC_D_PRE_ERROR						   	=	2;
@@ -80,12 +88,11 @@ const int PC_D_PRE_CHARGE_CURRENT                   =   15;
 const int PC_D_PRE_CHARGE_TIME                      =   17;
 const int PC_D_PRE_NG_ALARM                         =   19;
 
-// OK/NG - D41030
+// OK/NG - D34030
 const int PC_D_PRE_MEASURE_OK_NG			   		=	30;
-
-// D41070
+// D34100
 const int PC_D_PRE_VOLTAGE_VALUE                    =   100;
-// D42000
+// D35000
 const int PC_D_PRE_CURRENT_VALUE                    =   0;
 //---------------------------------------------------------------------------
 
@@ -169,7 +176,8 @@ private:	// User declarations
 //---------------------------------------------------------------------------
 	void __fastcall PLC_Initialization();
 	void __fastcall PLC_DataChange(int subCommand, int address, int devCode, int devLen);
-	void __fastcall PLC_Recv_Interface(int nTag);
+	void __fastcall PLC_Recv_Interface(int nTag = 0);
+    void __fastcall PLC_Recv_Interface_CellSerial(int index, int wordsToRead);
 
 	PLC_DATA plc_Data;
 	AnsiString plc_Read, plc_Read_Temp;
@@ -208,9 +216,33 @@ public:		// User declarations
 	double __fastcall GetDouble(unsigned char (*data)[2], int column);
 	AnsiString __fastcall GetString(unsigned char (*data)[2], int column, int count);
 
+    //---------------------------------------------------------------------------
+//  실제호출함수
+    AnsiString __fastcall GetCellSrial(int plc_address, int index, int size);
+    AnsiString __fastcall GetCellSrialTrayId(int plc_address, int size);
+    double __fastcall GetCellSrialValue(int plc_address);
+
+    AnsiString __fastcall GetPlcValue(int plc_address, int size);
+    double __fastcall GetPlcValue(int plc_address);
+    int __fastcall GetPlcData(int plc_address, int bit_num);
+    double __fastcall GetValue(int pc_address);
+    void __fastcall SetValue(int pc_address, int value);
+    void __fastcall SetSpecValue(int pc_address, int value);
+    void __fastcall SetVoltageValue(int pc_address, int index, int value);
+    void __fastcall SetCurrentValue(int pc_address, int index, int value);
+    int __fastcall GetVoltValue(int pc_address, int index);
+    int __fastcall GetCurrValue(int pc_address, int index);
+
 	bool PLC_Write_Result; //voltage, current 값은 필요 시에만 쓰기를 한다.
+    //* PLC DATA
+    int currentReadTask;
+    int CellSerialIndex;
 	unsigned char plc_Interface_Data[PLC_D_INTERFACE_LEN][2];
+    unsigned char plc_Interface_Cell_Serial[PLC_D_CELL_SERIAL_LEN][2];
+    //* PC DATA
+    int currentWriteTask;
 	unsigned char pc_Interface_Data[PC_D_INTERFACE_LEN][2];
+    unsigned char pc_Interface_Volt_Data[PC_D_INTERFACE_VOLTAGE_LEN][2];
 	unsigned char pc_Interface_Curr_Data[PC_D_INTERFACE_CURRENT_LEN][2];
 };
 //---------------------------------------------------------------------------
