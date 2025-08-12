@@ -779,8 +779,8 @@ object TotalForm: TTotalForm
         ParentBackground = False
         TabOrder = 3
         object btnInit: TAdvSmoothButton
-          Left = 7
-          Top = 74
+          Left = 3
+          Top = 12
           Width = 100
           Height = 50
           Appearance.Font.Charset = DEFAULT_CHARSET
@@ -811,6 +811,7 @@ object TotalForm: TTotalForm
           Color = 4342527
           ParentFont = False
           TabOrder = 0
+          Visible = False
           Version = '2.1.1.5'
           OnClick = btnInitClick
           TMSStyle = 8
@@ -855,7 +856,7 @@ object TotalForm: TTotalForm
         end
         object btnNgInfo: TAdvSmoothButton
           Left = 7
-          Top = 129
+          Top = 74
           Width = 100
           Height = 50
           Appearance.Font.Charset = DEFAULT_CHARSET
@@ -929,7 +930,7 @@ object TotalForm: TTotalForm
         end
         object ConfigBtn1: TAdvSmoothButton
           Left = 7
-          Top = 185
+          Top = 130
           Width = 100
           Height = 50
           Appearance.Font.Charset = DEFAULT_CHARSET

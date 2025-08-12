@@ -205,7 +205,7 @@ void __fastcall TTotalForm::Initialization(int traypos)
         channel = GetChMap(this->Tag, traypos, i) - 1;
 
         m_sTempVlot[channel] = channel + 1;
-        m_sTempCurr[channel] = GetChPosF(this->Tag, channel) + "-" + GetChPosR(this->Tag, channel);
+        m_sTempCurr[channel] = SetChannelHint(channel);//GetChPosF(channel) + "-" + GetChPosR(channel);
 
 		m_sTempVlot_Value[channel] = 0;
 		m_sTempCurr_Value[channel] = 0;
@@ -426,11 +426,16 @@ void __fastcall TTotalForm::MakePanel(AnsiString type)
 		}
 	}
     //* 채널 위치 -> 릴레이가 12줄이므로 위치를 계산해야 함
-    for(int index = 0; index < MAXCHANNEL; index++)
+    AnsiString hint = "";
+    for(int index = 0; index < MAXCHANNEL;)
     {
+        hint = SetChannelHint(index);
         if(panel[index] != NULL)
-            panel[index]->Hint = IntToStr(index + 1) + " : "
-            	+ GetChPosF(chReverseMap, index) + "-" + GetChPosR(chReverseMap, index);
+            panel[index]->Hint = hint;
+
+        index += 1;
+//            panel[index]->Hint = IntToStr(index + 1) + " : "
+//            	+ GetChPosF(index) + "-" + GetChPosR(index);
     }
 }
 //---------------------------------------------------------------------------
@@ -1383,7 +1388,7 @@ void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
 	{
         channel = GetChMap(this->Tag, nTrayPos, i) - 1;
 		m_sTempVlot[channel] = channel;
-        m_sTempCurr[channel] = GetChPosF(this->Tag, channel) + "-" + GetChPosR(this->Tag, channel);
+        m_sTempCurr[channel] = SetChannelHint(channel);//GetChPosF(channel) + "-" + GetChPosR(channel);
 
 		m_sTempVlot_Value[channel] = 0;
 		m_sTempCurr_Value[channel] = 0;

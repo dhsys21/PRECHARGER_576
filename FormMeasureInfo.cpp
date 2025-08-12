@@ -191,13 +191,14 @@ void __fastcall TMeasureInfoForm::SetChannelInfo(int traypos)
     //* 채널 위치 -> 릴레이가 12줄이므로 위치를 계산해야 함
     int channel, rchannel;
     for(int index = 0; index < MAXCHANNEL / 2; index++){
-        channel = GetChMap(stage, traypos, index) - 1;
+        //channel = GetChMap(stage, traypos, index) - 1;
+        channel = GetChannel(traypos, index) - 1;
 
         pvolt[channel]->Caption = IntToStr(channel + 1);
         pvolt[channel]->Color = pnormal1->Color;
 
-        pcurr[channel]->Caption = GetChPosF(stage, channel)	+ "-" + GetChPosR(stage, channel);
-        pcurr[channel]->Hint = "CH " + GetChPosF(stage, channel) + "-" + GetChPosR(stage, channel);
+        pcurr[channel]->Caption = SetChannelHint(channel);//GetChPosF(channel)	+ "-" + GetChPosR(channel);
+        pcurr[channel]->Hint = "CH " + SetChannelHint(channel);//GetChPosF(channel) + "-" + GetChPosR(channel);
         pcurr[channel]->Color = pnormal2->Color;
         pcurr[channel]->Refresh();
     }
@@ -373,7 +374,7 @@ void __fastcall TMeasureInfoForm::ChInfoMouseEnter(TObject *Sender)
 	int index;
 	index = pnl->Tag;
 	pch->Caption = index + 1;
-    ppos->Caption = GetChPosF(stage, index) + "-" + GetChPosR(stage, index);
+    ppos->Caption = SetChannelHint(index + 1);//GetChPosF(index) + "-" + GetChPosR(index);
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::ChInfoMouseLeave(TObject *Sender)

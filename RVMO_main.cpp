@@ -387,11 +387,6 @@ void __fastcall TBaseForm::WriteSystemInfo()
 	delete ini;
 }
 //---------------------------------------------------------------------------
-void __fastcall TBaseForm::OpenFolder(UnicodeString path)
-{
-	 ShellExecute(NULL, L"open", path.c_str(), NULL, NULL, SW_SHOW);
-}
-//---------------------------------------------------------------------------
 //--------------------- 함수 정리  ------------------------------------------
 //---------------------------------------------------------------------------
 
@@ -457,6 +452,12 @@ void __fastcall TBaseForm::btnNgCountErrClick(TObject *Sender)
 void __fastcall TBaseForm::lblTitleClick(TObject *Sender)
 {
     GroupBox2->Visible = !GroupBox2->Visible;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TBaseForm::btnInitClick(TObject *Sender)
+{
+    nForm[0]->Initialization();
 }
 //---------------------------------------------------------------------------
 

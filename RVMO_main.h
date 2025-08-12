@@ -86,6 +86,7 @@ __published:	// IDE-managed Components
 	TButton *btnNgCountErr;
 	TCheckBox *chkTest;
 	TRadioButton *rbChinese;
+	TAdvSmoothButton *btnInit;
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall ClockTimerTimer(TObject *Sender);
@@ -108,6 +109,7 @@ __published:	// IDE-managed Components
 	void __fastcall rbKoreanClick(TObject *Sender);
 	void __fastcall btnNgCountErrClick(TObject *Sender);
 	void __fastcall lblTitleClick(TObject *Sender);
+	void __fastcall btnInitClick(TObject *Sender);
 	//void __fastcall ptimeDblClick(TObject *Sender);
 	//void __fastcall ptimeClick(TObject *Sender);
 
@@ -148,7 +150,6 @@ public:		// User declarations
     AnsiString __fastcall HexToAscii(AnsiString hex);
     AnsiString __fastcall HexToAscii(AnsiString hex, int length);
     vector<AnsiString> __fastcall  SplitString(AnsiString str, AnsiString delimiter);
-    void __fastcall OpenFolder(UnicodeString path);
 	TImage *statusImage[13];
 
 //---------------------------------------------------------------------------
