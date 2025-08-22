@@ -1001,7 +1001,7 @@ object TotalForm: TTotalForm
       TabOrder = 4
       Visible = False
     end
-    object GroupBox2: TGroupBox
+    object grbChInfo: TGroupBox
       Left = 10
       Top = 309
       Width = 585

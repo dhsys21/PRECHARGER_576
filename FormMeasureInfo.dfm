@@ -861,7 +861,7 @@ object MeasureInfoForm: TMeasureInfoForm
       TabOrder = 16
     end
   end
-  object gbChInfo: TGroupBox
+  object grbChInfo: TGroupBox
     Left = 1050
     Top = 0
     Width = 200

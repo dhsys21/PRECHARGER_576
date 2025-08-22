@@ -53,15 +53,25 @@ object Form_Language: TForm_Language
       'PROCESSINFO='#54532#47532#52264#51256' '#51652#54665' '#51221#48372
       'TRAYINFO='#53944#47112#51060' '#51221#48372
       'CHARGINGPROCESS='#52649#51204' '#54532#47196#49464#49828
+      'READY='#45824#44592
+      'CHARGING='#52649#51204
+      'COMPLETE='#50756#47308
+      'FAIL='#48520#47049
+      'OUTFLOW='#49472' '#50976#52636
+      'NOCELL='#49472' '#50630#51020
       'msgRBT=Reboot'#51008' 60'#52488' '#51221#46020' '#49548#50836#46121#45768#45796'. Reboot '#54616#49884#44192#49845#45768#44620'?'
       'msgRST=Reset'#51008' 15'#52488' '#51221#46020' '#49548#50836#46121#45768#45796'. Reset '#54616#49884#44192#49845#45768#44620'?'
-      'msgTooManyNG=NG '#49472#51060' '#45320#47924' '#47566#49845#45768#45796'. '#54869#51064#54644#51452#49464#50836
-      'msgError='#50640#47084)
+      'msgTooManyNG=NG '#49472#51060' '#45320#47924' '#47566#49845#45768#45796'. '#54869#51064#54644#51452#49464#50836)
     TabOrder = 0
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
+      18
+      18
+      18
+      18
       18
       18
       18
@@ -142,15 +152,25 @@ object Form_Language: TForm_Language
       'TRAYINFO=TRAY INFO.'
       'CHARGINGPROCESS=CHARGING PROCESS'
       'DISCONNECT=DisConnect'
+      'READY=READY'
+      'CHARGING=CHARGING'
+      'COMPLETE=COMPLETE'
+      'FAIL=FAIL'
+      'OUTFLOW=OUTFLOW'
+      'NOCELL=NO CELL'
       'msgRBT=Rebooting takes 60 seconds. Do you want to reboot?'
       'msgRST=Reset takes 15 seconds. Do you want to reset?'
-      'msgTooManyNG=Too many NG cells. Please check it.'
-      'msgError=Error')
+      'msgTooManyNG=Too many NG cells. Please check it.')
     TabOrder = 1
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
+      18
+      18
+      18
+      18
       18
       18
       18
@@ -195,12 +215,12 @@ object Form_Language: TForm_Language
     Left = 424
     Top = 24
     Width = 321
-    Height = 265
+    Height = 553
     Strings.Strings = (
       'SAVE='#20445#23384
-      'CANCEL='#21462#28040
+      'CANCEL='#30830#35748
       'CONFIG='#37197#32622
-      'MANUAL= '#25163#21160
+      'MANUAL='#25163#21160
       'AUTO='#33258#21160
       'RESET='#37325#32622
       'TRAYOUT='#25176#30424#21462#20986
@@ -208,17 +228,69 @@ object Form_Language: TForm_Language
       'STATUS='#29366#24577
       'PROCESS='#36807#31243
       'CHANNEL='#36890#36947
+      'CONFIGURATION='#37197#32622
       'IR=IR'
       'OCV=OCV'
       'REMEAINFO='#19981#33391#20449#24687
-      'INIT= '#21021#22987#21270
+      'INIT='#21021#22987#21270
       'OK='#30830#23450
+      'CLOSE='#20851#38381
+      'OPEN='#25171#24320
+      'SET='#35774#32622
+      'RESET='#37325#32622
+      'START='#24320#22987
+      'STOP='#20572#27490
+      'SAVE='#20445#23384
+      'PRECHARGER=PRECHARGER'
+      'PLCCONNECTION=PLC '#36830#25509
+      'ETC='#31561#31561
+      'CHINFO='#36890#36947#24773#22577
+      'CHPOS='#20301#32622
+      'CONNECT='#36830#25509
+      'PROCESSINFO=PRECHARGER '#36807#31243#24773#22577
+      'TRAYINFO='#25176#30424#24773#22577
+      'CHARGINGPROCESS='#20805#30005' '#36807#31243
+      'DISCONNECT='#26029#24320
+      'READY='#31561#24453
+      'CHARGING='#27491#22312#20805#30005
+      'COMPLETE='#23436#25104
+      'FAIL='#38169#35823
+      'OUTFLOW=CELL'#27969#20986
+      'NOCELL='#26080' CELL'
+      'msgRBT=Rebooting takes 60 seconds. Do you want to reboot?'
+      'msgRST=Reset takes 15 seconds. Do you want to reset?'
       'msgTooManyNG='#19981#33391#21697#36807#22810#65292#35831#26816#26597#12290)
     TabOrder = 2
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
       18
       18
       18

@@ -51,7 +51,7 @@ __published:	// IDE-managed Components
 	TPanel *Panel18;
 	TPanel *clir;
 	TPanel *clocv;
-	TGroupBox *gbChInfo;
+	TGroupBox *grbChInfo;
 	TPanel *pnlChannel;
 	TPanel *pch;
 	TPanel *pnlPos;

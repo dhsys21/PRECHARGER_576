@@ -127,7 +127,7 @@ __published:	// IDE-managed Components
 	TLabel *modAlarm3;
 	TLabel *modAlarm4;
 	TLabel *AlarmTime;
-	TGroupBox *GroupBox2;
+	TGroupBox *grbChInfo;
 	TPanel *pBase;
 	TPanel *flowChart;
 	TLabel *lblProcess;

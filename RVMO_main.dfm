@@ -9,7 +9,7 @@ object BaseForm: TBaseForm
   VertScrollBar.Range = 83
   VertScrollBar.Visible = False
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Precharger (Ver.250822 002)'
+  Caption = 'Precharger (Ver.250822 003)'
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -632,7 +632,6 @@ object BaseForm: TBaseForm
     Fill.ShadowOffset = 0
     Fill.Glow = gmNone
     Version = '1.5.2.1'
-    OnClick = AdvSmoothPanel_PLCClick
     TabOrder = 4
     TMSStyle = 0
   end
@@ -6376,11 +6375,12 @@ object BaseForm: TBaseForm
       OnClick = rbKoreanClick
     end
     object rbEnglish: TRadioButton
-      Left = 50
+      Left = 49
       Top = 4
       Width = 40
       Height = 20
       Caption = 'En'
+      Checked = True
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -15
@@ -6388,6 +6388,7 @@ object BaseForm: TBaseForm
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 1
+      TabStop = True
       OnClick = rbKoreanClick
     end
     object rbChinese: TRadioButton
@@ -6397,7 +6398,6 @@ object BaseForm: TBaseForm
       Width = 40
       Height = 20
       Caption = 'Cn'
-      Checked = True
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -15
@@ -6405,7 +6405,6 @@ object BaseForm: TBaseForm
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 2
-      TabStop = True
       OnClick = rbKoreanClick
     end
   end
