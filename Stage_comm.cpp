@@ -57,13 +57,20 @@ void __fastcall TTotalForm::CmdForceStop_Original()
 void __fastcall TTotalForm::CmdTrayOut()
 {
 	AnsiString cell_serial_filename;
+    int nCellSerial = 0;
     if(chkBypass->Checked == false){
         //* 2번 모두 측정 한 후에 ok/ng 쓰기
     	BadInfomation();
+        nCellSerial = ReadCellSerial();
+        if(nCellSerial != (tray.cell_count1 + tray.cell_count2))
+        WritePLCLog("CmdTrayOut",
+            "Cell Serial Count Error. CellSerial : " + IntToStr(nCellSerial)
+            + ", CellCount : " + IntToStr(tray.cell_count1 + tray.cell_count2));
         WriteVoltCurrValue();
 		WriteResultFile();
     }
 
+    Sleep(100);
 	// 자동검사 9(끝). 트레이 방출
 	if(/*NgCount == (tray.cell_count1 + tray.cell_count2) || */
     	NgCount > editNGAlarmCount->Text.ToIntDef(10)){

@@ -334,6 +334,7 @@ private:	// User declarations
     void __fastcall WriteMonDataSort(int traypos);
     void __fastcall WriteResultFile();
     void __fastcall WriteResultFile(int traypos);
+    int __fastcall ReadCellSerial();
     void __fastcall BadInfomation();
 	void __fastcall WriteVoltCurrValue();
     void __fastcall WriteVoltCurrValue(int initValue);
