@@ -43,10 +43,14 @@ void __fastcall TForm_PLCInterface::SetListViewPLC(int nTag)
 	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_ID), "IN TRAY BCR DATA");
 
 	// CELL INFO => 1 : YES, 0 : NO
-	for(int i = 0; i < LINECOUNT; i++)
+    //* 16(bit)개씩 36개
+	for(int i = 0; i < 36; i++)
 	{
-		AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_CELL_DATA + (i * 2)), "TRAY CELL DATA #" + IntToStr(i + 1));
+		AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_CELL_DATA + i), "TRAY CELL DATA #" + IntToStr(i + 1));
 	}
+
+    for(int i = 0; i < LINECOUNT; i++)
+       AddListView(ListView_PLC, "D" + IntToStr(PLC_D_CELL_SERIAL_NUM + PLC_D_PRE_CELL_SERIAL + (i * 10 * LINECOUNT)), "CELL SERIAL #" + IntToStr(i * LINECOUNT + 1));
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm_PLCInterface::SetListViewPC(int nTag)
@@ -73,15 +77,22 @@ void __fastcall TForm_PLCInterface::SetListViewPC(int nTag)
     AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_NG_ALARM), "NG ALARM");
 
 	// PRECHARGE RESULT OK/NG => 1 : NG, 0 : OK or NO CELL
+    //* 16 bit * 36
+	for(int i = 0; i < 36; i++)
+		AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_MEASURE_OK_NG + i), "PRECHARGE OK/NG #" + IntToStr(i + 1));
+
+//	for(int i = 0; i < MAXCHANNEL; i++)
+//		AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_VOLTAGE_VALUE + i), "PRECHARGE VOLTAGE #" + IntToStr(i + 1));
+//
+//	for(int i = 0; i < MAXCHANNEL; i++)
+//		AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_CURRENT + PC_D_PRE_CURRENT_VALUE + i), "PRECHARGE CURRENT #" + IntToStr(i + 1));
+    for(int i = 0; i < LINECOUNT; i++)
+		AddListView(ListView_PC, "D" + IntToStr(PC_D_INTERFACE_VOLTAGE + PC_D_PRE_VOLTAGE_VALUE + i * LINECOUNT), "VOLT VALUE #" + IntToStr(i * LINECOUNT + 1));
+
 	for(int i = 0; i < LINECOUNT; i++)
-		AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_MEASURE_OK_NG + (i * 2)), "PRECHARGE OK/NG #" + IntToStr(i + 1));
-
-	for(int i = 0; i < MAXCHANNEL; i++)
-		AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_VOLTAGE_VALUE + i), "PRECHARGE VOLTAGE #" + IntToStr(i + 1));
-
-	for(int i = 0; i < MAXCHANNEL; i++)
-		AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_CURRENT + PC_D_PRE_CURRENT_VALUE + i), "PRECHARGE CURRENT #" + IntToStr(i + 1));
-}//---------------------------------------------------------------------------
+		AddListView(ListView_PC, "D" + IntToStr(PC_D_INTERFACE_CURRENT + PC_D_PRE_CURRENT_VALUE + i  * LINECOUNT), "CURR VALUE #" + IntToStr(i * LINECOUNT + 1));
+}
+//---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
 void __fastcall TForm_PLCInterface::AddListView(TListView *list, AnsiString address, AnsiString name)
@@ -123,15 +134,19 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetString(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_ID, 10);
 
 			AnsiString cellinfo;
-			for(int i = 0; i < LINECOUNT; i++)
+            //* 16bit * 36
+			for(int i = 0; i < 36; i++)
 			{
 				cellinfo = "";
-				for(int j = 0; j < LINECOUNT; j++)
+				for(int j = 0; j < 16; j++)
 				{
-					cellinfo += Mod_PLC->GetData(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_CELL_DATA + (i * 2), j);
+					cellinfo += Mod_PLC->GetData(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_CELL_DATA + i, j);
 				}
 				nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = cellinfo;
 			}
+
+            for(int i = 0; i < LINECOUNT; i++)
+            	ListView_PLC->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetCellSrial(PLC_D_PRE_CELL_SERIAL, i * LINECOUNT, 10);
 		}
 	}
 
@@ -160,28 +175,35 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
             nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_ALARM);
 			// PRECHARGE RESULT OK/NG
 			AnsiString okng_bin;
-			for(int i = 0; i < LINECOUNT; i++)
+            //* 16 bit * 36
+			for(int i = 0; i < 36; i++)
 			{
 				okng_bin = "";
-				for(int j = 0; j < LINECOUNT; j++)
-					okng_bin += Mod_PLC->GetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (i * 2), j);
+				for(int j = 0; j < 16; j++)
+					okng_bin += Mod_PLC->GetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j);
 
 				nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = okng_bin;
 			}
 
 			double vol1 = 0.0, vol2 = 0.0;
 			// PRECHARGE RESULT VOLTAGE VALUE
-			for(int i = 0; i < MAXCHANNEL; i++)
-			{
-				vol1 = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + i);
-                nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = vol1;
-			}
+//			for(int i = 0; i < MAXCHANNEL; i++)
+//			{
+//				vol1 = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + i);
+//                nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = vol1;
+//			}
+            for(int i = 0; i < LINECOUNT; i++)
+        		ListView_PC->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetVoltValue(PC_D_PRE_VOLTAGE_VALUE, i * LINECOUNT);
+
 
 			// PRECHARGE RESULT CURRENT VALUE
-			for(int i = 0; i < MAXCHANNEL; i++)
-			{
-				nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + i);
-			}
+//			for(int i = 0; i < MAXCHANNEL; i++)
+//			{
+//				nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1]
+//					= Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + i);
+//			}
+            for(int i = 0; i < LINECOUNT; i++)
+	        	ListView_PC->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetCurrValue(PC_D_PRE_CURRENT_VALUE, i * LINECOUNT);
 		}
 	}
 }
@@ -195,7 +217,7 @@ void __fastcall TForm_PLCInterface::btnWriteValueClick(TObject *Sender)
 {
 	int address = cbAddress->Text.ToIntDef(41000);
 	int value = editValue->Text.ToIntDef(1);
-	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, address - 41000, value);
+	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, address - 34000, value);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm_PLCInterface::btnWriteNgValueClick(TObject *Sender)
@@ -204,10 +226,11 @@ void __fastcall TForm_PLCInterface::btnWriteNgValueClick(TObject *Sender)
 	vector<int> ngchannels = BaseForm->StringToVector(strIrocvNg);
 
     int ngCount = 0;
-	for(int i = 0; i < LINECOUNT; ++i){
-		for(int j = 0; j < LINECOUNT; j++)
+    //* 16 bit * 36
+	for(int i = 0; i < 36; ++i){
+		for(int j = 0; j < 16; j++)
 		{
-			int nChannel = i * LINECOUNT + j + 1;
+			int nChannel = i * 16 + j + 1;
 			if(find(ngchannels.begin(), ngchannels.end(), nChannel) != ngchannels.end())
 			{
 				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, true);
@@ -233,14 +256,14 @@ void __fastcall TForm_PLCInterface::btnWriteIrOcvValueClick(TObject *Sender)
 	// 2 Word :  value / (65536 / 2) => 윗 주소에 쓰기, value % (65536 /2 ) => 아래 주소에 쓰기 // herald 2017 11 30
 	for(int i = 0; i < MAXCHANNEL; i++)
 	{
-		double voltage = voltage_base + (i / 100.0);
-		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + i, FormatFloat("0000", voltage * 10.0) % (256 * 256));
+		int32_t voltage_int = static_cast<int32_t>(voltage_base * 10.0) + i;  // signed 32-bit int
+        Mod_PLC->SetVoltValue(PC_D_PRE_VOLTAGE_VALUE, i, voltage_int);
 	}
 
 	for(int i = 0; i < MAXCHANNEL; i++)
 	{
-		double current = current_base + (i / 10.0);
-		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + i, FormatFloat("00000", current * 10.0) % (256 * 256));
+		double current = static_cast<int32_t>(current_base * 10.0) + i;
+		Mod_PLC->SetCurrValue(PC_D_PRE_CURRENT_VALUE, i, current);
 	}
 }
 //---------------------------------------------------------------------------

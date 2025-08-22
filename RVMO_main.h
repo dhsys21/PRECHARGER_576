@@ -13,6 +13,7 @@
 #include "FormPLCInterface.h"
 #include "FormLanguage.h"
 #include "FormNgCountError.h"
+#include "FormErrorReset.h"
 #include "FormGraph.h"
 #include "Util.h"
 #include <jpeg.hpp>
@@ -87,6 +88,7 @@ __published:	// IDE-managed Components
 	TCheckBox *chkTest;
 	TRadioButton *rbChinese;
 	TAdvSmoothButton *btnInit;
+	TAdvSmoothPanel *pnlCONT;
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall ClockTimerTimer(TObject *Sender);

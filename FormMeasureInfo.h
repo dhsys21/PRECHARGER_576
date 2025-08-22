@@ -152,12 +152,13 @@ public:		// User declarations
 
 	int stage;
     int nStep;
+    int nSetStep;
     int nSetCount;
     void __fastcall SetStep();
     void __fastcall SetChannelInfo();
     void __fastcall SetChannelInfo(int traypos);
     bool n_bManualStart;
-
+    void __fastcall initChart(int volt, int curr);
 	__fastcall TMeasureInfoForm(TComponent* Owner);
 };
 //---------------------------------------------------------------------------

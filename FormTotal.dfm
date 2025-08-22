@@ -5121,7 +5121,7 @@ object TotalForm: TTotalForm
     Left = 641
     Top = 249
     Width = 544
-    Height = 425
+    Height = 460
     Cursor = crDefault
     CanMove = True
     Caption.Location = plCenterCenter
@@ -5157,7 +5157,7 @@ object TotalForm: TTotalForm
     TMSStyle = 0
     object lblConfiguration: TLabel
       Left = 7
-      Top = 10
+      Top = 7
       Width = 111
       Height = 19
       Caption = 'Configuration'
@@ -5170,7 +5170,7 @@ object TotalForm: TTotalForm
     end
     object gbPreCharger: TGroupBox
       Left = 7
-      Top = 47
+      Top = 33
       Width = 412
       Height = 100
       Caption = 'PRECHARGER'
@@ -5251,9 +5251,9 @@ object TotalForm: TTotalForm
       end
       object btnConnectPRECHARGER: TAdvSmoothButton
         Left = 307
-        Top = 33
+        Top = 25
         Width = 99
-        Height = 56
+        Height = 32
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
         Appearance.Font.Height = -13
@@ -5284,6 +5284,43 @@ object TotalForm: TTotalForm
         TabOrder = 4
         Version = '2.1.1.5'
         OnClick = btnConnectPRECHARGERClick
+        TMSStyle = 8
+      end
+      object btnDisconnPRECHARGER: TAdvSmoothButton
+        Left = 308
+        Top = 60
+        Width = 99
+        Height = 32
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWindowText
+        Appearance.Font.Height = -13
+        Appearance.Font.Name = 'Tahoma'
+        Appearance.Font.Style = [fsBold]
+        Appearance.Spacing = 0
+        Appearance.Rounding = 3
+        Appearance.WordWrapping = False
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Tahoma'
+        Status.Appearance.Font.Style = []
+        BevelColor = clMedGray
+        Caption = 'DisConnect'
+        Color = clWhite
+        ParentFont = False
+        TabOrder = 5
+        Version = '2.1.1.5'
+        OnClick = btnDisconnPRECHARGERClick
         TMSStyle = 8
       end
     end
@@ -5442,8 +5479,8 @@ object TotalForm: TTotalForm
       Visible = False
     end
     object gbEtc: TGroupBox
-      Left = 7
-      Top = 289
+      Left = 9
+      Top = 325
       Width = 514
       Height = 132
       Caption = 'ETC'
@@ -5651,10 +5688,53 @@ object TotalForm: TTotalForm
         TabOrder = 4
         Text = '5'
       end
+      object Panel5: TPanel
+        Left = 235
+        Top = 102
+        Width = 184
+        Height = 24
+        Margins.Top = 5
+        Margins.Bottom = 5
+        BevelKind = bkFlat
+        BevelOuter = bvNone
+        Caption = 'Current Min. (mA)'
+        Color = 15658734
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Padding.Top = 5
+        ParentBackground = False
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 5
+        Visible = False
+      end
+      object editCurrentMin: TEdit
+        Left = 423
+        Top = 102
+        Width = 75
+        Height = 24
+        Alignment = taCenter
+        AutoSize = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ImeName = 'Microsoft Office IME 2007'
+        NumbersOnly = True
+        ParentFont = False
+        TabOrder = 6
+        Text = '50'
+        Visible = False
+      end
     end
     object gbPlcConnection: TGroupBox
       Left = 7
-      Top = 153
+      Top = 135
       Width = 412
       Height = 130
       Caption = 'PLC CONNECTION'
@@ -5840,6 +5920,36 @@ object TotalForm: TTotalForm
         ParentFont = False
         TabOrder = 7
         Text = '8902'
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 7
+      Top = 268
+      Width = 412
+      Height = 58
+      Caption = 'MODEL NAME'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 8
+      object editModelName: TEdit
+        Left = 72
+        Top = 25
+        Width = 329
+        Height = 24
+        Alignment = taCenter
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ImeName = 'Microsoft Office IME 2007'
+        ParentFont = False
+        TabOrder = 0
+        Text = '20PQ'
       end
     end
   end

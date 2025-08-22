@@ -1693,7 +1693,7 @@ object MeasureInfoForm: TMeasureInfoForm
   object Timer_SetStep: TTimer
     Enabled = False
     OnTimer = Timer_SetStepTimer
-    Left = 1136
+    Left = 1120
     Top = 195
   end
   object Timer_SetStep2: TTimer

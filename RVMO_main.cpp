@@ -116,6 +116,10 @@ void __fastcall TBaseForm::ClockTimerTimer(TObject *Sender)
 		AdvSmoothPanel_PLC->Fill->ColorTo = poff->Color;
 	}
 
+    if(nForm[0]->Client->Active == true)
+        SetColorPanel(pnlCONT, true);
+    else
+        SetColorPanel(pnlCONT, false);
 
 	if(Now().FormatString("hhnn") == "0700") {
 		DeleteDay = 90;	// 12시가 되면 DeleteDay를 90으로 초기화
@@ -460,4 +464,5 @@ void __fastcall TBaseForm::btnInitClick(TObject *Sender)
     nForm[0]->Initialization();
 }
 //---------------------------------------------------------------------------
+
 

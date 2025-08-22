@@ -14,6 +14,7 @@ USEFORM("FormTotal.cpp", TotalForm);
 USEFORM("FormRemeasure.cpp", RemeasureForm);
 USEFORM("FormNgCountError.cpp", Form_NgCountError);
 USEFORM("FormPLCInterface.cpp", Form_PLCInterface);
+USEFORM("FormErrorReset.cpp", Form_ErrorReset);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -42,6 +43,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		Application->CreateForm(__classid(TForm_Graph), &Form_Graph);
 		Application->CreateForm(__classid(TForm_Language), &Form_Language);
 		Application->CreateForm(__classid(TForm_NgCountError), &Form_NgCountError);
+		Application->CreateForm(__classid(TForm_ErrorReset), &Form_ErrorReset);
 		Application->Run();
 	}
 	catch (Exception &exception)

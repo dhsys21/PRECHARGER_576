@@ -34,6 +34,8 @@ void __fastcall TTotalForm::WriteSystemInfo()
 	ini->WriteString("PRECHARGER", "IP", editPRECHARGERIPAddress->Text);
 	ini->WriteString("PRECHARGER", "PORT", editPRECHARGERPort->Text);
 
+    ini->WriteString("CELLINFO", "MODELNAME", editModelName->Text);
+
 	delete ini;
 }
 //---------------------------------------------------------------------------
@@ -81,45 +83,11 @@ bool __fastcall TTotalForm::ReadSystemInfo()
         Client->Port = editPRECHARGERPort->Text.ToIntDef(50000);
     }
 
+    editModelName->Text = ini->ReadString("CELLINFO", "MODELNAME", "20PQ");
+
     //btnConnectPRECHARGERClick(this);
 
 	delete ini;
-}
-//---------------------------------------------------------------------------
-bool __fastcall TTotalForm::ReadCellInfo()
-{
-	TIniFile *ini;
-
-	AnsiString file;
-	file = (AnsiString)BIN_PATH + "SystemInfo_"+ IntToStr(this->Tag) + ".inf";
-
-	ini = new TIniFile(file);
-
-	tray.cell_model = ini->ReadString("CELL_INFO", "CELL_MODEL", "-");
-	tray.lot_number = ini->ReadString("CELL_INFO", "LOT_NUMBER", "-");
-
-	delete ini;
-}
-//---------------------------------------------------------------------------
-bool __fastcall TTotalForm::LoadTrayInfo(AnsiString trayID)
-{
-	AnsiString filename;
-	filename = (UnicodeString)TRAY_PATH2 + trayID + ".Tray";
-    WritePLCLog("Read CELL SERIAL Filename", filename);
-	if(FileExists(filename)){
-		TIniFile *ini;
-
-		ini = new TIniFile(filename);
-		for(int i = 0; i < MAXCHANNEL; i++)
-		{
-			tray.cell_serial[i] = ini->ReadString(i + 1, "CELL_SERIAL", "-");
-		}
-
-		delete ini;
-	}
-	else return false;
-
-	return true;
 }
 //---------------------------------------------------------------------------
 // 환경설정 파일 저장 / 읽기
@@ -207,24 +175,23 @@ void __fastcall TTotalForm::ErrorLog()
 //---------------------------------------------------------------------------
 // 로그
 //---------------------------------------------------------------------------
-
-
-
-
 //---------------------------------------------------------------------------
-// Tray Info저장, Mon Data 저장, Final Result 저장
+// Mon Data 저장, Final Result 저장
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::WriteTrayInfo()
+//---------------------------------------------------------------------------
+//* 첫번째 트레이 위치에서는 절반만 결과 저장.
+//* 두번째 트레이 위치에서는 모든 결과 저장.
+void __fastcall TTotalForm::WriteResultFile()
 {
 	int file_handle;
 	AnsiString filename;
 	AnsiString dir;
-	AnsiString ok_ng;
+	AnsiString cell, cell_id, volt, curr, ok_ng;
 
 	dir = (AnsiString)DATA_PATH + Now().FormatString("yyyymmdd") + "\\" + lblTitle->Caption + "\\";
 	ForceDirectories((AnsiString)dir);
 
-	filename =  dir + tray.trayid +  "-" + Now().FormatString("yymmddhhnnss") + "-TRAYINFO.csv";
+	filename =  dir + tray.trayid +  "-" + Now().FormatString("yymmddhhnnss") + ".csv";
 
 	if(FileExists(filename)){
 		DeleteFile(filename);
@@ -234,23 +201,47 @@ void __fastcall TTotalForm::WriteTrayInfo()
 	FileSeek(file_handle, 0, 0);
 
 	AnsiString file;
-//	file = "TRAY ID," + tray.trayid + "\r\n";
-//	file += "CH,OK/NG\r\n";
-	file = "CELL 유무 (1 : OK/ 0 : NG)\r\n";
-	for(int i = 0; i < MAXCHANNEL; ++i)
-	{
-		if(tray.cell[i] == 1) ok_ng = "1";
-		else ok_ng = "0";
-		file = file + IntToStr(i+1) + "," + ok_ng + "\r\n";
+	file = "TRAY ID," + tray.trayid + "\r\n";
+    file = "TRAY POSITION,ALL\r\n";
+//	file = file + "CELL MODEL," + tray.cell_model + "\r\n";
+//	file = file + "LOT NUMBER," + tray.lot_number + "\r\n";
+	file = file + "ARRIVE TIME," + m_dateTime.FormatString("yyyy/mm/dd hh:nn:ss") + "\r\n";
+	file = file + "FINISH TIME," + Now().FormatString("yyyy/mm/dd hh:nn:ss") + "\r\n";
+	file = file + "VOLTAGE," + FormatFloat("0", config.volt) + "\r\n";
+	file = file + "CURRENT," + FormatFloat("0", config.curr) + "\r\n";
+	file = file + "TIME," + FormatFloat("0", config.time) + "\r\n";
+
+	file += "CH,CELL,CELL ID,VOLT,CURR,RESULT\r\n";
+
+    int channel;
+	for(int i = 0; i < MAXCHANNEL; ++i){
+        channel = i;
+        cell_id = tray.cell_serial[channel];
+		volt = real_data.final_volt[channel];
+		curr = real_data.final_curr[channel];
+
+		if(tray.cell[channel] == 1)
+		{
+			if(tray.measure_result[channel] == 0) ok_ng = "OK";
+			else ok_ng = "NG";
+
+			cell = "O";
+		}
+		else if(tray.cell[channel] == 0)
+		{
+			if(tray.measure_result[channel] == 0) ok_ng = "OUT FLOW";
+			else ok_ng = "NG (No Cell)";
+
+			cell = "X";
+		}
+
+		file = file + IntToStr(channel + 1) + "," + cell + "," + cell_id + "," + volt + "," + curr + "," + ok_ng + "\r\n";
 	}
 
 	FileWrite(file_handle, file.c_str(), file.Length());
 	FileClose(file_handle);
 }
-
 //---------------------------------------------------------------------------
-//* 첫번째 트레이 위치에서는 절반만 결과 저장.
-//* 두번째 트레이 위치에서는 모든 결과 저장.
 void __fastcall TTotalForm::WriteResultFile(int traypos)
 {
 	int file_handle;
@@ -261,7 +252,7 @@ void __fastcall TTotalForm::WriteResultFile(int traypos)
 	dir = (AnsiString)DATA_PATH + Now().FormatString("yyyymmdd") + "\\" + lblTitle->Caption + "\\";
 	ForceDirectories((AnsiString)dir);
 
-	filename =  dir + tray.trayid +  "-" + Now().FormatString("yymmddhhnnss") + "_TP" + IntToStr(traypos) + ".csv";
+	filename =  dir + tray.trayid + "_TP" + IntToStr(traypos) + ".csv";
 
 	if(FileExists(filename)){
 		DeleteFile(filename);
@@ -284,9 +275,8 @@ void __fastcall TTotalForm::WriteResultFile(int traypos)
 	file += "CH,CELL,CELL ID,VOLT,CURR,RESULT\r\n";
 
     int channel;
-	for(int i = 0; i < MAXCHANNEL; ++i){
-        //channel = GetChMap(this->Tag, traypos, i) - 1;
-        channel = i;
+	for(int i = 0; i < CHANNELCOUNT; ++i){
+        channel = GetChMap(this->Tag, traypos, i) - 1;
         cell_id = tray.cell_serial[channel];
 		volt = real_data.final_volt[channel];
 		curr = real_data.final_curr[channel];
@@ -330,10 +320,11 @@ void __fastcall TTotalForm::WriteMonData(int traypos)
 	else{
 		file_handle = FileCreate(filename);
 
-    file = "DATETIME,RUNCOUNT";
-    for(int nIndex = 0; nIndex < CHANNELCOUNT; nIndex++)
-        channel = GetChMap(this->Tag, traypos, nIndex);
-        file += ",CH" + IntToStr(channel) + " STATUS,CH" + IntToStr(channel) + " VOLTAGE,CH" + IntToStr(channel) + " CURRENT";
+    	file = "DATETIME,RUNCOUNT";
+    	for(int nIndex = 0; nIndex < CHANNELCOUNT; nIndex++){
+        	channel = GetChMap(this->Tag, traypos, nIndex);
+        	file += ",CH" + IntToStr(channel) + " STATUS,CH" + IntToStr(channel) + " VOLTAGE,CH" + IntToStr(channel) + " CURRENT";
+        }
     	file += "\r\n";
 	}
 

@@ -176,6 +176,8 @@ void __fastcall TTotalForm::InitTrayStruct(int traypos)
 
 		panel[channel]->Caption = "";
 		panel[channel]->Color = cl_line->Color;
+        LimitVolt[channel] = 0;
+        LimitCurr[channel] = 0;
 	}
 
     if(traypos == 1) MeasureInfoForm->btnInit1Click(this);
@@ -250,7 +252,7 @@ void __fastcall TTotalForm::PLCInitialization(int traypos)
 	for(int i = 0; i < CHANNELCOUNT; i++)
 	{
         channel = GetChMap(this->Tag, traypos, i) - 1;
-		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + channel, 0);
+		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Volt_Data, PC_D_PRE_VOLTAGE_VALUE + channel, 0);
 		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + channel, 0);
 	}
 
@@ -488,7 +490,6 @@ void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
         else tray.trayin = false;
 
         nTrayPos = GetTrayPos();
-        startOffset = (nTrayPos - 1) * CHANNELCOUNT;  // 0 or 288
 		switch(nSection)
 		{
 			case STEP_WAIT:
@@ -547,12 +548,6 @@ bool __fastcall TTotalForm::ErrorCheck()
 			WritePLCLog("ErrorCheck", ErrorCheckStatus);
 		}
         BaseForm->advPLCInterfaceShow->Color = clRed;
-
-        //* 2025 04 08 plc 연결이 안되면 아래 코드 때문에 수동측정도 못함.
-		//Initialization();
-		//if(Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data[this->Tag], PLC_D_PRE_PROB_CLOSE)
-		//		&& Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data[this->Tag], PLC_D_PRE_TRAY_IN))
-		//	CmdForceStop();
 
 		return true;
 	}
@@ -617,27 +612,26 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 			DisplayStatus(nREADY);
             //* Cell 정보 가져오기. 1 => 셀있음, 0 => 셀없음
             //* Cell 정보는 tray pos 상관없이 전체를 가져옴.
-            for(int i = 0; i < LINECOUNT; i++)
+            //* 16개 * 36 = 576
+            for(int i = 0; i < 36; i++)
 			{
-				for(int j = 0; j < LINECOUNT; j++)
+				for(int j = 0; j < 16; j++)
 				{
-					tray.cell[i * LINECOUNT + j] = GetPlcData(PLC_D_PRE_TRAY_CELL_DATA + (i * 2), j);
+					tray.cell[i * 16 + j] = GetPlcData(PLC_D_PRE_TRAY_CELL_DATA + i, j);
 				}
 			}
-
-            //* Tray Info 저장
-            WriteTrayInfo();
 
             //* Cell 갯수. tray pos 별 갯수. 갯수가 0이면 바로 종료
             //* tray pos 1 => cell_count1, tray pos 2 => cell_count2
             tray.cell_count1 = 0;
             tray.cell_count2 = 0;
             for(int i = 0; i < CHANNELCOUNT; i++){
-                channel = GetChMap(this->Tag, nTrayPos, i);
-                if(nTrayPos == 1)
-                	tray.cell_count1 += tray.cell[channel];
-                else if(nTrayPos == 2)
-                    tray.cell_count2 += tray.cell[channel];
+                channel = GetChMap(this->Tag, 1, i);
+                tray.cell_count1 += tray.cell[channel - 1];
+            }
+            for(int i = 0; i < CHANNELCOUNT; i++){
+                channel = GetChMap(this->Tag, 2, i);
+                tray.cell_count2 += tray.cell[channel - 1];
             }
 
             DisplayProcess(sBarcode, "AutoInspection_Wait", "[STEP 2] Reading Cell info ... ");
@@ -653,21 +647,16 @@ void __fastcall TTotalForm::AutoInspection_Wait()
             else if(nTrayPos == 1 && tray.cell_count1 == 0){
                 DisplayTrayInfo(1);
                 DisplayTrayInfo(2);
-            	//SetPcValue(PC_D_PRE_PROB_OPEN, 1); //* 현재 open 상태
-
                 DisplayProcess(sBarcode, "AutoInspection_Wait", "[STEP 3] TRAY POS 1 and CELL = 0 ... ");
                 nStep = 4;
             }
             else if(nTrayPos == 2 && tray.cell_count2 == 0){
                 DisplayTrayInfo(2);
-            	//SetPcValue(PC_D_PRE_PROB_OPEN, 1); //* 현재 open 상태
-
                 DisplayProcess(sBarcode, "AutoInspection_Wait", "[STEP 3] TRAY POS 2 and CELL = 0 ... ");
                 nStep = 4;
             }
 			else if((nTrayPos == 1 && tray.cell_count1 > 0) || (nTrayPos == 2 && tray.cell_count2 > 0))
 			{
-				//* WriteTrayInfo();
                 if(nTrayPos == 1){
                     tray.pos1_complete = false;
 
@@ -897,7 +886,7 @@ void __fastcall TTotalForm::AutoInspection_Finish()
 				editTrayId->Text = "";
 
 				nSection = STEP_WAIT;
-				nStep = 3;
+				nStep = 0;
 			}
 			break;
 		default:
@@ -1018,8 +1007,9 @@ void __fastcall TTotalForm::Timer_ResetTimer(TObject *Sender)
 				Form_Error->DisplayErrorMessage(this->Tag, nResetErr);
 				Form_Error->Tag = this->Tag;
                 nRStep = 2;
-            }else
-                nRStepCount++;
+            }
+
+            nRStepCount++;
 
             pnlResetMsg->Visible = true;
             pnlResetMsg->Caption = "PreCharger is under RESET. Please wait...(" + IntToStr(nRStepCount) + ")";
@@ -1048,14 +1038,20 @@ void __fastcall TTotalForm::Timer_RebootTimer(TObject *Sender)
         case 1:
             if(nRStepCount > 10 && (pnlStatus->Caption == "IDL" || pnlStatus->Caption == "RUN"))
                 nRStep = 2;
+            else if(nRStepCount > 10 && pnlStatus->Caption == "WDT")
+                nRStep = 3;
+            else if(nRStepCount == 15){
+                Client->Active = false;
+            }
             else if(nRStepCount > 60){
                 pnlResetMsg->Visible = false;
                 //* error display
                 Form_Error->DisplayErrorMessage(this->Tag, nRebootErr);
 				Form_Error->Tag = this->Tag;
                 nRStep = 2;
-            }else
-                nRStepCount++;
+            }
+
+            nRStepCount++;
 
             pnlResetMsg->Visible = true;
             pnlResetMsg->Caption = "PreCharger is under REBOOT. Please wait... (" + IntToStr(nRStepCount) + ")";
@@ -1065,16 +1061,41 @@ void __fastcall TTotalForm::Timer_RebootTimer(TObject *Sender)
             Timer_Reboot->Enabled = false;
             nRStep = 99;
             break;
+        case 3:
+            CmdReset();
+            nRStepCount = 0;
+            pnlStatus->Caption = "RST";
+            nRStep = 4;
+            break;
+        case 4:
+            if(nRStepCount > 5 && (pnlStatus->Caption == "IDL" || pnlStatus->Caption == "RUN"))
+                nRStep = 5;
+            else if(nRStepCount > 15){
+                pnlResetMsg->Visible = false;
+                //* error display
+				Form_Error->DisplayErrorMessage(this->Tag, nResetErr);
+				Form_Error->Tag = this->Tag;
+                nRStep = 5;
+            }
+
+            nRStepCount++;
+
+            pnlResetMsg->Visible = true;
+            pnlResetMsg->Caption = "PreCharger is under RESET. Please wait...(" + IntToStr(nRStepCount) + ")";
+            break;
+        case 5:
+            pnlResetMsg->Visible = false;
+            Timer_Reboot->Enabled = false;
+
+            nRStep = 99;
+            break;
         default:
         	break;
     }
 }
 //---------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------
 //  Timer - AutoInspection, ManualInspection, FinishCharging, Reset, Reboot
 //---------------------------------------------------------------------------
-
 
 
 //---------------------------------------------------------------------------
@@ -1096,13 +1117,12 @@ void __fastcall TTotalForm::ChannelStatus()
 	dTime2 = SecondsBetween(dt1CurrentTime, dt1FinishTime);
 
 	//* keysightEndTime -> 설정시간이 모두 지나고 keysightEndTime 이 되면 종료한다.
-	if(tray.ams == true && dTime > 30 && testTime->Caption.ToIntDef(0) > config.time + 7)
+	if(tray.ams == true && dTime > 30 && testTime->Caption.ToIntDef(0) > config.time + 2)
 	{
         CmdStop();
-        //if(BaseForm->WaitForMilliSeconds(1000) == true)
-        CmdAutoStop();
-	}
 
+        CmdAutoStop(nTrayPos);
+	}
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::StatusTimerTimer(TObject *Sender)
@@ -1120,6 +1140,9 @@ void __fastcall TTotalForm::StatusTimerTimer(TObject *Sender)
 
     if(GetPlcValue(PLC_D_PRE_PROB_CLOSE) == 1) ShowPLCSignal(pnlProbeClose, true);
     else ShowPLCSignal(pnlProbeClose, false);
+
+    nTrayPos = GetTrayPos();
+    pnlTrayPos->Caption->Text = IntToStr(nTrayPos);
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::StageStatus()
@@ -1209,7 +1232,6 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
     int channel;
 	try{
 		for(int i = 0; i < CHANNELCOUNT; ++i){
-            //channel = chMap[(traypos - 1) * (MAXCHANNEL / 2) + i + 1] - 1;
             channel = GetChMap(this->Tag, traypos, i) - 1;
 			if(tray.amf)
 			{
@@ -1217,8 +1239,10 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 				//* 2024 04 10 충전종료에러 때문에 조건 수정
 				//* volt, curr -> final_volt, final_curr
 				//* 10, 1000 => 100, 500
-					if(real_data.final_result[channel] == "0" || real_data.final_result[channel] == "2"
-						|| (real_data.final_curr[channel] < 100 && real_data.final_volt[channel] < 500)){
+					if(/*real_data.final_result[channel] == "0" || real_data.final_result[channel] == "2"*/
+                        real_data.status[channel] < -2
+						|| (real_data.final_curr[channel] < 100 && real_data.final_volt[channel] < 500)
+						|| real_data.final_volt[channel] > 4200){
 						//* 결과 NG
 						panel[channel]->Color = cl_error->Color;
       				}
@@ -1241,12 +1265,12 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 					m_sTempVlot[channel] = real_data.volt[channel];
 					m_sTempCurr[channel] = real_data.curr[channel];
 
-					//GetCodeColor(panel[channel], i);
+                    if(LimitVolt[i].ToDouble() < real_data.volt[i].ToDouble())
+						LimitVolt[i] = real_data.volt[i];
+
+					if(LimitCurr[i].ToDouble() < real_data.curr[i].ToDouble())
+						LimitCurr[i] = real_data.curr[i];
 				 }
-//                 else if(m_sTempCurr[channel] != "Cell"
-//					&& (real_data.status[channel] > -2 && BaseForm->StringToDouble(real_data.volt[channel],0) <= 100)){
-//					//* 이전값 그대로 표시
-//				 }
 				 else{
                     m_sTempVlot[channel] = real_data.volt[channel];
 					m_sTempCurr[channel] = real_data.curr[channel];
@@ -1254,7 +1278,7 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 					//GetCodeColor(panel[channel], i);
 				 }
 
-                 if(testTime->Caption.ToIntDef(0) > 5)
+                 if(testTime->Caption.ToIntDef(0) > 10)
 					GetCodeColor(panel[channel], channel);
 			}
 
@@ -1295,6 +1319,11 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 
 				MeasureInfoForm->pvolt[channel]->Caption = m_sTempVlot[channel];
 				MeasureInfoForm->pcurr[channel]->Caption = m_sTempCurr[channel];
+
+                //* Graph Start
+                MeasureInfoForm->chartVoltage->Series[0]->YValue[i + 1] = StringToDouble(m_sTempVlot[i], 0);
+                MeasureInfoForm->chartCurrent->Series[0]->YValue[i + 1] = StringToDouble(m_sTempCurr[i], 0);
+				//* Graph End
 			}
 		}
 	}catch(...){}
@@ -1412,88 +1441,63 @@ void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
 void __fastcall TTotalForm::SetResultList(int traypos)
 {
     int channel;
+    AnsiString fResult = "";
+    double fVolt, fCurr;
+    double minCurr = StringToDouble(editCurrentMin->Text, 0);
 	for(int index = 0; index < CHANNELCOUNT; ++index)
 	{
         channel = GetChMap(this->Tag, traypos, index) - 1;
-        //* 셀이 있을 때 NONE(0), FAIL(2) 은 NG (셀이 있는데 충전이 안되거나 에러가 나면 불량
+        fResult = real_data.final_result[channel];
+        fVolt = StringToDouble(real_data.final_volt[channel], 0);
+        fCurr = StringToDouble(real_data.final_curr[channel], 0);
+        //* 2025 07 14 voltage, current 값으로면 ok/ng 판단. CmdReport() 실행하지 않음(시간문제)
+        //* DisplayChannelInfo 에서 처리 volt < 500, curr < 100, volt > 4200 일때 error(NG)
 		if(tray.cell[channel] == 1)
 		{
-			if(real_data.final_result[channel] == "0" || real_data.final_result[channel] == "2")
+            if(panel[channel]->Color == cl_error->Color)
 				tray.measure_result[channel] = 1;
 			else
 				tray.measure_result[channel] = 0;
 		}
-        //* 셀이 없을 때 RUNNING(1), OK(4) 는 NG (셀이 없으면 충전이 안되어야 함.)
+        //* 셀이 없을 때 전압이 500mV 넘으면 overflow.
 		else if(tray.cell[channel] == 0)
 		{
-			if(real_data.final_result[channel] == "1" || real_data.final_result[channel] == "4")
-				tray.measure_result[channel] = 1;
-			else
-            	tray.measure_result[channel] = 0;
+            if(fVolt > 500 && fCurr > 100)
+                tray.measure_result[channel] = 0;
+            else
+                tray.measure_result[channel] = 1;
         }
 	}
 
-	CmdForceStop();
+	//* CmdAutoStop 으로 위치 변경
+	//CmdForceStop(traypos);
 }
 //---------------------------------------------------------------------------
-// 트레이 위치 변경이 없을 때 버전
-void __fastcall TTotalForm::BadInfomation2()
-{
-    int channel, index;
-	for(int i = 0; i < LINECOUNT / 2; ++i){
-		for(int j = 0; j < LINECOUNT; j++)
-		{
-            index = startOffset + (i * LINECOUNT + j + 1);
-            channel = chMap[index] - 1;
-            //* 셀이 있는데 Fail 이면 1, OK 면 0
-            //* measure_result == 1 : NG, == 0 : OK
-			if((tray.cell[channel] == 1) && tray.measure_result[channel] == 1)
-			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / LINECOUNT) * 2, channel % LINECOUNT, true);
-				acc_remeasure[channel] += 1;   // 셀이 있고 에러일 때 count 증가
-				ngCount++;
-				NgCount++;
-			}
-			else if(tray.cell[channel] == 1 && tray.measure_result[channel] == 0)
-			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / LINECOUNT) * 2, channel % LINECOUNT, false);
-			}
-            //* 셀이 없으면 1.
-			else
-			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / LINECOUNT) * 2, channel % LINECOUNT, true);
-				ngCount++;
-			}
-		}
-	}
-
-	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_COUNT, ngCount);
-}
 void __fastcall TTotalForm::BadInfomation()
 {
-    int channel, index;
-	for(int i = 0; i < LINECOUNT / 2; ++i){
-		for(int j = 0; j < LINECOUNT; j++)
+    int channel;
+    //* 16bit * 36
+	for(int i = 0; i < 36; ++i){
+		for(int j = 0; j < 16; j++)
 		{
-            index = startOffset + (i * LINECOUNT + j + 1);
-            channel = chMap[index] - 1;
+            channel = (i * 16) + j;
             //* 셀이 있는데 Fail 이면 1, OK 면 0
             //* measure_result == 1 : NG, == 0 : OK
 			if((tray.cell[channel] == 1) && tray.measure_result[channel] == 1)
 			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / LINECOUNT) * 2, channel % LINECOUNT, true);
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, true);
 				acc_remeasure[channel] += 1;   // 셀이 있고 에러일 때 count 증가
 				ngCount++;
 				NgCount++;
 			}
 			else if(tray.cell[channel] == 1 && tray.measure_result[channel] == 0)
 			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / LINECOUNT) * 2, channel % LINECOUNT, false);
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, false);
 			}
             //* 셀이 없으면 1.
 			else
 			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / LINECOUNT) * 2, channel % LINECOUNT, true);
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, true);
 				ngCount++;
 			}
 		}
@@ -1501,22 +1505,31 @@ void __fastcall TTotalForm::BadInfomation()
 
 	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_COUNT, ngCount);
 }
-
+//---------------------------------------------------------------------------
 void __fastcall TTotalForm::WriteVoltCurrValue()
 {
-	// ir value 2 Word
-	// 2 Word :  value / 65536 => 윗 주소에 쓰기, value % 65536 => 아래 주소에 쓰기 // herald 2017 11 30
     Mod_PLC->PLC_Write_Result = true;
 	for(int i = 0; i < MAXCHANNEL; i++)
 	{
-		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + i, FormatFloat("00000", (real_data.final_volt[i].ToDouble() * 10)) % (256 * 256));
+        int32_t voltage_int = static_cast<int32_t>(std::floor(StringToDouble(real_data.final_volt[i], 0) * 10.0 + 0.5));
+        Mod_PLC->SetVoltValue(PC_D_PRE_VOLTAGE_VALUE, i, voltage_int);
 	}
 
 	for(int i = 0; i < MAXCHANNEL; i++)
 	{
-		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + i, FormatFloat("00000", (real_data.final_curr[i].ToDouble() * 10)) % (256 * 256));
+        int32_t current_int = static_cast<int32_t>(std::floor(StringToDouble(real_data.final_curr[i], 0) * 10.0 + 0.5));
+        Mod_PLC->SetCurrValue(PC_D_PRE_CURRENT_VALUE, i, current_int);
 	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::WriteVoltCurrValue(int initValue)
+{
+    Mod_PLC->PLC_Write_Result = true;
+	for(int i = 0; i < MAXCHANNEL; i++)
+        Mod_PLC->SetVoltValue(PC_D_PRE_VOLTAGE_VALUE, i, initValue);
 
+	for(int i = 0; i < MAXCHANNEL; i++)
+        Mod_PLC->SetCurrValue(PC_D_PRE_CURRENT_VALUE, i, initValue);
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::WriteMINMAX(int stage_num)
@@ -1862,7 +1875,7 @@ void __fastcall TTotalForm::SET_SENDATA(AnsiString eqstatus, AnsiString runcount
     //* 충전종료 및 Final 데이터 저장
     if(stage.status == IDL && stage.oldstatus == RUN)
     {
-        CmdAutoStop();
+        CmdAutoStop(nTrayPos);
     }
 }
 //---------------------------------------------------------------------------
@@ -1872,19 +1885,22 @@ void __fastcall TTotalForm::ProcessRPY(AnsiString param)
 
     if(LASTCMD == "REP"){
         SetFinalResult(param);
-//    } else if(LASTCMD == "RST" || LASTCMD == "RBT"){
-//        if(param.Pos("No error") > 0)
-//            nRStep = 2;
     } else if(LASTCMD == "SET"){
         if(param.Pos("No error") > 0)
-            MeasureInfoForm->nStep = 1; // check setup
-        else
-            MeasureInfoForm->nStep = 3; // reset
+            MeasureInfoForm->nSetStep = 1; // check setup
+		else{
+			MeasureInfoForm->nSetStep = 4; // reset -> show error
+            if(Form_ErrorReset->Visible == false)
+            	Form_ErrorReset->DisplayErrorMessage(this->Tag);
+		}
     } else if(LASTCMD == "ENA"){
         if(param.Pos("No error"))
-            MeasureInfoForm->nStep = 4; // end
-        else if(param.Pos("-1001") > 0)
-            MeasureInfoForm->nStep = 3; // reset
+            MeasureInfoForm->nSetStep = 4; // end
+		else /*if(param.Pos("-1001") > 0)*/{
+			MeasureInfoForm->nSetStep = 4; // reset -> show error
+            if(Form_ErrorReset->Visible == false)
+            	Form_ErrorReset->DisplayErrorMessage(this->Tag);
+		}
     }
 }
 //---------------------------------------------------------------------------
@@ -1904,7 +1920,7 @@ void __fastcall TTotalForm::SetStatus(AnsiString strStatus)
         hexStr = strStatus.SubString(nIndex * 4 + 3, 2) + strStatus.SubString(nIndex * 4 + 1, 2);
         int16_t hexValue = strtol(hexStr.c_str(), NULL, 16);
 
-        ch = chMap[startOffset + nIndex + 1];
+        ch = chMap[(nTrayPos - 1) * 288 + nIndex + 1];
         real_data.status[ch - 1] = hexValue;
     }
 }
@@ -1922,7 +1938,7 @@ void __fastcall TTotalForm::SetVoltage(AnsiString strVoltage)
         memcpy(&fVal, &hexValue, sizeof(float));
         double dVal = static_cast<double>(fVal) * 1000;
 
-        ch = chMap[startOffset + nIndex + 1];
+        ch = chMap[(nTrayPos - 1) * 288 + nIndex + 1];
 		real_data.volt[ch - 1] = FormatFloat("0.0", dVal);
     }
 }
@@ -1940,7 +1956,7 @@ void __fastcall TTotalForm::SetCurrent(AnsiString strCurrent)
         memcpy(&fVal, &hexValue, sizeof(float));
         double dVal = static_cast<double>(fVal) * 1000;
 
-        ch = chMap[startOffset + nIndex + 1];
+        ch = chMap[(nTrayPos - 1) * 288 + nIndex + 1];
 		real_data.curr[ch - 1] = FormatFloat("0.0", dVal);//FloatToStr(dVal);
 	}
 }
@@ -1958,7 +1974,7 @@ void __fastcall TTotalForm::SetCapacity(AnsiString strCapacity)
         memcpy(&fVal, &hexValue, sizeof(float));
         double dVal = static_cast<double>(fVal) * 1000;
 
-        ch = chMap[startOffset + nIndex + 1];
+        ch = chMap[(nTrayPos - 1) * 288 + nIndex + 1];
         real_data.capa[ch - 1] = FormatFloat("0.0", dVal);
     }
 }
@@ -1990,7 +2006,7 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
             // `,`로 분리하여 배열에 저장
             int pos;
             while ((pos = extracted.Pos(",")) > 0 && nResultIndex < MAX_SIZE) {
-                channel = chMap[startOffset + nResultIndex];
+                channel = chMap[(nTrayPos - 1) * 288 + nResultIndex];
 
                 real_data.final_result[channel - 1] = extracted.SubString(1, pos - 1).Trim();  // 배열에 추가
                 extracted = extracted.SubString(pos + 1, extracted.Length() - pos);
@@ -1998,7 +2014,7 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
                 nResultIndex++;
             }
             if (nResultIndex < MAX_SIZE + 1) {
-                channel = chMap[startOffset + nResultIndex];
+                channel = chMap[(nTrayPos - 1) * 288 + nResultIndex];
 
                 real_data.final_result[channel - 1] = extracted.Trim();  // 마지막 값 추가
             }
@@ -2018,7 +2034,7 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
             // `,`로 분리하여 배열에 저장
             int pos;
             while ((pos = extracted.Pos(",")) > 0 && nResultIndex < MAX_SIZE) {
-                channel = chMap[startOffset + nResultIndex];
+                channel = chMap[(nTrayPos - 1) * 288 + nResultIndex];
 
                 real_data.final_result[channel - 1] = extracted.SubString(1, pos - 1).Trim();  // 배열에 추가
                 extracted = extracted.SubString(pos + 1, extracted.Length() - pos);
@@ -2026,7 +2042,7 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
                 nResultIndex++;
             }
             if (nResultIndex < MAX_SIZE + 1) {
-                channel = chMap[startOffset + nResultIndex];
+                channel = chMap[(nTrayPos - 1) * 288 + nResultIndex];
 
                 real_data.final_result[channel - 1] = extracted.Trim();  // 마지막 값 추가
             }
@@ -2037,10 +2053,13 @@ void __fastcall TTotalForm::SetFinalResult(AnsiString strResult)
 void __fastcall TTotalForm::SetFinalData()
 {
     int channel;
-    for(int nIndex = 0; nIndex < MAXCHANNEL / 2; nIndex++){
-        //channel = chMap[startOffset + nIndex + 1] - 1;
+    double tempVolt = 0.0, tempCurr = 0.0;
+    for(int nIndex = 0; nIndex < CHANNELCOUNT; nIndex++){
         channel = GetChMap(this->Tag, nTrayPos, nIndex) - 1;
-		if(real_data.status[channel] > -2 && StringToDouble(real_data.volt[channel], 0) > 100){
+        tempVolt = StringToDouble(real_data.volt[channel], 0);
+        tempCurr = StringToDouble(real_data.curr[channel], 0);
+
+		if(real_data.status[channel] > -2 && tempVolt > 100){
 			real_data.final_status[channel] = real_data.status[channel];
             real_data.final_volt[channel] = real_data.volt[channel];
             real_data.final_curr[channel] = real_data.curr[channel];
@@ -2048,21 +2067,17 @@ void __fastcall TTotalForm::SetFinalData()
 		}
 		//* -2는 무시
 		//* -2는 done 상태로 전압, 전류값이 점점 줄어든다. => 이 값은 final 데이터로 처리하면 안됨.
+        //* 2024 07 09 다른 셀이 상태가 2이고 이 셀의 상태가 -2인 경우가 있음.
+        //* 셀마다 끝나는 시점이 1,2 초 차이가 나기 때문.
+        //* -2일때 처리를 하면 정상셀이 NG셀이 됨.
 		else if(real_data.status[channel] < -2){
-			if(StringToDouble(real_data.curr[channel], 0) < 100.0){
+			if(tempCurr < 100.0){
 				real_data.final_curr[channel] = "0";
 			}
 
-			if(StringToDouble(real_data.curr[channel], 0) < 100.0
-				&& StringToDouble(real_data.volt[channel], 0) < 100.0){
+			if(tempCurr < 100.0 && tempVolt < 100.0){
 				real_data.final_volt[channel] = "0";
 			}
-
-			//* 2024 04 10 009 if(BaseForm->StringToDouble(real_data.volt[channel], 0) < 100.0) real_data.final_volt[channel] = "0";
-			//* 2024 04 10 001 //else real_data.final_volt[channel] = real_data.volt[channel];
-
-			//* 2024 04 10 009 if(BaseForm->StringToDouble(real_data.curr[channel], 0) < 100.0) real_data.final_curr[channel] = "0";
-			//* 2024 04 10 001 //else real_data.final_curr[channel] = real_data.curr[channel];
 
             real_data.final_capa[channel] = real_data.capa[channel];
         }
@@ -2184,13 +2199,6 @@ void __fastcall TTotalForm::SetSystemInfo()
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnMeasureInfoClick(TObject *Sender)
 {
-	//* test start
-	//	for(int i = 0; i < 256; i++)
-	//	{
-	//		tray.cell[i] = 1;
-	//	}
-	//	DisplayTrayInfo();
-	//* test end
     MeasureInfoForm->Left = 620;
 	MeasureInfoForm->Top = 85;
 	for(int i = 0; i < MAXCHANNEL; ++i){
@@ -2206,28 +2214,20 @@ void __fastcall TTotalForm::btnMeasureInfoClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnConnectPRECHARGERClick(TObject *Sender)
 {
-    if(Client->Active == false){
-        Client->Host = editPRECHARGERIPAddress->Text;
-		config.recontact = true;
-		this->ReContactTimerTimer(ReContactTimer);
-	}
-	else{
-		Client->Active = false;
-        Client->Host = editPRECHARGERIPAddress->Text;   // Client->Active == true  일때는 변경안됨
-		config.recontact = true;
-		this->ReContactTimerTimer(ReContactTimer);
-	}
+    Client->Host = editPRECHARGERIPAddress->Text;
+    config.recontact = true;
+    this->ReContactTimerTimer(ReContactTimer);
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::btnDisconnPRECHARGERClick(TObject *Sender)
+{
+    Client->Active = false;
 }
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnCloseConnConfigClick(TObject *Sender)
 {
     pnlConfig->Visible = false;
-}
-//---------------------------------------------------------------------------
-void __fastcall TTotalForm::btnDisConnectPLCClick(TObject *Sender)
-{
-	Mod_PLC->DisConnect();
 }
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -2237,7 +2237,6 @@ void __fastcall TTotalForm::lblChargingProcessDblClick(TObject *Sender)
     editCurrMin->Visible = !editCurrMin->Visible;
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TTotalForm::btnConfigClick(TObject *Sender)
 {
 	pnlConfig->Visible = !pnlConfig->Visible;
@@ -2251,6 +2250,11 @@ void __fastcall TTotalForm::btnConnectPLCClick(TObject *Sender)
     WriteSystemInfo();
     ReadSystemInfo();
 	Mod_PLC->Connect(PLC_IPADDRESS, PLC_PLCPORT, PLC_PCPORT);
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::btnDisConnectPLCClick(TObject *Sender)
+{
+	Mod_PLC->DisConnect();
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnNgInfoClick(TObject *Sender)
@@ -2497,4 +2501,6 @@ void __fastcall TTotalForm::Edit1KeyPress(TObject *Sender, System::WideChar &Key
 	}
 }
 //---------------------------------------------------------------------------
+
+
 

@@ -9,7 +9,7 @@ object BaseForm: TBaseForm
   VertScrollBar.Range = 83
   VertScrollBar.Visible = False
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Precharger (Ver.250812 003)'
+  Caption = 'Precharger (Ver.250822 001)'
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -526,7 +526,7 @@ object BaseForm: TBaseForm
     Visible = False
   end
   object advPLCInterfaceShow: TAdvSmoothButton
-    Left = 1618
+    Left = 1603
     Top = 7
     Width = 104
     Height = 55
@@ -598,9 +598,9 @@ object BaseForm: TBaseForm
     TMSStyle = 8
   end
   object AdvSmoothPanel_PLC: TAdvSmoothPanel
-    Left = 1725
+    Left = 1710
     Top = 7
-    Width = 110
+    Width = 63
     Height = 55
     Cursor = crDefault
     Caption.Text = 'PLC'
@@ -613,7 +613,7 @@ object BaseForm: TBaseForm
     Caption.HTMLURLColor = clBlack
     Caption.Font.Charset = DEFAULT_CHARSET
     Caption.Font.Color = clWindowText
-    Caption.Font.Height = -29
+    Caption.Font.Height = -24
     Caption.Font.Name = 'Tahoma'
     Caption.Font.Style = [fsBold]
     Caption.ColorStart = clWhite
@@ -6232,13 +6232,12 @@ object BaseForm: TBaseForm
     Fill.ShadowOffset = 0
     Fill.Glow = gmNone
     Version = '1.5.2.1'
-    OnClick = AdvSmoothPanel_PLCClick
     TabOrder = 9
     TMSStyle = 0
   end
   object pnlBT2: TAdvSmoothPanel
     Left = 1838
-    Top = 35
+    Top = 34
     Width = 40
     Height = 30
     Cursor = crDefault
@@ -6271,12 +6270,11 @@ object BaseForm: TBaseForm
     Fill.ShadowOffset = 0
     Fill.Glow = gmNone
     Version = '1.5.2.1'
-    OnClick = AdvSmoothPanel_PLCClick
     TabOrder = 10
     TMSStyle = 0
   end
   object btnViewLog: TAdvSmoothButton
-    Left = 1422
+    Left = 1407
     Top = 7
     Width = 80
     Height = 27
@@ -6311,7 +6309,7 @@ object BaseForm: TBaseForm
     TMSStyle = 8
   end
   object btnViewData: TAdvSmoothButton
-    Left = 1422
+    Left = 1407
     Top = 35
     Width = 80
     Height = 27
@@ -6346,7 +6344,7 @@ object BaseForm: TBaseForm
     TMSStyle = 8
   end
   object pstepInfo1: TPanel
-    Left = 1271
+    Left = 1256
     Top = 31
     Width = 145
     Height = 30
@@ -6459,7 +6457,7 @@ object BaseForm: TBaseForm
     TabOrder = 15
   end
   object btnInit: TAdvSmoothButton
-    Left = 1506
+    Left = 1491
     Top = 7
     Width = 110
     Height = 55
@@ -6494,6 +6492,44 @@ object BaseForm: TBaseForm
     Version = '2.1.1.5'
     OnClick = btnInitClick
     TMSStyle = 8
+  end
+  object pnlCONT: TAdvSmoothPanel
+    Left = 1774
+    Top = 7
+    Width = 63
+    Height = 55
+    Cursor = crDefault
+    Caption.Text = 'BT'
+    Caption.Location = plCenterCenter
+    Caption.HTMLFont.Charset = DEFAULT_CHARSET
+    Caption.HTMLFont.Color = clWindowText
+    Caption.HTMLFont.Height = -11
+    Caption.HTMLFont.Name = 'Tahoma'
+    Caption.HTMLFont.Style = []
+    Caption.HTMLURLColor = clBlack
+    Caption.Font.Charset = DEFAULT_CHARSET
+    Caption.Font.Color = clWindowText
+    Caption.Font.Height = -24
+    Caption.Font.Name = 'Tahoma'
+    Caption.Font.Style = [fsBold]
+    Caption.ColorStart = clWhite
+    Caption.ColorEnd = clWhite
+    Caption.LineColor = clBlack
+    Caption.Line = False
+    Caption.TextAlignment = taCenter
+    Fill.Color = clRed
+    Fill.ColorTo = clRed
+    Fill.ColorMirror = clRed
+    Fill.ColorMirrorTo = clRed
+    Fill.GradientType = gtVertical
+    Fill.GradientMirrorType = gtVertical
+    Fill.BorderColor = 14922381
+    Fill.Rounding = 5
+    Fill.ShadowOffset = 0
+    Fill.Glow = gmNone
+    Version = '1.5.2.1'
+    TabOrder = 17
+    TMSStyle = 0
   end
   object ClockTimer: TTimer
     OnTimer = ClockTimerTimer

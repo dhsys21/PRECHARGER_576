@@ -236,6 +236,11 @@ __published:	// IDE-managed Components
 	TAdvSmoothPanel *pnlTrayPosTitle;
 	TAdvSmoothPanel *pnlTrayPos;
 	TEdit *Edit1;
+	TGroupBox *GroupBox1;
+	TEdit *editModelName;
+	TPanel *Panel5;
+	TEdit *editCurrentMin;
+	TAdvSmoothButton *btnDisconnPRECHARGER;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnSaveConfigClick(TObject *Sender);
 	void __fastcall BitmapBtn5Click(TObject *Sender);
@@ -275,6 +280,7 @@ __published:	// IDE-managed Components
 	void __fastcall Timer_RebootTimer(TObject *Sender);
 	void __fastcall pnlTrayPosClick(TObject *Sender);
 	void __fastcall Edit1KeyPress(TObject *Sender, System::WideChar &Key);
+	void __fastcall btnDisconnPRECHARGERClick(TObject *Sender);
 
 private:	// User declarations
 //---------------------------------------------------------------------------
@@ -290,6 +296,7 @@ private:	// User declarations
 	queue<int> q_txMode;
     queue<string> rxq;		// 수신 큐
    	int sock_len;
+    int rxCount;
 	vector<unsigned char> TxVector;		// 전송 데이터 만들기
     vector<unsigned char> dataBuffer;
 
@@ -325,11 +332,11 @@ private:	// User declarations
     void __fastcall DisplayChannelInfo(int traypos);
     void __fastcall WriteMonData(int traypos);
     void __fastcall WriteMonDataSort(int traypos);
+    void __fastcall WriteResultFile();
     void __fastcall WriteResultFile(int traypos);
-    void __fastcall WriteTrayInfo();
     void __fastcall BadInfomation();
-    void __fastcall BadInfomation2();
 	void __fastcall WriteVoltCurrValue();
+    void __fastcall WriteVoltCurrValue(int initValue);
 	void __fastcall SetResultList(int traypos);
 
 //------------ 폼 관련 -------------------//
@@ -346,8 +353,6 @@ private:	// User declarations
 // 로그 파일 관련 생성
 	void __fastcall WriteSystemInfo();
 	bool __fastcall ReadSystemInfo();
-	bool __fastcall ReadCellInfo();
-    bool __fastcall LoadTrayInfo(AnsiString trayID);
 	void __fastcall ErrorLog();
     void __fastcall ErrorMsg(int err);
     void __fastcall WriteCommLog(AnsiString Type, AnsiString Msg);
@@ -378,8 +383,6 @@ private:	// User declarations
 	int NgCount; //* 셀이 있는데 fail 이면
     int ngCount; //* 셀이 있는데 fail 이거나 셀이 없는 경우
     int NgAlarmCount;
-    int nTrayPos;
-    int startOffset;
 public:		// User declarations
 	void __fastcall InitMeasureForm();
     void __fastcall InitData(int traypos);
@@ -399,7 +402,7 @@ public:		// User declarations
 
 	void __fastcall CmdTrayOut();
 	void __fastcall CmdTrayOut_Original();
-	void __fastcall CmdForceStop();
+	void __fastcall CmdForceStop(int traypos);
 	void __fastcall CmdForceStop_Original();
 	void __fastcall CmdManualMod(bool Set);
     void __fastcall AutoTestFinish(int traypos);
@@ -408,7 +411,7 @@ public:		// User declarations
 //---------------------------------------------------------------------------
 // Controller 명령어
 	void __fastcall CmdAutoTest();
-    void __fastcall CmdAutoStop();
+    void __fastcall CmdAutoStop(int traypos);
     void __fastcall CmdReset();
     void __fastcall CmdReboot();
     void __fastcall CmdResetTimer();
@@ -430,6 +433,9 @@ public:		// User declarations
 // 충전 셋팅
 	AnsiString __fastcall convertCondition(AnsiString condition);
 	AnsiString __fastcall convertCondition2(int iCondition);
+	PRECHARGE_CONFIG precharge;
+	CHARGE_CONFIG charge[2]; //* BT 설비 2개를 다루기 위한 배열 2개
+	int nQueryIndex;
 	int nCount;
 
 //---------------------------------------------------------------------------
@@ -455,15 +461,10 @@ public:		// User declarations
 // Define.h structure 데이터
 	REAL_TIME real_data;
     TRAY_INFO tray;
-
-    //* BT 설비 2개를 다루기 위한 배열 2개
-	CHARGE_CONFIG charge[2];
-
     //* 1개만 사용
     STAGE_INFO stage;
 	MAX_CONFIG max_config;
     CONFIG config;
-    PRECHARGE_CONFIG precharge;
 
 	TPanel *panel[MAXCHANNEL];
 	int stageno;
@@ -485,6 +486,7 @@ public:		// User declarations
 	AnsiString acc_init;
 	int chMap[MAXCHANNEL + 1];
 	int chReverseMap[MAXCHANNEL + 1];
+    int nTrayPos;
 
 	double curr_min;
 	TDateTime dt1StartTime, dt1FinishTime, dt1CurrentTime;
@@ -503,6 +505,7 @@ public:		// User declarations
 
 	AnsiString m_sTempVlot[MAXCHANNEL], m_sTempCurr[MAXCHANNEL];
 	AnsiString m_sTempVlot_Value[MAXCHANNEL], m_sTempCurr_Value[MAXCHANNEL];
+    AnsiString LimitVolt[MAXCHANNEL], LimitCurr[MAXCHANNEL];
 
 	int currMin, setChargeVolt, setChargeCurr, setChargeTime;
 

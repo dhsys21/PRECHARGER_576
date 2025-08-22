@@ -23,15 +23,23 @@ void __fastcall TTotalForm::SendData(AnsiString Cmd, AnsiString Param)
 }
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::CmdForceStop()
+void __fastcall TTotalForm::CmdForceStop(int traypos)
 {
 	// 자동검사 7. 검사종료	- Probe 해제 및 Tray 검사 대기
 	DisplayStatus(nEND);
 	Panel_State->Caption = " PreCharger Complete ... ";
 
-	//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_PROB_OPEN, 1);
+    //* 각 포지션별 결과 저장
+    WriteResultFile(nTrayPos);
+
     SetPcValue(PC_D_PRE_PROB_OPEN, 1);
-	WritePLCLog("AutoInspection_Measure", "PreCharger Complete ... , PC_INTERFACE_PROB_OPEN = 1");
+    if(nTrayPos == 1){
+        SetPcValue(PC_D_PRE_COMPLETE1, 1);
+        WritePLCLog("AutoInspection_Measure", "PreCharger Complete ... , COMPLETE1 on, PC_INTERFACE_PROB_OPEN on");
+    } else if(nTrayPos == 2){
+        SetPcValue(PC_D_PRE_COMPLETE2, 1);
+        WritePLCLog("AutoInspection_Measure", "PreCharger Complete ... , COMPLETE2 on, PC_INTERFACE_PROB_OPEN on");
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::CmdForceStop_Original()
@@ -44,41 +52,39 @@ void __fastcall TTotalForm::CmdForceStop_Original()
 		WritePLCLog("CmdForceStop_Original", PLCStatus);
         OldPLCStatus = PLCStatus;
 	}
-
-	//PLC_SETPCPROBEOPEN(nSTAGENO, 1);
-	//PLC_SETPCPROBECLOSE(nSTAGENO, 0);
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::CmdTrayOut()
 {
 	AnsiString cell_serial_filename;
-    BadInfomation();
+    if(chkBypass->Checked == false){
+        //* 2번 모두 측정 한 후에 ok/ng 쓰기
+    	BadInfomation();
+        WriteVoltCurrValue();
+		WriteResultFile();
+    }
 
 	// 자동검사 9(끝). 트레이 방출
-	if(NgCount == (tray.cell_count1 + tray.cell_count2) || NgCount > editNGAlarmCount->Text.ToIntDef(10)){
-		//NgAlarmCount++;
+	if(/*NgCount == (tray.cell_count1 + tray.cell_count2) || */
+    	NgCount > editNGAlarmCount->Text.ToIntDef(10)){
+        Form_Error->Tag = this->Tag;
         Form_Error->DisplayErrorMessage(this->Tag, nNgErr);
-		Form_Error->Tag = this->Tag;
 	}
 	else{
-        WriteVoltCurrValue();
-		ReadCellInfo();
-//		LoadTrayInfo(tray.trayid);
-		WriteResultFile(nTrayPos);
-
-        if(BaseForm->chkTest->Checked == false)
+        if(BaseForm->chkTest->Checked == false){
         	SetPcValue(PC_D_PRE_TRAY_OUT, 1);
+            WritePLCLog("CmdTrayOut", "IROCV TRAY OUT = 1");
+        }
 		DisplayStatus(nFinish);
 		Panel_State->Caption = " PreCharger Tray Out ... ";
 	}
-
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::CmdTrayOut_Original()
 {
 	BadInfomation();
 	WriteVoltCurrValue();
-
+    WriteResultFile();
 }
 //--------------------------------------------------------------------------
 void __fastcall TTotalForm::CmdManualMod(bool Set)
@@ -127,19 +133,18 @@ void __fastcall TTotalForm::CmdAutoTest()
     LASTCMD = "ASB";
 }
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::CmdAutoStop()
+void __fastcall TTotalForm::CmdAutoStop(int traypos)
 {
-    BaseForm->WaitForMilliSeconds(1000);
+    Sleep(100);
 
-    //* GetReport, AutoTestFinish
-	if(Timer_FinishCharging->Enabled == false){
-        tray.amf = true;
-        tray.ams = false;
+    tray.amf = true;
+    tray.ams = false;
 
-        nFinishStep = 0;
-        nFinishCount = 0;
-        Timer_FinishCharging->Enabled = true;
-    }
+    //* 마지막 종료 색상 표시
+    DisplayChannelInfo(traypos);
+    //* final data 저장.
+    AutoTestFinish(traypos);
+    CmdForceStop(traypos);
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::CmdStop()
@@ -207,15 +212,19 @@ void __fastcall TTotalForm::CmdReport()
 void __fastcall TTotalForm::CmdSetStep()
 {
     AnsiString CMD = "";
-	AnsiString precharge_time = "20", precharge_curr = "1.0", precharge_volt = "2.0";
     AnsiString cTime, cCurr, cVolt;
 
     cTime = config.time;
 	cCurr = convertCondition2(config.curr);
 	cVolt = convertCondition2(config.volt);
-
-    CMD = "SEQ:STEP:DEF 1,1,PRECHARGE," + precharge_time + "," + precharge_curr + "," + precharge_volt + "\n";
-    CMD += "SEQ:STEP:DEF 1,2,CHARGE," + cTime + "," + cCurr + "," + cVolt + "\n";
+    // "SEQ:TEST:DEF 1,2,2,VOLT_LE,0.1,BEFORE,90,FAIL";  // 100mV
+    // "SEQ:TEST:DEF 1,2,1,CURR_LE,0.01,BEFORE,60,FAIL"; // 10mA
+    // "SEQ:TEST:DEF 1,1,1,VOLT_GE,2.0,BEFORE,20,NEX";
+    CMD = "SEQ:STEP:DEF 1,1,PRECHARGE,20,1.0,2.0\n";
+    CMD += "SEQ:TEST:DEF 1,1,1,VOLT_GE,1.2,BEFORE,20,NEXT\n";
+    CMD += "SEQ:STEP:DEF 1,2,PRECHARGE2," + cTime + "," + cCurr + "," + cVolt + "\n";
+    CMD += "SEQ:TEST:DEF 1,2,1,CURR_LE,0.01,BEFORE,40,FAIL\n";
+    CMD += "SEQ:TEST:DEF 1,2,2,VOLT_LE,0.1,BEFORE,40,FAIL\n";
     CMD += "SYST:ERR?";
     CMD = "TRB" + CMD + "\n";
     SendData(CMD);

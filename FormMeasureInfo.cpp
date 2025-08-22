@@ -461,7 +461,7 @@ void __fastcall TMeasureInfoForm::btnStopClick(TObject *Sender)
 	BaseForm->nForm[stage]->Timer_ManualInspection->Enabled = false;
     BaseForm->nForm[stage]->CmdStop();
     if(BaseForm->WaitForMilliSeconds(1000) == true){
-        BaseForm->nForm[stage]->CmdAutoStop();
+        BaseForm->nForm[stage]->CmdAutoStop(BaseForm->nForm[stage]->nTrayPos);
 	}
 
 	if(BaseForm->nForm[stage]->Timer_Reset->Enabled == true)
@@ -543,7 +543,7 @@ void __fastcall TMeasureInfoForm::btnDisChargeSetClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::SetStep()
 {
-     nStep = 0;
+     nSetStep = 0;
      nSetCount = 0;
      MeasureInfoForm->Timer_SetStep2->Enabled = true;
 }
@@ -584,7 +584,7 @@ void __fastcall TMeasureInfoForm::Timer_SetStepTimer(TObject *Sender)
 void __fastcall TMeasureInfoForm::Timer_SetStep2Timer(TObject *Sender)
 {
     nSetCount++;
-    switch(nStep)
+    switch(nSetStep)
     {
         case 0:
             BaseForm->nForm[stage]->CmdSetStep();
@@ -592,22 +592,26 @@ void __fastcall TMeasureInfoForm::Timer_SetStep2Timer(TObject *Sender)
         	break;
         case 1:
             if(BaseForm->nForm[stage]->CmdCheckSet() == true){
-                nStep = 2; // Ena
+                nSetStep = 2; // Ena
                 nSetCount = 0;
             }
 
-            if(nSetCount > 3)
-                nStep = 0; // re-set
+            if(nSetCount > 3){
+                ShowMessage("PreCharger setting error! Please re-set it");//nSetStep = 0; // re-set
+                nSetStep = 3;
+            }
             break;
         case 2: // Ena
             BaseForm->nForm[stage]->CmdEna();
             break;
         case 3:
-            BaseForm->nForm[stage]->CmdResetTimer();
+            //BaseForm->nForm[stage]->CmdResetTimer();
+            Timer_SetStep2->Enabled = false;
+            nSetStep = 0;
             break;
         case 4:
             Timer_SetStep2->Enabled = false;
-            nStep = 0;
+            nSetStep = 0;
             break;
         default:
             break;
@@ -622,5 +626,37 @@ void __fastcall TMeasureInfoForm::btnInit1Click(TObject *Sender)
 void __fastcall TMeasureInfoForm::btnInit2Click(TObject *Sender)
 {
     SetChannelInfo(2);
+}
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// CHART
+//---------------------------------------------------------------------------
+void __fastcall TMeasureInfoForm::initChart(int volt, int curr)
+{
+	for(int i=0; i<3; ++i){
+		chartVoltage->Series[i]->Clear();
+		chartCurrent->Series[i]->Clear();
+	}
+
+	for (int i = 0; i < MAXCHANNEL; ++i) {
+		chartVoltage->Series[0]->AddXY(i + 1, 0);
+		chartCurrent->Series[0]->AddXY(i + 1, 0);
+	}
+
+	chartVoltage->LeftAxis->Maximum = 4200;
+	chartVoltage->LeftAxis->Minimum = 0;
+
+	chartCurrent->LeftAxis->Maximum = curr + 500;
+	chartCurrent->LeftAxis->Minimum = 0;
+
+	chartVoltage->Series[1]->AddXY(1, volt - 200);
+	chartVoltage->Series[1]->AddXY(400, volt - 200);
+	chartCurrent->Series[1]->AddXY(1, curr);
+	chartCurrent->Series[1]->AddXY(400, curr);
+
+	chartVoltage->Series[2]->AddXY(1, volt - 2000);
+	chartVoltage->Series[2]->AddXY(400, volt - 2000);
+	chartCurrent->Series[2]->AddXY(1, curr - 1000);
+	chartCurrent->Series[2]->AddXY(400, curr - 1000);
 }
 //---------------------------------------------------------------------------
