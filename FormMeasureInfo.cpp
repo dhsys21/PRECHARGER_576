@@ -191,18 +191,17 @@ void __fastcall TMeasureInfoForm::SetChannelInfo(int traypos)
     //* 채널 위치 -> 릴레이가 12줄이므로 위치를 계산해야 함
     int channel, rchannel;
     for(int index = 0; index < MAXCHANNEL / 2; index++){
-        //channel = GetChMap(stage, traypos, index) - 1;
-        channel = GetChannel(traypos, index) - 1;
+        channel = GetChMap(stage, traypos, index) - 1;
+        //channel = GetChannel(traypos, index) - 1;
 
         pvolt[channel]->Caption = IntToStr(channel + 1);
         pvolt[channel]->Color = pnormal1->Color;
 
-        pcurr[channel]->Caption = SetChannelHint(channel);//GetChPosF(channel)	+ "-" + GetChPosR(channel);
-        pcurr[channel]->Hint = "CH " + SetChannelHint(channel);//GetChPosF(channel) + "-" + GetChPosR(channel);
+        pcurr[channel]->Caption = SetChannelHint(channel);
+        pcurr[channel]->Hint = "CH " + SetChannelHint(channel);
         pcurr[channel]->Color = pnormal2->Color;
         pcurr[channel]->Refresh();
     }
-    btnDisCharge->Caption = "SetChannelInfo";
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)

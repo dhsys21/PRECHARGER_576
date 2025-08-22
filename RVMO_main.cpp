@@ -466,3 +466,21 @@ void __fastcall TBaseForm::btnInitClick(TObject *Sender)
 //---------------------------------------------------------------------------
 
 
+void __fastcall TBaseForm::Button5Click(TObject *Sender)
+{
+    int traypos = 1, channel;
+    for(int i = 0; i < CHANNELCOUNT; i++){
+        channel = GetChMap(0, traypos, i) - 1;
+        MeasureInfoForm->pvolt[channel]->Caption = IntToStr(traypos) + " - " + IntToStr(channel + 1);
+        MeasureInfoForm->pcurr[channel]->Caption = IntToStr(i);
+    }
+
+    traypos = 2;
+    for(int i = 0; i < CHANNELCOUNT; i++){
+        channel = GetChMap(0, traypos, i) - 1;
+        MeasureInfoForm->pvolt[channel]->Caption = IntToStr(traypos) + " - " + IntToStr(channel + 1);
+        MeasureInfoForm->pcurr[channel]->Caption = IntToStr(i);
+    }
+}
+//---------------------------------------------------------------------------
+
