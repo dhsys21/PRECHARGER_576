@@ -113,6 +113,7 @@ __published:	// IDE-managed Components
 	void __fastcall lblTitleClick(TObject *Sender);
 	void __fastcall btnInitClick(TObject *Sender);
 	void __fastcall Button5Click(TObject *Sender);
+	void __fastcall Button1Click(TObject *Sender);
 	//void __fastcall ptimeDblClick(TObject *Sender);
 	//void __fastcall ptimeClick(TObject *Sender);
 

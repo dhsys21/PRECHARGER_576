@@ -334,6 +334,7 @@ private:	// User declarations
     void __fastcall WriteMonDataSort(int traypos);
     void __fastcall WriteResultFile();
     void __fastcall WriteResultFile(int traypos);
+
     int __fastcall ReadCellSerial();
     void __fastcall BadInfomation();
 	void __fastcall WriteVoltCurrValue();
@@ -408,6 +409,7 @@ public:		// User declarations
 	void __fastcall CmdManualMod(bool Set);
     void __fastcall AutoTestFinish(int traypos);
 	void __fastcall ReadchannelMapping();
+    void __fastcall ReadResultFile(int traypos);
 
 //---------------------------------------------------------------------------
 // Controller ¸í·É¾î
@@ -474,7 +476,6 @@ public:		// User declarations
     bool n_bMeasureStart;
 
 	AnsiString OldPLCStatus, PLCStatus, OldErrorCheckStatus, ErrorCheckStatus, OldPreChargerStatus, PreChargerStatus;
-
 	void __fastcall ProcessError(AnsiString err1, AnsiString err2,AnsiString err3,AnsiString err4);
 	void __fastcall ShowAlarm(AnsiString err1, AnsiString err2, AnsiString err3 , AnsiString err4);
 	void __fastcall SetTrayID(AnsiString str_id);

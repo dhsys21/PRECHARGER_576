@@ -9,7 +9,7 @@ object BaseForm: TBaseForm
   VertScrollBar.Range = 83
   VertScrollBar.Visible = False
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Precharger (Ver.250822 005)'
+  Caption = 'Precharger (Ver.250822 006)'
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -6422,6 +6422,7 @@ object BaseForm: TBaseForm
       Height = 25
       Caption = 'Button1'
       TabOrder = 0
+      OnClick = Button1Click
     end
     object Button5: TButton
       Left = 88
