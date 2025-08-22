@@ -695,7 +695,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
                 nStep = 6;
             }
         	break;
-        case 5: //* 트레이 위치 1 : COMPLETE1, TRAY_POS_MOVE 신호 확인
+        case 5: //* 해당 트레이 위치에서 셀이 없을 때 처리 - 트레이 위치 1 : COMPLETE1, TRAY_POS_MOVE 신호 확인
             if(GetPcValue(PC_D_PRE_COMPLETE1) == 1 && GetPcValue(PC_D_PRE_TRAY_POS_MOVE) == 1)
                 nStep = 7;
             else{
@@ -703,30 +703,31 @@ void __fastcall TTotalForm::AutoInspection_Wait()
                 SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 1);
             }
         	break;
-        case 6: //* 트레이 위치 2 : COMPLETE2 신호 확인
-            if(GetPcValue(PC_D_PRE_COMPLETE2) == 1) nStep = 7;
+        case 6: //* 해당 트레이 위치에서 셀이 없을 때 처리 - 트레이 위치 2 : COMPLETE2 신호 확인
+            if(GetPcValue(PC_D_PRE_COMPLETE2) == 1) nStep = 8;
             else SetPcValue(PC_D_PRE_COMPLETE2, 1);
             break;
         case 7:
+            //* 해당 트레이 위치에서 셀이 없을 때 처리 -
+            //* 트레이가 2번째 위치로 옮겨 졌으면 probe close 부터 다시 시작
+            if(nTrayPos == 2){
+                SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 0);
+                DisplayProcess(sFinish, "AutoInspection_Measure", " TRAY POS1 : PreCharger Finish ... ");
+
+                nSection = STEP_WAIT;
+                nStep = 3;
+            }
+        	break;
+        case 8:
+            //* 해당 트레이 위치에서 셀이 없을 때 처리 -
             //* 트레이 위치가 1이고 셀이 없으면 트레이 위치이동 pos1_complete = 1, tray_pos_move = 1
             //* 트레이 위치가 2이고 셀이 없으면 pos1_complete = pos2_complete = 1 이므로 종료.
             if(tray.pos1_complete == true && tray.pos2_complete == true){
                 //* NG count 후 셋팅값(20개) 이상이면 에러창
-                // WriteCommLog("AutoInspection_Measure", "PreCharger Finish... ");
                 DisplayProcess(sFinish, "AutoInspection_Measure", " TRAY POS1 and POS2 : PreCharger Finish ... ");
 				CmdTrayOut();
 				nStep = 0;
 				nSection = STEP_FINISH;
-            }
-            else{
-                //* 트레이가 2번째 위치로 옮겨 졌으면 probe close 부터 다시 시작
-                if(nTrayPos == 2){
-                    SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 0);
-                    DisplayProcess(sFinish, "AutoInspection_Measure", " TRAY POS1 : PreCharger Finish ... ");
-
-                	nSection = STEP_WAIT;
-                	nStep = 3;
-                }
             }
         	break;
 		default:
@@ -834,26 +835,25 @@ void __fastcall TTotalForm::AutoInspection_Measure()
             }
         	break;
         case 6:
-            if(GetPcValue(PC_D_PRE_COMPLETE2) == 1) nStep = 7;
+            if(GetPcValue(PC_D_PRE_COMPLETE2) == 1) nStep = 8;
             else SetPcValue(PC_D_PRE_COMPLETE2, 1);
             break;
         case 7:
+            //* 트레이가 2번째 위치로 옮겨 졌으면 probe close 부터 다시 시작
+            if(nTrayPos == 2){
+                SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 0);
+                DisplayProcess(sFinish, "AutoInspection_Measure", "[STEP 7] MOVE TRAY to POSITION 2 ... ");
+                nSection = STEP_WAIT;
+                nStep = 3;
+            }
+        	break;
+        case 8:
             if(tray.pos1_complete == true && tray.pos2_complete == true){
                 //* NG count 후 셋팅값(20개) 이상이면 에러창
                 DisplayProcess(sFinish, "AutoInspection_Measure", "[STEP 7] PreCharger Finish ... ");
-                //WriteCommLog("AutoInspection_Measure", "PreCharger Finish... ");
 				CmdTrayOut();
 				nStep = 0;
 				nSection = STEP_FINISH;
-            }
-            else{
-                //* 트레이가 2번째 위치로 옮겨 졌으면 probe close 부터 다시 시작
-                if(nTrayPos == 2){
-                    SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 0);
-                    DisplayProcess(sFinish, "AutoInspection_Measure", "[STEP 7] MOVE TRAY to POSITION 2 ... ");
-                	nSection = STEP_WAIT;
-                	nStep = 3;
-                }
             }
         	break;
 		default:
