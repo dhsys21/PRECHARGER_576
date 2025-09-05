@@ -73,6 +73,13 @@ const int MAXCHANNEL 	= 576;
 const int CHANNELCOUNT  = 288;
 const int LINECOUNT		= 24;
 
+//---------------------------------------------------------------------------
+//	BT 2202A 변수
+// SETTLETIME : precharge2 시작 후 실제 전류 흘리기 전까지 검사시간
+//---------------------------------------------------------------------------
+const int SETTLETIME    =   7;
+const int PRECHARGETIME =   10;
+
 const int SEND 			= 1;
 const int RECEIVE 		= 2;
 const int ETC 			= 3;

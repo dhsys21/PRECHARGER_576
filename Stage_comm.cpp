@@ -220,14 +220,21 @@ void __fastcall TTotalForm::CmdSetStep()
 {
     AnsiString CMD = "";
     AnsiString cTime, cCurr, cVolt;
+    AnsiString cPrechargeTime;
 
-    cTime = config.time;
+    //* settle time : precharge2 시작할 때 충전전류를 흘리기 전 검사시간 약 7초
+    //* charge 명령은 약 15초 정도 걸림
+    /// config.time = 30s, cTime = config.time + SETTLETIME = 37s
+    /// SETTLETIME = 7s
+    /// PRECHARGETIME = 10s
+    cPrechargeTime = IntToStr(PRECHARGETIME);
+    cTime = config.time + SETTLETIME;
 	cCurr = convertCondition2(config.curr);
 	cVolt = convertCondition2(config.volt);
     // "SEQ:TEST:DEF 1,2,2,VOLT_LE,0.1,BEFORE,90,FAIL";  // 100mV
     // "SEQ:TEST:DEF 1,2,1,CURR_LE,0.01,BEFORE,60,FAIL"; // 10mA
     // "SEQ:TEST:DEF 1,1,1,VOLT_GE,2.0,BEFORE,20,NEX";
-    CMD = "SEQ:STEP:DEF 1,1,PRECHARGE,20,1.0,2.0\n";
+    CMD = "SEQ:STEP:DEF 1,1,PRECHARGE," + cPrechargeTime + ",1.0,2.0\n";
     CMD += "SEQ:TEST:DEF 1,1,1,VOLT_GE,1.2,BEFORE,20,NEXT\n";
     CMD += "SEQ:STEP:DEF 1,2,PRECHARGE2," + cTime + "," + cCurr + "," + cVolt + "\n";
     CMD += "SEQ:TEST:DEF 1,2,1,CURR_LE,0.01,BEFORE,40,FAIL\n";
@@ -240,6 +247,9 @@ void __fastcall TTotalForm::CmdSetStep()
 //---------------------------------------------------------------------------
 bool __fastcall TTotalForm::CmdCheckSet()
 {
+    /// charge[0].time = charge[1].time = 30s
+    /// SETTLETIME = 7s
+    /// config.time = 30s
     int time1 = StringToInt(charge[0].time, 0);
     int time2 = StringToInt(charge[1].time, 0);
     double curr1 = charge[0].curr * 1000;

@@ -1118,10 +1118,15 @@ void __fastcall TTotalForm::ChannelStatus()
 	dTime2 = SecondsBetween(dt1CurrentTime, dt1FinishTime);
 
 	//* keysightEndTime -> 설정시간이 모두 지나고 keysightEndTime 이 되면 종료한다.
-	if(tray.ams == true && dTime > 30 && testTime->Caption.ToIntDef(0) > config.time + 2)
+    //* asb 실행 후 시작까지 4초, senrun에서 senidl 바뀌는데 2초
+    //* mon data : 시작 후 precharge 10초, precharge2 config.time초, idle 2초
+    //* 37(precharge2) + 10(precharge) + 2(idle) = 49
+    //* 파텍 마련 기준 : config.time 30 + settle time 7 + precharge 10 + idle 2 = 49 => 30 + 19;
+    int extraTime = 19;
+	if(tray.ams == true && dTime > 30 && testTime->Caption.ToIntDef(0) > (config.time + extraTime))
 	{
         CmdStop();
-
+        Sleep(50);
         CmdAutoStop(nTrayPos);
 	}
 }
@@ -1859,13 +1864,13 @@ void __fastcall TTotalForm::SET_SENDATA(AnsiString eqstatus, AnsiString runcount
     //* BT SETTING (time, current, voltage)
     //* PRECHARGE2,+30,+1.23000000E+00,+4.00000000E+00#PRECHARGE2,+30,+1.23000000E+00,+4.00000000E+00
     if(btset1.size() == 4){
-        charge[0].time = StringToInt(btset1[1], 180);
+        charge[0].time = StringToInt(btset1[1], 180) - StringToInt(SETTLETIME, 7);
         charge[0].curr = StringToDouble(btset1[2], 1.23);
         charge[0].volt = StringToDouble(btset1[3], 4);
     }
 
     if(btset2.size() == 4){
-        charge[1].time = StringToInt(btset2[1], 180);
+        charge[1].time = StringToInt(btset2[1], 180) - StringToInt(SETTLETIME, 7);
         charge[1].curr = StringToDouble(btset2[2], 1.23);
         charge[1].volt = StringToDouble(btset2[3], 4);
     }
