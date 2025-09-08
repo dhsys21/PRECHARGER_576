@@ -70,12 +70,14 @@ void __fastcall TForm_Language::LanguageChange(int LangIndex)
     MeasureInfoForm->pnlChannel->Caption = vle->Values["CHANNEL"];
     MeasureInfoForm->pnlPos->Caption = vle->Values["CHPOS"];
 
-
+    Form_ErrorSet->btnOK->Caption = vle->Values["OK"];
     //-------------------------------------------------------------------------
 	// 				MESSAGE
 	//-------------------------------------------------------------------------
 	msgRbt = vle->Values["msgRBT"];
     msgRst = vle->Values["msgRST"];
     msgTooManyNG = vle->Values["msgTooManyNG"];
+    msgErrorSet = vle->Values["msgErrorSet"];
+    Form_ErrorSet->ChangeMessage(msgErrorSet);
 }
 //---------------------------------------------------------------------------

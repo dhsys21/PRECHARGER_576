@@ -6,15 +6,16 @@
 //---------------------------------------------------------------------------
 USEFORM("RVMO_main.cpp", BaseForm);
 USEFORM("ModPLC.cpp", Mod_PLC); /* TDataModule: File Type */
-USEFORM("FormLanguage.cpp", Form_Language);
-USEFORM("FormMeasureInfo.cpp", MeasureInfoForm);
 USEFORM("FormGraph.cpp", Form_Graph);
+USEFORM("FormLanguage.cpp", Form_Language);
+USEFORM("FormErrorReset.cpp", Form_ErrorReset);
 USEFORM("FormError.cpp", Form_Error);
+USEFORM("FormMeasureInfo.cpp", MeasureInfoForm);
 USEFORM("FormTotal.cpp", TotalForm);
 USEFORM("FormRemeasure.cpp", RemeasureForm);
 USEFORM("FormNgCountError.cpp", Form_NgCountError);
 USEFORM("FormPLCInterface.cpp", Form_PLCInterface);
-USEFORM("FormErrorReset.cpp", Form_ErrorReset);
+USEFORM("FormErrorSet.cpp", Form_ErrorSet);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -44,6 +45,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		Application->CreateForm(__classid(TForm_Language), &Form_Language);
 		Application->CreateForm(__classid(TForm_NgCountError), &Form_NgCountError);
 		Application->CreateForm(__classid(TForm_ErrorReset), &Form_ErrorReset);
+		Application->CreateForm(__classid(TForm_ErrorSet), &Form_ErrorSet);
 		Application->Run();
 	}
 	catch (Exception &exception)

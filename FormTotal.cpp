@@ -787,7 +787,10 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 			}
 			else{
                 if(nStep_Count > 3){
-                    nStep = 1;
+                    //nStep = 1;
+                    //* 2025 09 08 - 셋팅값이 틀리면 에러창 표시
+                    if(Form_ErrorSet->Visible == false)
+					    Form_ErrorSet->DisplayErrorMessage(0);
                     WriteCommLog("AutoInspection_Measure", "Precharger is not set. - run CmdSetStep()");
                 }
 			}

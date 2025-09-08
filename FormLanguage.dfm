@@ -19,6 +19,7 @@ object Form_Language: TForm_Language
     Width = 321
     Height = 265
     Strings.Strings = (
+      'OK='#54869#51064
       'SAVE='#51200#51109
       'CANCEL='#52712#49548
       'CONFIG='#49444#51221
@@ -61,12 +62,15 @@ object Form_Language: TForm_Language
       'NOCELL='#49472' '#50630#51020
       'msgRBT=Reboot'#51008' 60'#52488' '#51221#46020' '#49548#50836#46121#45768#45796'. Reboot '#54616#49884#44192#49845#45768#44620'?'
       'msgRST=Reset'#51008' 15'#52488' '#51221#46020' '#49548#50836#46121#45768#45796'. Reset '#54616#49884#44192#49845#45768#44620'?'
-      'msgTooManyNG=NG '#49472#51060' '#45320#47924' '#47566#49845#45768#45796'. '#54869#51064#54644#51452#49464#50836)
+      'msgTooManyNG=NG '#49472#51060' '#45320#47924' '#47566#49845#45768#45796'. '#54869#51064#54644#51452#49464#50836
+      'msgErrorSet='#54788#51116' '#49444#51221' '#44050#51060' '#50732#48148#47476#51648' '#50506#49845#45768#45796'. \r\n\r\n'#45796#49884' '#49444#51221#54644' '#51452#49464#50836'.')
     TabOrder = 0
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
+      18
       18
       18
       18
@@ -118,6 +122,7 @@ object Form_Language: TForm_Language
     Width = 321
     Height = 265
     Strings.Strings = (
+      'OK=OK'
       'SAVE=SAVE'
       'CANCEL=CANCEL'
       'CONFIG=CONFIG'
@@ -160,12 +165,17 @@ object Form_Language: TForm_Language
       'NOCELL=NO CELL'
       'msgRBT=Rebooting takes 60 seconds. Do you want to reboot?'
       'msgRST=Reset takes 15 seconds. Do you want to reset?'
-      'msgTooManyNG=Too many NG cells. Please check it.')
+      'msgTooManyNG=Too many NG cells. Please check it.'
+      
+        'msgErrorSet=The current settings are invalid. \r\n\r\nPlease res' +
+        'et and try again.')
     TabOrder = 1
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
+      18
       18
       18
       18
@@ -217,6 +227,7 @@ object Form_Language: TForm_Language
     Width = 321
     Height = 553
     Strings.Strings = (
+      'OK='#30906#23450
       'SAVE='#20445#23384
       'CANCEL='#30830#35748
       'CONFIG='#37197#32622
@@ -259,12 +270,15 @@ object Form_Language: TForm_Language
       'NOCELL='#26080' CELL'
       'msgRBT=Rebooting takes 60 seconds. Do you want to reboot?'
       'msgRST=Reset takes 15 seconds. Do you want to reset?'
-      'msgTooManyNG='#19981#33391#21697#36807#22810#65292#35831#26816#26597#12290)
+      'msgTooManyNG='#19981#33391#21697#36807#22810#65292#35831#26816#26597#12290
+      'msgErrorSet='#24403#21069#35774#32622#26080#25928#65292'\r\n\r\n'#35831#37325#26032#35774#32622#12290)
     TabOrder = 2
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
+      18
       18
       18
       18

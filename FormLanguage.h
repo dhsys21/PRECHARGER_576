@@ -28,6 +28,7 @@ public:		// User declarations
 	UnicodeString msgRst;
     UnicodeString msgRbt;
     UnicodeString msgTooManyNG;
+    UnicodeString msgErrorSet;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm_Language *Form_Language;
