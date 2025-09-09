@@ -787,7 +787,7 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 			}
 			else{
                 if(nStep_Count > 3){
-                    //nStep = 1;
+                    nStep_Count = 0;
                     //* 2025 09 08 - 셋팅값이 틀리면 에러창 표시
                     if(Form_ErrorSet->Visible == false)
 					    Form_ErrorSet->DisplayErrorMessage(0);
@@ -903,28 +903,36 @@ void __fastcall TTotalForm::Timer_ManualInspectionTimer(TObject *Sender)
     switch(nManualStep)
 	{
 		case 0:
-        	nSetStepCount = 0;
-			if(CmdCheckSet() == true)
+        	nSetStepCount++;
+			if(CmdCheckSet() == true){
 				nManualStep = 2;
+                nSetStepCount = 0;
+            }
             else {
-                CmdEna();
-                BaseForm->WaitForMilliSeconds(1000);
-                CmdSetStep();
-                nManualStep = 1;
-            	WriteCommLog("SET", "SetTrayID - CmdSetStep()");
+                if(nSetStepCount > 3){
+                    if(Form_ErrorSet->Visible == false)
+					    Form_ErrorSet->DisplayErrorMessage(0);
+                    WriteCommLog("AutoInspection_Measure", "Precharger is not set. - run CmdSetStep()");
+            	}
             }
 			break;
 		case 1:
             nSetStepCount++;
-			if(CmdCheckSet() == true){
+            tray.set = CmdCheckSet();
+			if(tray.set == true)
+			{
 				nManualStep = 2;
-            }
-            else {
+                WriteCommLog("AutoInspection_Measure", "verify setting and start charging, DisplayStatus(nRUN)");
+			}
+			else{
                 if(nSetStepCount > 3){
-                	nManualStep = 0;
-            		WriteCommLog("SET", "SetTrayID - CmdSetStep()");
+                    nSetStepCount = 0;
+                    //* 2025 09 08 - 셋팅값이 틀리면 에러창 표시
+                    if(Form_ErrorSet->Visible == false)
+					    Form_ErrorSet->DisplayErrorMessage(0);
+                    WriteCommLog("AutoInspection_Measure", "Precharger is not set. - run CmdSetStep()");
                 }
-            }
+			}
 			break;
 		case 2:
 			CmdAutoTest();
@@ -936,6 +944,45 @@ void __fastcall TTotalForm::Timer_ManualInspectionTimer(TObject *Sender)
 			break;
     }
 }
+//---------------------------------------------------------------------------
+//void __fastcall TTotalForm::Timer_ManualInspectionTimer(TObject *Sender)
+//{
+//    switch(nManualStep)
+//	{
+//		case 0:
+//        	nSetStepCount = 0;
+//			if(CmdCheckSet() == true)
+//				nManualStep = 2;
+//            else {
+//                CmdEna();
+//                BaseForm->WaitForMilliSeconds(1000);
+//                CmdSetStep();
+//                nManualStep = 1;
+//            	WriteCommLog("SET", "SetTrayID - CmdSetStep()");
+//            }
+//			break;
+//		case 1:
+//            nSetStepCount++;
+//			if(CmdCheckSet() == true){
+//				nManualStep = 2;
+//            }
+//            else {
+//                if(nSetStepCount > 3){
+//                	nManualStep = 0;
+//            		WriteCommLog("SET", "SetTrayID - CmdSetStep()");
+//                }
+//            }
+//			break;
+//		case 2:
+//			CmdAutoTest();
+//			WriteCommLog("ASB", "SetTrayID (" + tray.trayid + ")");
+//            Timer_ManualInspection->Enabled = false;
+//			nManualStep++;
+//			break;
+//		default:
+//			break;
+//    }
+//}
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::Timer_FinishChargingTimer(TObject *Sender)
 {
