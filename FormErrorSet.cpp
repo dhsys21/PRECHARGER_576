@@ -27,7 +27,7 @@ void __fastcall TForm_ErrorSet::DisplayErrorMessage(int nStage)
 	if(!this->Visible)
 	{
 		Timer_BringToFront->Enabled = true;
-        Mod_PLC->SetValue(PC_D_PRE_ERROR, 1);
+        Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
 
         Label_Msg1->Caption = L"The current settings are invalid. \r\n\r\nPlease reset and try again.";
 		SaveErrorLog(Label_Msg1->Caption);
@@ -70,7 +70,7 @@ void __fastcall TForm_ErrorSet::Timer_BringToFrontTimer(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm_ErrorSet::timerErrorOffTimer(TObject *Sender)
 {
-    Mod_PLC->SetValue(PC_D_PRE_ERROR, 0);
+    Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
     Timer_BringToFront->Enabled = false;
     timerErrorOff->Enabled = false;
     this->Close();

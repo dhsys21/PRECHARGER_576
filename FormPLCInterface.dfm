@@ -152,7 +152,7 @@ object Form_PLCInterface: TForm_PLCInterface
         Width = 178
         Height = 21
         TabOrder = 0
-        Text = '3100'
+        Text = '3600.5'
       end
       object editCurrent: TEdit
         Left = 39
@@ -160,7 +160,7 @@ object Form_PLCInterface: TForm_PLCInterface
         Width = 178
         Height = 21
         TabOrder = 1
-        Text = '1000'
+        Text = '3000'
       end
       object btnWriteIrOcvValue: TButton
         Left = 104

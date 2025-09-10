@@ -23,7 +23,7 @@ void __fastcall TForm_Error::DisplayErrorMessage(AnsiString title, AnsiString ms
 		Timer_BringToFront->Enabled = true;
 
 		//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_ERROR, 1);
-        BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_ERROR, 1);
+        Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
 
 		Label_Title->Caption = title;
 		Label_Msg1->Caption = msg1;
@@ -61,7 +61,7 @@ void __fastcall TForm_Error::DisplayErrorMessage(int nStage, int nError)
 		Timer_BringToFront->Enabled = true;
 
 		//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_ERROR, 1);
-        BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_ERROR, 1);
+        Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
 
         if(nError == nNgErr){
             title = "PreCharger #" + IntToStr(nStage + 1) + " NG ERROR";

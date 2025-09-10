@@ -21,7 +21,7 @@ void __fastcall TForm_NgCountError::DisplayErrorMessage(AnsiString title, WideSt
 	{
 		Timer_BringToFront->Enabled = true;
 
-		BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_ERROR, 1);
+		Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
 
 		Label_Title->Caption = title;
 		Label_Msg1->Caption = msg1;
@@ -80,15 +80,15 @@ void __fastcall TForm_NgCountError::SaveErrorLog(AnsiString title, AnsiString ms
 //---------------------------------------------------------------------------
 void __fastcall TForm_NgCountError::btnTrayOutClick(TObject *Sender)
 {
-    BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_ERROR, 0);
-	BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_TRAY_OUT, 1);
+    Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
+	Mod_PLC->SetPcValue(PC_D_PRE_TRAY_OUT, 1);
 	BaseForm->nForm[stage]->WritePLCLog("TRAY OUT", "NG TRAY OUT");
 	timerErrorOff->Enabled = true;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm_NgCountError::btnOKClick(TObject *Sender)
 {
-    BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_ERROR, 0);
+    Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
 	BaseForm->nForm[stage]->Initialization();
 	BaseForm->nForm[stage]->WritePLCLog("RESTART", "NG TRAY RESTART");
     BaseForm->nForm[stage]->CmdForceStop_Original();
@@ -102,10 +102,10 @@ void __fastcall TForm_NgCountError::Timer_BringToFrontTimer(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm_NgCountError::timerErrorOffTimer(TObject *Sender)
 {
-    if(BaseForm->nForm[stage]->GetPlcValue(PLC_D_PRE_ERROR) == 1)
+    if(Mod_PLC->GetPlcValue(PLC_D_PRE_ERROR) == 1)
 	{
 		Label_Msg2->Caption = "Please check PLC whether PC ERROR is 0 ...";
-		BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_ERROR, 0);
+		Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
 	}
 	else
 	{

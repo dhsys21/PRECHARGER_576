@@ -91,7 +91,7 @@ const int PC_D_PRE_NG_ALARM                         =   19;
 // OK/NG - D34030 : 16bit * 36
 const int PC_D_PRE_MEASURE_OK_NG			   		=	30;
 // D34100
-const int PC_D_PRE_VOLTAGE_VALUE                    =   100;
+const int PC_D_PRE_VOLTAGE_VALUE                    =   0;//100;
 // D35000
 const int PC_D_PRE_CURRENT_VALUE                    =   0;
 //---------------------------------------------------------------------------
@@ -222,11 +222,13 @@ public:		// User declarations
     AnsiString __fastcall GetCellSrialTrayId(int plc_address, int size);
     double __fastcall GetCellSrialValue(int plc_address);
 
+    int __fastcall GetTrayPos();
     AnsiString __fastcall GetPlcValue(int plc_address, int size);
     double __fastcall GetPlcValue(int plc_address);
     int __fastcall GetPlcData(int plc_address, int bit_num);
-    double __fastcall GetValue(int pc_address);
-    void __fastcall SetValue(int pc_address, int value);
+    double __fastcall GetPcValue(int pc_address);
+    void __fastcall SetPcData(int pc_address, int bit_num, bool bValue);
+    void __fastcall SetPcValue(int pc_address, int value);
     void __fastcall SetSpecValue(int pc_address, int value);
     void __fastcall SetVoltValue(int pc_address, int index, int value);
     void __fastcall SetCurrValue(int pc_address, int index, int value);

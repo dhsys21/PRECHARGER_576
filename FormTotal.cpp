@@ -238,14 +238,13 @@ void __fastcall TTotalForm::PLCInitialization(int traypos)
 
     int channel, index;
 	Mod_PLC->PLC_Write_Result = true;
-    for(int i = 0; i < LINECOUNT / 2; i++)
+    for(int i = 0; i < 18; i++)
 	{
-		for(int j = 0; j < LINECOUNT; j++)
+		for(int j = 0; j < 16; j++)
 		{
-			//Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_IROCV_MEASURE_OK_NG + (i * 2), j, false);
-            index = (traypos - 1) * 288 + (i * 24 + j) + 1;
+            index = (traypos - 1) * 288 + (i * 16 + j) + 1;
             channel = chMap[index];
-            Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel / 24) * 2, channel % 24, false);
+            Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + (channel - 1) / 16, (channel - 1) % 16, false);
 		}
 	}
 
@@ -458,13 +457,13 @@ void __fastcall TTotalForm::Timer_PLCConnectTimer(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
 {
-	if(stage.arl == nAuto && GetPcValue(PC_D_PRE_STAGE_AUTO_READY) == 0){
-        SetPcValue(PC_D_PRE_STAGE_AUTO_READY, 1);
+	if(stage.arl == nAuto && Mod_PLC->GetPcValue(PC_D_PRE_STAGE_AUTO_READY) == 0){
+        Mod_PLC->SetPcValue(PC_D_PRE_STAGE_AUTO_READY, 1);
 		PreChargerStatus = "PreCharger STAGE AUTO READY = 1";
 		WritePLCLog("PreCharger STAGE AUTO/MANUAL", PreChargerStatus);
 	}
-	else if(stage.arl == nLocal && GetPcValue(PC_D_PRE_STAGE_AUTO_READY) == 1){
-        SetPcValue(PC_D_PRE_STAGE_AUTO_READY, 0);
+	else if(stage.arl == nLocal && Mod_PLC->GetPcValue(PC_D_PRE_STAGE_AUTO_READY) == 1){
+        Mod_PLC->SetPcValue(PC_D_PRE_STAGE_AUTO_READY, 0);
 		PreChargerStatus = "PreCharger STAGE AUTO READY = 0";
 		WritePLCLog("PreCharger STAGE AUTO/MANUAL", PreChargerStatus);
 	}
@@ -486,10 +485,10 @@ void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
 
 	if(stage.arl == nAuto && BaseForm->nForm[0]->Client->Active == true)
 	{
-        if(GetPlcValue(PLC_D_PRE_TRAY_IN) == 1) tray.trayin = true;
+        if(Mod_PLC->GetPlcValue(PLC_D_PRE_TRAY_IN) == 1) tray.trayin = true;
         else tray.trayin = false;
 
-        nTrayPos = GetTrayPos();
+        nTrayPos = Mod_PLC->GetTrayPos();
 		switch(nSection)
 		{
 			case STEP_WAIT:
@@ -564,7 +563,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 	switch(nStep)
 	{
 		case 0: //* Tray In 확인
-            trayin = GetPlcValue(PLC_D_PRE_TRAY_IN);
+            trayin = Mod_PLC->GetPlcValue(PLC_D_PRE_TRAY_IN);
 			if(trayin)
 			{
 				if(chkBypass->Checked == true)
@@ -591,7 +590,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 			}
 			break;
 		case 1:  //* BCR 리딩
-            trayid = GetPlcValue(PLC_D_PRE_TRAY_ID, 10);
+            trayid = Mod_PLC->GetPlcValue(PLC_D_PRE_TRAY_ID, 10);
 			pTrayid->Caption = trayid;
 			DisplayStatus(nREADY);
 
@@ -617,7 +616,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 			{
 				for(int j = 0; j < 16; j++)
 				{
-					tray.cell[i * 16 + j] = GetPlcData(PLC_D_PRE_TRAY_CELL_DATA + i, j);
+					tray.cell[i * 16 + j] = Mod_PLC->GetPlcData(PLC_D_PRE_TRAY_CELL_DATA + i, j);
 				}
 			}
 
@@ -673,7 +672,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
                     DisplayProcess(sProbeDown, "AutoInspection_Wait", "[STEP 3] (Tray Pos 2) PROBE IS CLOSED ... ");
                 }
 
-                SetPcValue(PC_D_PRE_PROB_CLOSE, 1);
+                Mod_PLC->SetPcValue(PC_D_PRE_PROB_CLOSE, 1);
 				WritePLCLog("AutoInspection_Wait", "[STEP 3] Tray Position : " + IntToStr(nTrayPos) + " -> PC_D_PRE_PROB_CLOSE = 1");
 
 				nSection = STEP_MEASURE;
@@ -683,36 +682,36 @@ void __fastcall TTotalForm::AutoInspection_Wait()
         case 4: //* 해당 트레이 위치에서 셀이 없을 때 처리
             if(nTrayPos == 1){
                 tray.pos1_complete = true;
-                SetPcValue(PC_D_PRE_COMPLETE1, 1);
-                SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 1);
+                Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE1, 1);
+                Mod_PLC->SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 1);
                 DisplayProcess(sBarcode, "AutoInspection_Wait", "[STEP 4] TRAY POS 1 CELL = 0, COMPLETE = 1, TRAY_POS_MOVE = 1 ... ");
 
                 nStep = 5;
             } else if(nTrayPos == 2){
                 tray.pos2_complete = true;
-                SetPcValue(PC_D_PRE_COMPLETE2, 1);
+                Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE2, 1);
                 DisplayProcess(sBarcode, "AutoInspection_Wait", "[STEP 4] TRAY POS 2 CELL = 0, COMPLETE =1 ... ");
 
                 nStep = 6;
             }
         	break;
         case 5: //* 해당 트레이 위치에서 셀이 없을 때 처리 - 트레이 위치 1 : COMPLETE1, TRAY_POS_MOVE 신호 확인
-            if(GetPcValue(PC_D_PRE_COMPLETE1) == 1 && GetPcValue(PC_D_PRE_TRAY_POS_MOVE) == 1)
+            if(Mod_PLC->GetPcValue(PC_D_PRE_COMPLETE1) == 1 && Mod_PLC->GetPcValue(PC_D_PRE_TRAY_POS_MOVE) == 1)
                 nStep = 7;
             else{
-                SetPcValue(PC_D_PRE_COMPLETE1, 1);
-                SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 1);
+                Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE1, 1);
+                Mod_PLC->SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 1);
             }
         	break;
         case 6: //* 해당 트레이 위치에서 셀이 없을 때 처리 - 트레이 위치 2 : COMPLETE2 신호 확인
-            if(GetPcValue(PC_D_PRE_COMPLETE2) == 1) nStep = 8;
-            else SetPcValue(PC_D_PRE_COMPLETE2, 1);
+            if(Mod_PLC->GetPcValue(PC_D_PRE_COMPLETE2) == 1) nStep = 8;
+            else Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE2, 1);
             break;
         case 7:
             //* 해당 트레이 위치에서 셀이 없을 때 처리 -
             //* 트레이가 2번째 위치로 옮겨 졌으면 probe close 부터 다시 시작
             if(nTrayPos == 2){
-                SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 0);
+                Mod_PLC->SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 0);
                 DisplayProcess(sFinish, "AutoInspection_Measure", " TRAY POS1 : PreCharger Finish ... ");
 
                 nSection = STEP_WAIT;
@@ -740,24 +739,24 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 {
 	//* Charging
 	if(tray.ams == true && tray.amf == false){
-        SetPcValue(PC_D_PRE_CHARGING, 1);
+        Mod_PLC->SetPcValue(PC_D_PRE_CHARGING, 1);
 		DisplayProcess(sCharge, "AutoInspection_Measure", "[STEP -] Tray Position : " + IntToStr(nTrayPos) + " -> Start charging ... ");
 	}
 	else{
-        SetPcValue(PC_D_PRE_CHARGING, 0);
+        Mod_PLC->SetPcValue(PC_D_PRE_CHARGING, 0);
 	}
 
 	double plc_probe_close, plc_tray_in, plc_probe_open;
 	switch(nStep)
 	{
 		case 0:
-            plc_probe_close = GetPlcValue(PLC_D_PRE_PROB_CLOSE);
-            plc_tray_in = GetPlcValue(PLC_D_PRE_TRAY_IN);
+            plc_probe_close = Mod_PLC->GetPlcValue(PLC_D_PRE_PROB_CLOSE);
+            plc_tray_in = Mod_PLC->GetPlcValue(PLC_D_PRE_TRAY_IN);
 			if(plc_probe_close == 1 && plc_tray_in == 1)
 			{
 				DisplayStatus(nRUN);
 				DisplayProcess(sProbeDown, "AutoInspection_Measure", "Tray Position : " + IntToStr(nTrayPos) + " -> PLC - PROBE CLOSED");
-                SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
+                Mod_PLC->SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
 
 				tray.rst = false;
 				nStep = 1;
@@ -770,7 +769,7 @@ void __fastcall TTotalForm::AutoInspection_Measure()
             	nStep = 3;
             else {
                 CmdEna();
-                BaseForm->WaitForMilliSeconds(1000);
+                Sleep(500);
                 CmdSetStep();
                 nStep = 2;
             }
@@ -788,7 +787,9 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 			else{
                 if(nStep_Count > 3){
                     nStep_Count = 0;
-                    //* 2025 09 08 - 셋팅값이 틀리면 에러창 표시
+                    //* 2025 09 07 - nStep 1로 이동해서 다시 셋팅
+                    //nStep = 1;
+                    //* 2025 09 09 - 셋팅값이 틀리면 에러창 표시
                     if(Form_ErrorSet->Visible == false)
 					    Form_ErrorSet->DisplayErrorMessage(0);
                     WriteCommLog("AutoInspection_Measure", "Precharger is not set. - run CmdSetStep()");
@@ -807,45 +808,45 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 			if(StatusImage->Picture == BaseForm->statusImage[nNoAnswer]->Picture)
                 StatusImage->Picture = BaseForm->statusImage[nRUN]->Picture;
 
-            plc_probe_open = GetPlcValue(PLC_D_PRE_PROB_OPEN);
+            plc_probe_open = Mod_PLC->GetPlcValue(PLC_D_PRE_PROB_OPEN);
 			if(plc_probe_open == 1 && tray.amf == true)
 			{
 				DisplayProcess(sProbeOpen, "AutoInspection_Measure", "[STEP 4] PLC - PROBE IS OPEN ... ");
 				WriteCommLog("AutoInspection_Measure",
                 	"[STEP 4] PreCharging Complete -> Tray Position : " + IntToStr(nTrayPos));
 
-                SetPcValue(PC_D_PRE_PROB_OPEN, 0);
+                Mod_PLC->SetPcValue(PC_D_PRE_PROB_OPEN, 0);
                 if(nTrayPos == 1) {
                 	tray.pos1_complete = true;
 
-                    SetPcValue(PC_D_PRE_COMPLETE1, 1);
-                    SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 1);
+                    Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE1, 1);
+                    Mod_PLC->SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 1);
                     nStep = 5;
                 }
                 else if(nTrayPos == 2) {
                 	tray.pos2_complete = true;
 
-                    SetPcValue(PC_D_PRE_COMPLETE2, 1);
+                    Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE2, 1);
                     nStep = 6;
                 }
 			}
 			break;
         case 5:
-            if(GetPcValue(PC_D_PRE_COMPLETE1) == 1 && GetPcValue(PC_D_PRE_TRAY_POS_MOVE) == 1)
+            if(Mod_PLC->GetPcValue(PC_D_PRE_COMPLETE1) == 1 && Mod_PLC->GetPcValue(PC_D_PRE_TRAY_POS_MOVE) == 1)
                 nStep = 7;
             else{
-                SetPcValue(PC_D_PRE_COMPLETE1, 1);
-                SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 1);
+                Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE1, 1);
+                Mod_PLC->SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 1);
             }
         	break;
         case 6:
-            if(GetPcValue(PC_D_PRE_COMPLETE2) == 1) nStep = 8;
-            else SetPcValue(PC_D_PRE_COMPLETE2, 1);
+            if(Mod_PLC->GetPcValue(PC_D_PRE_COMPLETE2) == 1) nStep = 8;
+            else Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE2, 1);
             break;
         case 7:
             //* 트레이가 2번째 위치로 옮겨 졌으면 probe close 부터 다시 시작
             if(nTrayPos == 2){
-                SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 0);
+                Mod_PLC->SetPcValue(PC_D_PRE_TRAY_POS_MOVE, 0);
                 DisplayProcess(sFinish, "AutoInspection_Measure", "[STEP 7] MOVE TRAY to POSITION 2 ... ");
                 nSection = STEP_WAIT;
                 nStep = 3;
@@ -867,21 +868,21 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::AutoInspection_Finish()
 {
-    SetPcValue(PC_D_PRE_CHARGING, 0);
+    Mod_PLC->SetPcValue(PC_D_PRE_CHARGING, 0);
 
 	double plc_tray_in;
 	//DisplayStatus(nFinish);
 	switch(nStep)
 	{
 		case 0:       
-            plc_tray_in = GetPlcValue(PLC_D_PRE_TRAY_IN);
+            plc_tray_in = Mod_PLC->GetPlcValue(PLC_D_PRE_TRAY_IN);
 
 			if(plc_tray_in == 0)
 			{
 				WriteCommLog("AutoInspection_Finish", "[STEP 0] TRAY OUT");
-                SetPcValue(PC_D_PRE_TRAY_OUT, 0);
-                SetPcValue(PC_D_PRE_PROB_OPEN, 0);
-                SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
+                Mod_PLC->SetPcValue(PC_D_PRE_TRAY_OUT, 0);
+                Mod_PLC->SetPcValue(PC_D_PRE_PROB_OPEN, 0);
+                Mod_PLC->SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
 
 				DisplayProcess(sTrayOut, "AutoInspection_Finish", "[STEP 0] PreCharger Tray Out ... ");
 
@@ -1027,7 +1028,7 @@ void __fastcall TTotalForm::Timer_FinishChargingTimer(TObject *Sender)
             break;
         case 4:
             //* probe open
-            SetPcValue(PC_D_PRE_PROB_OPEN, 1);
+            Mod_PLC->SetPcValue(PC_D_PRE_PROB_OPEN, 1);
             nFinishStep = 5;
             break;
         case 5:
@@ -1188,16 +1189,16 @@ void __fastcall TTotalForm::StatusTimerTimer(TObject *Sender)
     if(tray.ams == true)
     	ChannelStatus();
 
-    if(GetPlcValue(PLC_D_PRE_TRAY_IN) == 1) ShowPLCSignal(pnlTrayIn, true);
+    if(Mod_PLC->GetPlcValue(PLC_D_PRE_TRAY_IN) == 1) ShowPLCSignal(pnlTrayIn, true);
     else ShowPLCSignal(pnlTrayIn, false);
 
-    if(GetPlcValue(PLC_D_PRE_PROB_OPEN) == 1) ShowPLCSignal(pnlProbeOpen, true);
+    if(Mod_PLC->GetPlcValue(PLC_D_PRE_PROB_OPEN) == 1) ShowPLCSignal(pnlProbeOpen, true);
     else ShowPLCSignal(pnlProbeOpen, false);
 
-    if(GetPlcValue(PLC_D_PRE_PROB_CLOSE) == 1) ShowPLCSignal(pnlProbeClose, true);
+    if(Mod_PLC->GetPlcValue(PLC_D_PRE_PROB_CLOSE) == 1) ShowPLCSignal(pnlProbeClose, true);
     else ShowPLCSignal(pnlProbeClose, false);
 
-    nTrayPos = GetTrayPos();
+    nTrayPos = Mod_PLC->GetTrayPos();
     pnlTrayPos->Caption->Text = IntToStr(nTrayPos);
 }
 //---------------------------------------------------------------------------
@@ -2362,6 +2363,8 @@ void __fastcall TTotalForm::btnManualClick(TObject *Sender)
 	//{
 		stage.arl_reserve = nLocal;
 		stage.arl = nLocal;
+        btnAuto->Color = clWhite;
+	    btnManual->Color = (TColor)0x00FF8000;
 		this->CmdManualMod(true);
 		VisibleBox(GrpLocal);
 
@@ -2375,6 +2378,8 @@ void __fastcall TTotalForm::btnAutoClick(TObject *Sender)
 {
 	stage.arl_reserve = nAuto;
 	stage.arl = nAuto;
+    btnAuto->Color = (TColor)0x00FF8000;
+    btnManual->Color = clWhite;
     MeasureInfoForm->pLocal->Visible = false;
 	this->CmdManualMod(false);
 	VisibleBox(GrpMain);
@@ -2383,14 +2388,11 @@ void __fastcall TTotalForm::btnAutoClick(TObject *Sender)
 void __fastcall TTotalForm::btnTrayOutClick(TObject *Sender)
 {
 	if(MessageBox(Handle, L"Are you sure you want to eject the tray?", L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
-//		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_PROB_CLOSE, 0);
-//		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_PROB_OPEN, 1);
-//		Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_TRAY_OUT, 1);
-        SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
-        SetPcValue(PC_D_PRE_PROB_OPEN, 1);
-        SetPcValue(PC_D_PRE_COMPLETE2, 1);
-        SetPcValue(PC_D_PRE_COMPLETE2, 1);
-        SetPcValue(PC_D_PRE_TRAY_OUT, 1);
+        Mod_PLC->SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
+        Mod_PLC->SetPcValue(PC_D_PRE_PROB_OPEN, 1);
+        Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE2, 1);
+        Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE2, 1);
+        Mod_PLC->SetPcValue(PC_D_PRE_TRAY_OUT, 1);
 
 		nStep = 0;
 		nSection = STEP_FINISH;
@@ -2407,11 +2409,11 @@ void __fastcall TTotalForm::VisibleBox(TGroupBox *grp)
 		if( (grp == GrpError) || (grp == GrpAlarm) ){
 			if(grp->Visible == false)BaseForm->IncErrorCount();
 			//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_ERROR, 1);
-            SetPcValue(PC_D_PRE_ERROR, 1);
+            Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
 		}
 		else {
         	//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_ERROR, 0);
-            SetPcValue(PC_D_PRE_ERROR, 0);
+            Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
         }
 		if( (CurrentGrp == GrpError) || (CurrentGrp == GrpAlarm) ){
 			BaseForm->DecErrorCount();

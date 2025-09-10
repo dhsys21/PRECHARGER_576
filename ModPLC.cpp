@@ -497,6 +497,12 @@ AnsiString __fastcall TMod_PLC::GetString(unsigned char (*data)[2], int column, 
 //---------------------------------------------------------------------------
 // PLC ¸í·É¾î
 //---------------------------------------------------------------------------
+int __fastcall TMod_PLC::GetTrayPos()
+{
+    int value = GetPlcValue(PLC_D_PRE_TRAY_POS);
+    return value;
+}
+//---------------------------------------------------------------------------
 double __fastcall TMod_PLC::GetPlcValue(int plc_address)
 {
     double value = GetDouble(plc_Interface_Data, plc_address);
@@ -515,7 +521,7 @@ AnsiString __fastcall TMod_PLC::GetPlcValue(int plc_address, int size)
     return value;
 }
 //---------------------------------------------------------------------------
-double __fastcall TMod_PLC::GetValue(int pc_address)
+double __fastcall TMod_PLC::GetPcValue(int pc_address)
 {
     double value = GetDouble(pc_Interface_Data, pc_address);
     return value;
@@ -539,9 +545,14 @@ double __fastcall TMod_PLC::GetCellSrialValue(int plc_address)
     return value;
 }
 //---------------------------------------------------------------------------
-void __fastcall TMod_PLC::SetValue(int pc_address, int value)
+void __fastcall TMod_PLC::SetPcData(int pc_address, int bit_num, bool bValue)
 {
-    SetDouble(pc_Interface_Data,  pc_address, value);
+    SetData(pc_Interface_Data, pc_address, bit_num, bValue);
+}
+//---------------------------------------------------------------------------
+void __fastcall TMod_PLC::SetPcValue(int pc_address, int value)
+{
+    SetDouble(pc_Interface_Data, pc_address, value);
 }
 //---------------------------------------------------------------------------
 void __fastcall TMod_PLC::SetSpecValue(int pc_address, int value)

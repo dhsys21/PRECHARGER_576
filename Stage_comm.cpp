@@ -32,12 +32,13 @@ void __fastcall TTotalForm::CmdForceStop(int traypos)
     //* 각 포지션별 결과 저장
     WriteResultFile(nTrayPos);
 
-    SetPcValue(PC_D_PRE_PROB_OPEN, 1);
+    Mod_PLC->SetPcValue(PC_D_PRE_PROB_OPEN, 1);
+    MeasureInfoForm->probeTimer->Enabled = true;
     if(nTrayPos == 1){
-        SetPcValue(PC_D_PRE_COMPLETE1, 1);
+        Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE1, 1);
         WritePLCLog("AutoInspection_Measure", "PreCharger Complete ... , COMPLETE1 on, PC_INTERFACE_PROB_OPEN on");
     } else if(nTrayPos == 2){
-        SetPcValue(PC_D_PRE_COMPLETE2, 1);
+        Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE2, 1);
         WritePLCLog("AutoInspection_Measure", "PreCharger Complete ... , COMPLETE2 on, PC_INTERFACE_PROB_OPEN on");
     }
 }
@@ -79,7 +80,7 @@ void __fastcall TTotalForm::CmdTrayOut()
 	}
 	else{
         if(BaseForm->chkTest->Checked == false){
-        	SetPcValue(PC_D_PRE_TRAY_OUT, 1);
+        	Mod_PLC->SetPcValue(PC_D_PRE_TRAY_OUT, 1);
             WritePLCLog("CmdTrayOut", "IROCV TRAY OUT = 1");
         }
 		DisplayStatus(nFinish);
@@ -291,39 +292,39 @@ void __fastcall TTotalForm::CmdDischargeSetStep()
 //---------------------------------------------------------------------------
 // PLC 명령어
 //---------------------------------------------------------------------------
-int __fastcall TTotalForm::GetTrayPos()
-{
-    int value = GetPlcValue(PLC_D_PRE_TRAY_POS);
-    return value;
-}
-double __fastcall TTotalForm::GetPlcValue(int plc_address)
-{
-    double value = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, plc_address);
-    return value;
-}
-//---------------------------------------------------------------------------
-int __fastcall TTotalForm::GetPlcData(int plc_address, int bit_num)
-{
-    int value = Mod_PLC->GetData(Mod_PLC->plc_Interface_Data, plc_address, bit_num);
-    return value;
-}
-//---------------------------------------------------------------------------
-AnsiString __fastcall TTotalForm::GetPlcValue(int plc_address, int size)
-{
-    AnsiString value = Mod_PLC->GetString(Mod_PLC->plc_Interface_Data, plc_address, size);
-    return value;
-}
-//---------------------------------------------------------------------------
-void __fastcall TTotalForm::SetPcValue(int pc_address, int value)
-{
-    Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  pc_address, value);
-}
-//---------------------------------------------------------------------------
-double __fastcall TTotalForm::GetPcValue(int pc_address)
-{
-    double value = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, pc_address);
-    return value;
-}
+//int __fastcall TTotalForm::GetTrayPos()
+//{
+//    int value = GetPlcValue(PLC_D_PRE_TRAY_POS);
+//    return value;
+//}
+//double __fastcall TTotalForm::GetPlcValue(int plc_address)
+//{
+//    double value = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, plc_address);
+//    return value;
+//}
+////---------------------------------------------------------------------------
+//int __fastcall TTotalForm::GetPlcData(int plc_address, int bit_num)
+//{
+//    int value = Mod_PLC->GetData(Mod_PLC->plc_Interface_Data, plc_address, bit_num);
+//    return value;
+//}
+////---------------------------------------------------------------------------
+//AnsiString __fastcall TTotalForm::GetPlcValue(int plc_address, int size)
+//{
+//    AnsiString value = Mod_PLC->GetString(Mod_PLC->plc_Interface_Data, plc_address, size);
+//    return value;
+//}
+////---------------------------------------------------------------------------
+//void __fastcall TTotalForm::SetPcValue(int pc_address, int value)
+//{
+//    Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  pc_address, value);
+//}
+////---------------------------------------------------------------------------
+//double __fastcall TTotalForm::GetPcValue(int pc_address)
+//{
+//    double value = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, pc_address);
+//    return value;
+//}
 //---------------------------------------------------------------------------
 // PLC 명령어
 //---------------------------------------------------------------------------

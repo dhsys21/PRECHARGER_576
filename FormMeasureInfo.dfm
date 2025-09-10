@@ -1686,6 +1686,7 @@ object MeasureInfoForm: TMeasureInfoForm
     Top = 6
   end
   object probeTimer: TTimer
+    Interval = 2000
     OnTimer = probeTimerTimer
     Left = 1056
     Top = 195

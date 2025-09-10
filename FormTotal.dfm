@@ -97,7 +97,7 @@ object TotalForm: TTotalForm
       Status.Appearance.Font.Style = []
       BevelColor = clMedGray
       Caption = 'AUTO'
-      Color = 16744448
+      Color = clWhite
       ParentFont = False
       TabOrder = 0
       Version = '2.1.1.5'

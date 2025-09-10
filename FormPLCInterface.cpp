@@ -233,17 +233,20 @@ void __fastcall TForm_PLCInterface::btnWriteNgValueClick(TObject *Sender)
 			int nChannel = i * 16 + j + 1;
 			if(find(ngchannels.begin(), ngchannels.end(), nChannel) != ngchannels.end())
 			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, true);
+				//Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, true);
+                Mod_PLC->SetPcData(PC_D_PRE_MEASURE_OK_NG + i, j, true);
 				ngCount++;
 			}
 			else
 			{
-				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, false);
+				//Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, false);
+                Mod_PLC->SetPcData(PC_D_PRE_MEASURE_OK_NG + i, j, false);
 			}
 		}
 	}
 
-	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_COUNT, ngCount);
+	//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_COUNT, ngCount);
+    Mod_PLC->SetPcValue(PC_D_PRE_NG_COUNT, ngCount);
 }
 //---------------------------------------------------------------------------
 

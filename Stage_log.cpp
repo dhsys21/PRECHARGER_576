@@ -527,13 +527,13 @@ void __fastcall TTotalForm::RemeasureAlarm(int remeasure_alarm_count)
 {
 	if(remeasure_alarm_count > 0) {
 		//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_NG_ALARM, 1);
-        SetPcValue(PC_D_PRE_NG_ALARM, 1);
+        Mod_PLC->SetPcValue(PC_D_PRE_NG_ALARM, 1);
 		btnNgInfo->Color = clRed;
 		lblRemeasureAlarmCheck->Visible = true;
 	}
 	else{
         //Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_NG_ALARM, 0);
-        SetPcValue(PC_D_PRE_NG_ALARM, 0);
+        Mod_PLC->SetPcValue(PC_D_PRE_NG_ALARM, 0);
 		btnNgInfo->Color = clWhite;
 		lblRemeasureAlarmCheck->Visible = false;
     }

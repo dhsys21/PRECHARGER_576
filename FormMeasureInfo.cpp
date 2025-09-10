@@ -356,14 +356,16 @@ void __fastcall TMeasureInfoForm::SetUIOption(TPanel *pnl, int nx, int ny, int n
 
 void __fastcall TMeasureInfoForm::btnProbeClick(TObject *Sender)
 {
-    BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_PROB_CLOSE, 1);
-    BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_PROB_OPEN, 0);
+    Mod_PLC->SetPcValue(PC_D_PRE_PROB_CLOSE, 1);
+    Mod_PLC->SetPcValue(PC_D_PRE_PROB_OPEN, 0);
+    probeTimer->Enabled = true;
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::btnProbeOpenClick(TObject *Sender)
 {
-    BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
-    BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_PROB_OPEN, 1);
+    Mod_PLC->SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
+    Mod_PLC->SetPcValue(PC_D_PRE_PROB_OPEN, 1);
+    probeTimer->Enabled = true;
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::ChInfoMouseEnter(TObject *Sender)
@@ -389,10 +391,14 @@ void __fastcall TMeasureInfoForm::Panel35Click(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::probeTimerTimer(TObject *Sender)
 {
-    if(BaseForm->nForm[stage]->GetPlcValue(PLC_D_PRE_PROB_CLOSE))
-        BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
-    if(BaseForm->nForm[stage]->GetPlcValue(PLC_D_PRE_PROB_OPEN))
-        BaseForm->nForm[stage]->SetPcValue(PC_D_PRE_PROB_OPEN, 0);
+    if(Mod_PLC->GetPlcValue(PLC_D_PRE_PROB_CLOSE)){
+        Mod_PLC->SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
+        probeTimer->Enabled = false;
+    }
+    if(Mod_PLC->GetPlcValue(PLC_D_PRE_PROB_OPEN)){
+        Mod_PLC->SetPcValue(PC_D_PRE_PROB_OPEN, 0);
+        probeTimer->Enabled = false;
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::btnSaveClick(TObject *Sender)

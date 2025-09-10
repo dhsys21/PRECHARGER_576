@@ -358,7 +358,7 @@ private:	// User declarations
 	void __fastcall ErrorLog();
     void __fastcall ErrorMsg(int err);
     void __fastcall WriteCommLog(AnsiString Type, AnsiString Msg);
-    int __fastcall GetTrayPos();
+    //int __fastcall GetTrayPos();
 
 	void __fastcall StageClearAlarm();
 	void __fastcall StageReady();
@@ -455,11 +455,11 @@ public:		// User declarations
 	AnsiString PLC_IPADDRESS;
 	int PLC_PCPORT;
 	int PLC_PLCPORT;
-    AnsiString __fastcall GetPlcValue(int plc_address, int size);
-    double __fastcall GetPlcValue(int plc_address);
-    int __fastcall GetPlcData(int plc_address, int bit_num);
-    void __fastcall SetPcValue(int pc_address, int value);
-    double __fastcall GetPcValue(int pc_address);
+//    AnsiString __fastcall GetPlcValue(int plc_address, int size);
+//    double __fastcall GetPlcValue(int plc_address);
+//    int __fastcall GetPlcData(int plc_address, int bit_num);
+//    void __fastcall SetPcValue(int pc_address, int value);
+//    double __fastcall GetPcValue(int pc_address);
 
 // Define.h structure µ•¿Ã≈Õ
 	REAL_TIME real_data;
