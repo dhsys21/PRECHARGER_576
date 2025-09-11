@@ -1926,6 +1926,7 @@ void __fastcall TTotalForm::SET_SENDATA(AnsiString eqstatus, AnsiString runcount
         charge[1].volt = StringToDouble(btset2[3], 4);
     }
 
+    if(charge[0].time < 0) charge[0].time = 0;
     lblSet1->Caption = FormatFloat("0", charge[0].volt * 1000.0) + "mV "
     	+ FormatFloat("0", charge[0].curr * 1000.0) + "mA " + FormatFloat("0", charge[0].time) + "s";
 

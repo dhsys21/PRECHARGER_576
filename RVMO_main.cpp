@@ -244,6 +244,8 @@ void __fastcall TBaseForm::advPLCInterfaceShowClick(TObject *Sender)
 	Form_PLCInterface->Left = 5;
 	Form_PLCInterface->Top = 85;
 	Form_PLCInterface->Visible = true;
+    Form_PLCInterface->WindowState = wsNormal;
+    Form_PLCInterface->BringToFront();
 }
 //---------------------------------------------------------------------------
 void __fastcall TBaseForm::AdvSmoothPanel_PLCClick(TObject *Sender)

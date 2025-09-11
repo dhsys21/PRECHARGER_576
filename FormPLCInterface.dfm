@@ -1,6 +1,7 @@
 object Form_PLCInterface: TForm_PLCInterface
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'PLC Interface'
   ClientHeight = 951
