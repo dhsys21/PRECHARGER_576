@@ -96,7 +96,7 @@ object RemeasureForm: TRemeasureForm
     Width = 1044
     Height = 910
     Caption = 'Panel2'
-    Color = 12353126
+    Color = clGray
     ParentBackground = False
     TabOrder = 2
     object Panel3: TPanel

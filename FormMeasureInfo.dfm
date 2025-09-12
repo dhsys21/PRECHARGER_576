@@ -793,8 +793,8 @@ object MeasureInfoForm: TMeasureInfoForm
       OnClick = Panel35Click
     end
     object pnormal2: TPanel
-      Left = 60
-      Top = 0
+      Left = 4
+      Top = 240
       Width = 41
       Height = 19
       Caption = #45824#44592
@@ -811,7 +811,7 @@ object MeasureInfoForm: TMeasureInfoForm
     end
     object pnormal1: TPanel
       Left = 4
-      Top = 0
+      Top = 200
       Width = 54
       Height = 15
       Caption = #48372#53685'1'
@@ -859,6 +859,74 @@ object MeasureInfoForm: TMeasureInfoForm
       ParentBackground = False
       ParentFont = False
       TabOrder = 16
+    end
+    object pnormal3: TPanel
+      Left = 8
+      Top = 280
+      Width = 54
+      Height = 15
+      Caption = '??1'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 39
+      Visible = False
+    end
+    object pnormal31: TPanel
+      Left = 8
+      Top = 301
+      Width = 54
+      Height = 15
+      Caption = '??1'
+      Color = 15461355
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 40
+      Visible = False
+    end
+    object pnormal4: TPanel
+      Left = 8
+      Top = 323
+      Width = 41
+      Height = 19
+      Caption = '??'
+      Color = 12369084
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 41
+      Visible = False
+    end
+    object pnormal41: TPanel
+      Left = 9
+      Top = 348
+      Width = 41
+      Height = 19
+      Caption = '??'
+      Color = 13421772
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 42
+      Visible = False
     end
   end
   object grbChInfo: TGroupBox

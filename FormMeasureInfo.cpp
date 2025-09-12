@@ -83,7 +83,7 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 			index += 1;
 			nx += (nw + 1);
 			if(index % 2 == 0) nx += 1;
-			if(index % (LINECOUNT / 4) == 0) nx += 1;
+			if(index % (LINECOUNT / 6) == 0) nx += 1;
 			if(index % LINECOUNT == 0)
 			{
 				ny += nh * 2 + 2;
@@ -111,7 +111,7 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 			index += 1;
 			nx -= (nw + 1);
 			if(index % 2 == 0) nx -= 1;
-			if(index % (LINECOUNT / 4) == 0) nx -= 1;
+			if(index % (LINECOUNT / 6) == 0) nx -= 1;
 			if(index % LINECOUNT == 0)
 			{
 				ny += nh * 2 + 2;
@@ -192,16 +192,24 @@ void __fastcall TMeasureInfoForm::SetChannelInfo(int traypos)
     int channel, rchannel;
     for(int index = 0; index < MAXCHANNEL / 2; index++){
         channel = GetChMap(stage, traypos, index) - 1;
-        //channel = GetChannel(traypos, index) - 1;
 
         pvolt[channel]->Caption = IntToStr(channel + 1);
-        pvolt[channel]->Color = pnormal1->Color;
+        //pvolt[channel]->Color = pnormal1->Color;
 
         int ch = BaseForm->nForm[stage]->chReverseMap[channel + 1];
         pcurr[channel]->Caption = SetChannelHint(ch);
         pcurr[channel]->Hint = "CH " + SetChannelHint(ch);
-        pcurr[channel]->Color = pnormal2->Color;
+        //pcurr[channel]->Color = pnormal2->Color;
         pcurr[channel]->Refresh();
+
+        if(channel % 4 == 0 || channel % 4 == 1) {
+            pvolt[channel]->Color = pnormal3->Color;
+        	pcurr[channel]->Color = pnormal31->Color;
+        }
+        else {
+            pvolt[channel]->Color = pnormal4->Color;
+        	pcurr[channel]->Color = pnormal41->Color;
+        }
     }
 }
 //---------------------------------------------------------------------------
@@ -297,7 +305,7 @@ void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)
             index ++;
             nx -= (nw+1);
             if(index % 2 == 0) nx -= 1;
-            if(index % (LINECOUNT / 4) == 0) nx -= 1;
+            if(index % (LINECOUNT / 6) == 0) nx -= 1;
             ny += (nh+1);
             if( index % (LINECOUNT / 4) == 0) ny += 2;
         }

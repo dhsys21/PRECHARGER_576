@@ -1344,8 +1344,16 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 			{
 				if(m_sTempCurr[channel].Pos("-") > 1)
 				{
-					MeasureInfoForm->pvolt[channel]->Color = MeasureInfoForm->pnormal1->Color;
-					MeasureInfoForm->pcurr[channel]->Color = MeasureInfoForm->pnormal2->Color;
+//					MeasureInfoForm->pvolt[channel]->Color = MeasureInfoForm->pnormal1->Color;
+//					MeasureInfoForm->pcurr[channel]->Color = MeasureInfoForm->pnormal2->Color;
+                    if(channel % 4 == 0 || channel % 4 == 1) {
+                        MeasureInfoForm->pvolt[channel]->Color = MeasureInfoForm->pnormal3->Color;
+                        MeasureInfoForm->pcurr[channel]->Color = MeasureInfoForm->pnormal31->Color;
+                    }
+                    else {
+                        MeasureInfoForm->pvolt[channel]->Color = MeasureInfoForm->pnormal4->Color;
+                        MeasureInfoForm->pcurr[channel]->Color = MeasureInfoForm->pnormal41->Color;
+                    }
 				}
 				else if(m_sTempCurr[channel] == "Cell")
 				{
@@ -1365,8 +1373,16 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 					if(panel[channel]->Color == cl_line->Color ||
 						panel[channel]->Color == cl_charge->Color || panel[channel]->Color == cl_end->Color)
 					{
-						MeasureInfoForm->pvolt[channel]->Color = MeasureInfoForm->pnormal1->Color;
-						MeasureInfoForm->pcurr[channel]->Color = MeasureInfoForm->pnormal2->Color;
+//						MeasureInfoForm->pvolt[channel]->Color = MeasureInfoForm->pnormal1->Color;
+//						MeasureInfoForm->pcurr[channel]->Color = MeasureInfoForm->pnormal2->Color;
+                        if(channel % 4 == 0 || channel % 4 == 1) {
+                            MeasureInfoForm->pvolt[channel]->Color = MeasureInfoForm->pnormal3->Color;
+                            MeasureInfoForm->pcurr[channel]->Color = MeasureInfoForm->pnormal31->Color;
+                        }
+                        else {
+                            MeasureInfoForm->pvolt[channel]->Color = MeasureInfoForm->pnormal4->Color;
+                            MeasureInfoForm->pcurr[channel]->Color = MeasureInfoForm->pnormal41->Color;
+                        }
 					}
 					else
 					{

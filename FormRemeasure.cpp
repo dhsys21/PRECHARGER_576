@@ -126,7 +126,7 @@ void __fastcall TRemeasureForm::MakePanel(AnsiString type)
 			index += 1;
 			nx -= (nw + 1);
 			if(index % 2 == 0) nx -= 1;
-			if(index % (LINECOUNT / 4) == 0) nx -= 1;
+			if(index % (LINECOUNT / 6) == 0) nx -= 1;
 			if(index % LINECOUNT == 0)
 			{
 				ny += nh * 2 + 2;
@@ -302,7 +302,7 @@ void __fastcall TRemeasureForm::MakeUIPanel(AnsiString type)
             index ++;
             nx -= (nw+1);
             if(index % 2 == 0) nx -= 1;
-            if(index % (LINECOUNT / 4) == 0) nx -= 1;
+            if(index % (LINECOUNT / 6) == 0) nx -= 1;
             ny += (nh+1);
             if( index % (LINECOUNT / 4) == 0) ny += 2;
         }

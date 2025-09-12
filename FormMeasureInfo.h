@@ -109,6 +109,10 @@ __published:	// IDE-managed Components
 	TTimer *Timer_SetStep2;
 	TAdvSmoothButton *btnInit1;
 	TAdvSmoothButton *btnInit2;
+	TPanel *pnormal3;
+	TPanel *pnormal31;
+	TPanel *pnormal4;
+	TPanel *pnormal41;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall btnAutoClick(TObject *Sender);
 	void __fastcall btnProbeClick(TObject *Sender);
