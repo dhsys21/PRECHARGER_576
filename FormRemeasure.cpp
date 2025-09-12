@@ -406,11 +406,8 @@ void __fastcall TRemeasureForm::ChInfoMouseEnter(TObject *Sender)
 	index = pnl->Tag;
 	pnlCh->Caption = index + 1;
 
-    //int ch = BaseForm->nForm[stage]->chReverseMap[index + 1];
-    //if(ch >= 289) ch  = ch - 288;
-	//pnlPos->Caption = IntToStr((index+LINECOUNT)/LINECOUNT) + "-" + IntToStr((index%LINECOUNT)+1);
-    //pnlPos->Caption = IntToStr((ch - 1)/LINECOUNT + 1) + "-" + IntToStr((ch - 1)%LINECOUNT + 1);
-    pnlPos->Caption = SetChannelHint(index);
+    int ch = BaseForm->nForm[stage]->chReverseMap[index + 1];
+    pnlPos->Caption = SetChannelHint(ch);
 }
 //---------------------------------------------------------------------------
 void __fastcall TRemeasureForm::ChInfoMouseLeave(TObject *Sender)
