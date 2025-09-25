@@ -42,6 +42,21 @@ void __fastcall TMeasureInfoForm::FormShow(TObject *Sender)
     chartCurrent->Height = 433;
     chartCurrent->Left = pnl_nw + 4;
     chartCurrent->Top = chartVoltage->Height + pnl_nh + 8;
+
+    //* 기본 색상
+//    pnormal1->Color = (TColor)0x00FFE8D9;
+//    pnormal2->Color = (TColor)0x00FFE6FF;
+//
+//    pnormal3->Color = clWhite;
+//    pnormal31->Color = (TColor)0x00EBEBEB;
+//    pnormal4->Color = (TColor)0x00BCBCBC;
+//    pnormal41->Color = (TColor)0x00CCCCCC;
+
+    //* 2025 09 16 - 검수 요청 색상
+    pnormal3->Color = clWhite;
+    pnormal31->Color = clWhite;
+    pnormal4->Color = (TColor)0x00FFE8D9;
+    pnormal41->Color = (TColor)0x00FFE8D9;
 }
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

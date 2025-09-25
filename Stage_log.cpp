@@ -459,34 +459,69 @@ void __fastcall TTotalForm::ReadRemeasureInfo()
 
 	ini = new TIniFile((AnsiString)BIN_PATH + "RemeasureInfo.inf");
 
-	AnsiString retest_info;
+	AnsiString strNg, strTotalUse, strConsNg;
 	AnsiString title = "REMEASURE" + IntToStr(this->Tag);
 
-	int pos = 0;
+	int posNg = 0, posTotalNg = 0, posConsNg = 0;
 
-	retest_info = ini->ReadString(title, "ACCMULATE", "-1");
+	strNg = ini->ReadString(title, "NG", "-1");
+    strTotalUse = ini->ReadString(title, "TOTAL_USE", "-1");
+    strConsNg = ini->ReadString(title, "CONSECUTIVE_NG", "-1" );
+
     int nRemeasureAlarmCount = 0;
 	config.remeasure_alarm_cnt = ini->ReadInteger("MAIN", "REMEASURE_ALARM_COUNT", 3);
 	editRemeasureAlarmCount->Text = config.remeasure_alarm_cnt;
 	RemeasureForm->pcolor2->Caption = config.remeasure_alarm_cnt;
 
-	if(retest_info == "-1"){	// 파일이 존재하지 않으면
+	//* 총 누적 불량
+	if(strNg == "-1"){	// 파일이 존재하지 않으면
 		for(int index = 0; index < MAXCHANNEL; ++index){
 			acc_remeasure[index] = 0; 	// 모두 0으로
 		}
 	}
 	else{
 		for(int index = 0; index < MAXCHANNEL; ++index){
-			pos = retest_info.Pos("_");
-			acc_remeasure[index] = retest_info.SubString(1,pos-1).ToIntDef(0);
-            if(acc_remeasure[index] >= config.remeasure_alarm_cnt)
-				nRemeasureAlarmCount++;
-			retest_info.Delete(1, pos);
+			posNg = strNg.Pos("_");
+			acc_remeasure[index] = strNg.SubString(1, posNg - 1).ToIntDef(0);
+//			if(acc_remeasure[index] >= config.remeasure_alarm_cnt)
+//				nRemeasureAlarmCount++;
+			strNg.Delete(1, posNg);
 		}
 	}
+//	RemeasureAlarm(nRemeasureAlarmCount);
+
+	//* 총 측정 횟수
+	if(strTotalUse == "-1"){	// 파일이 존재하지 않으면
+		for(int index = 0; index < MAXCHANNEL; ++index){
+			acc_totaluse[index] = 0; 	// 모두 0으로
+		}
+	}
+	else{
+		for(int index = 0; index < MAXCHANNEL; ++index){
+			posTotalNg = strTotalUse.Pos("_");
+			acc_totaluse[index] = strTotalUse.SubString(1, posTotalNg - 1).ToIntDef(0);
+			strTotalUse.Delete(1, posTotalNg);
+		}
+	}
+
+    //* 연속불량 횟수
+	if(strConsNg == "-1"){	// 파일이 존재하지 않으면
+		for(int index = 0; index < MAXCHANNEL; ++index){
+			acc_consng[index] = 0; 	// 모두 0으로
+		}
+	}
+	else{
+		for(int index = 0; index < MAXCHANNEL; ++index){
+			posConsNg = strConsNg.Pos("_");
+			acc_consng[index] = strConsNg.SubString(1, posConsNg - 1).ToIntDef(0);
+			if(acc_consng[index] >= config.remeasure_alarm_cnt)
+				nRemeasureAlarmCount++;
+			strConsNg.Delete(1, posConsNg);
+		}
+	}
+    //* 연속불량이 일정횟수 이상이면 에러발생
     RemeasureAlarm(nRemeasureAlarmCount);
 
-	retest_info = "";
 	acc_init = 	 ini->ReadString(title, "ACCMULATE_DAY", Now().FormatString("yyyy. m. d. hh:nn"));
 	acc_cnt = ini->ReadInteger(title, "ACC_CNT", 0);
 
@@ -499,26 +534,30 @@ void __fastcall TTotalForm::WriteRemeasureInfo()	// Tray가 Vacancy 상태일때 기록
 
 	ini = new TIniFile((AnsiString)BIN_PATH + "RemeasureInfo.inf");
 
-	AnsiString retest_info;
+	AnsiString strNg, strTotalUse, strConsNg;
 	AnsiString title = "REMEASURE" + IntToStr(this->Tag);
-	retest_info = "";
+	strNg = "";
+    strTotalUse = "";
+    strConsNg = "";
 	int nRemeasureAlarmCount = 0;
 	config.remeasure_alarm_cnt = StringToInt(RemeasureForm->pcolor2->Caption, 3);
 
-	retest_info = "";
 	for(int index = 0; index < MAXCHANNEL; ++index){
-		retest_info =  retest_info + acc_remeasure[index] + "_";
+		strNg = strNg + acc_remeasure[index] + "_";
+        strTotalUse = strTotalUse + acc_totaluse[index] + "_";
+        strConsNg = strConsNg + acc_consng[index] + "_";
 
-		if(acc_remeasure[index] >= config.remeasure_alarm_cnt)
+		if(acc_consng[index] >= config.remeasure_alarm_cnt)
 			nRemeasureAlarmCount++;
 	}
     RemeasureAlarm(nRemeasureAlarmCount);
 
 	ini->WriteInteger(title, "REMEASURE_ALARM_COUNT", editRemeasureAlarmCount->Text.ToIntDef(3));
-	ini->WriteString(title, "ACCMULATE", retest_info);
+	ini->WriteString(title, "TOTAL_USE", strNg);
+	ini->WriteString(title, "NG", strTotalUse);
+    ini->WriteString(title, "CONSECUTIVE_NG", strConsNg);
 	ini->WriteString(title, "ACCMULATE_DAY", acc_init);
 	ini->WriteInteger(title, "ACC_CNT", acc_cnt);
-
 
 	delete ini;
 }

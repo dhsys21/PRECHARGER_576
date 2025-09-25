@@ -483,7 +483,9 @@ public:		// User declarations
     void __fastcall ShowPLCSignal(TAdvSmoothPanel *advPanel, bool bOn);
 
 	int cnt;
-	int acc_remeasure[MAXCHANNEL];
+	int acc_remeasure[MAXCHANNEL]; // ng count
+    int acc_totaluse[MAXCHANNEL]; // total count
+    int acc_consng[MAXCHANNEL]; //consecutive ng count
 	int acc_cnt;
 	AnsiString acc_init;
 	int chMap[MAXCHANNEL + 1];

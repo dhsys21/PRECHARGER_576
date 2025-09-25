@@ -5,7 +5,7 @@ object RemeasureForm: TRemeasureForm
   BorderStyle = bsSingle
   Caption = 'Remeasure Info'
   ClientHeight = 941
-  ClientWidth = 1245
+  ClientWidth = 1634
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -93,14 +93,14 @@ object RemeasureForm: TRemeasureForm
   object Panel2: TPanel
     Left = 8
     Top = 28
-    Width = 1044
+    Width = 1394
     Height = 910
     Caption = 'Panel2'
     Color = clGray
     ParentBackground = False
     TabOrder = 2
     object Panel3: TPanel
-      Left = 884
+      Left = 1007
       Top = 53
       Width = 50
       Height = 49
@@ -117,7 +117,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel4: TPanel
-      Left = 884
+      Left = 1007
       Top = 103
       Width = 50
       Height = 49
@@ -134,7 +134,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel5: TPanel
-      Left = 884
+      Left = 1007
       Top = 155
       Width = 50
       Height = 49
@@ -151,7 +151,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel6: TPanel
-      Left = 884
+      Left = 1007
       Top = 205
       Width = 50
       Height = 49
@@ -168,7 +168,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel7: TPanel
-      Left = 884
+      Left = 1007
       Top = 257
       Width = 50
       Height = 49
@@ -185,7 +185,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel8: TPanel
-      Left = 884
+      Left = 1007
       Top = 307
       Width = 50
       Height = 49
@@ -202,7 +202,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel9: TPanel
-      Left = 884
+      Left = 1007
       Top = 359
       Width = 50
       Height = 49
@@ -219,7 +219,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel10: TPanel
-      Left = 884
+      Left = 1007
       Top = 409
       Width = 50
       Height = 49
@@ -236,7 +236,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel11: TPanel
-      Left = 884
+      Left = 1007
       Top = 461
       Width = 50
       Height = 49
@@ -253,7 +253,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel12: TPanel
-      Left = 884
+      Left = 1007
       Top = 511
       Width = 50
       Height = 49
@@ -270,7 +270,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel13: TPanel
-      Left = 884
+      Left = 1007
       Top = 563
       Width = 50
       Height = 49
@@ -287,7 +287,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel14: TPanel
-      Left = 884
+      Left = 1007
       Top = 613
       Width = 50
       Height = 49
@@ -304,7 +304,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel15: TPanel
-      Left = 884
+      Left = 1007
       Top = 665
       Width = 50
       Height = 49
@@ -321,7 +321,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel16: TPanel
-      Left = 884
+      Left = 1007
       Top = 715
       Width = 50
       Height = 49
@@ -338,7 +338,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel17: TPanel
-      Left = 884
+      Left = 1007
       Top = 767
       Width = 50
       Height = 49
@@ -355,7 +355,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel18: TPanel
-      Left = 884
+      Left = 1007
       Top = 817
       Width = 50
       Height = 49
@@ -389,7 +389,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel19: TPanel
-      Left = 4
+      Left = 127
       Top = 3
       Width = 53
       Height = 48
@@ -406,7 +406,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel21: TPanel
-      Left = 59
+      Left = 182
       Top = 3
       Width = 53
       Height = 48
@@ -423,7 +423,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel22: TPanel
-      Left = 114
+      Left = 237
       Top = 3
       Width = 53
       Height = 48
@@ -440,7 +440,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel23: TPanel
-      Left = 774
+      Left = 897
       Top = 3
       Width = 53
       Height = 48
@@ -457,7 +457,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel24: TPanel
-      Left = 169
+      Left = 292
       Top = 3
       Width = 53
       Height = 48
@@ -474,7 +474,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel25: TPanel
-      Left = 224
+      Left = 347
       Top = 3
       Width = 53
       Height = 48
@@ -491,7 +491,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel26: TPanel
-      Left = 279
+      Left = 402
       Top = 3
       Width = 53
       Height = 48
@@ -508,7 +508,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel27: TPanel
-      Left = 334
+      Left = 457
       Top = 3
       Width = 53
       Height = 48
@@ -525,7 +525,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel28: TPanel
-      Left = 389
+      Left = 512
       Top = 3
       Width = 53
       Height = 48
@@ -542,7 +542,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel29: TPanel
-      Left = 444
+      Left = 567
       Top = 3
       Width = 53
       Height = 48
@@ -559,7 +559,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel30: TPanel
-      Left = 499
+      Left = 622
       Top = 3
       Width = 53
       Height = 48
@@ -576,7 +576,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel31: TPanel
-      Left = 554
+      Left = 677
       Top = 3
       Width = 53
       Height = 48
@@ -593,7 +593,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel32: TPanel
-      Left = 609
+      Left = 732
       Top = 3
       Width = 53
       Height = 48
@@ -610,7 +610,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel33: TPanel
-      Left = 664
+      Left = 787
       Top = 3
       Width = 53
       Height = 48
@@ -627,7 +627,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel34: TPanel
-      Left = 719
+      Left = 842
       Top = 3
       Width = 53
       Height = 48
@@ -644,7 +644,7 @@ object RemeasureForm: TRemeasureForm
       Visible = False
     end
     object Panel35: TPanel
-      Left = 829
+      Left = 952
       Top = 3
       Width = 55
       Height = 48
@@ -697,7 +697,7 @@ object RemeasureForm: TRemeasureForm
     object Panel1: TPanel
       Left = 3
       Top = 3
-      Width = 40
+      Width = 54
       Height = 34
       Color = 12829635
       Font.Charset = DEFAULT_CHARSET
@@ -711,7 +711,7 @@ object RemeasureForm: TRemeasureForm
     end
   end
   object GroupBox2: TGroupBox
-    Left = 1058
+    Left = 1440
     Top = 28
     Width = 180
     Height = 220

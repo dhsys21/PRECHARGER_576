@@ -16,7 +16,7 @@ __fastcall TRemeasureForm::TRemeasureForm(TComponent* Owner)
 	: TForm(Owner)
 {
 	stage = -1;
-    pnl_nw = 40;
+    pnl_nw = 54;
     pnl_nh = 34;
 }
 //---------------------------------------------------------------------------
@@ -387,7 +387,12 @@ void __fastcall TRemeasureForm::chInitdblClick(TObject *Sender)
 void __fastcall TRemeasureForm::AccInitBtnClick(TObject *Sender)
 {
 	if(MessageBox(Handle, L"Do you want to initialize?", L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
-		for(int i=0; i<MAXCHANNEL; ++i)acc_remeasure[i] = 0;
+		for(int i=0; i<MAXCHANNEL; ++i) {
+        	acc_remeasure[i] = 0;
+            acc_totaluse[i] = 0;
+            acc_consng[i] = 0;
+        }
+
 		BaseForm->nForm[stage]->RemeasureAlarm(0);
 		pAccDate->Caption = Now().FormatString("yyyy. m. d. hh:nn");
 		pAccCnt->Caption = 0;
@@ -395,7 +400,6 @@ void __fastcall TRemeasureForm::AccInitBtnClick(TObject *Sender)
 		*acc_init = pAccDate->Caption;
 		this->RefreshForm();
 	}
-
 }
 //---------------------------------------------------------------------------
 void __fastcall TRemeasureForm::ChInfoMouseEnter(TObject *Sender)
