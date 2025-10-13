@@ -455,11 +455,6 @@ public:		// User declarations
 	AnsiString PLC_IPADDRESS;
 	int PLC_PCPORT;
 	int PLC_PLCPORT;
-//    AnsiString __fastcall GetPlcValue(int plc_address, int size);
-//    double __fastcall GetPlcValue(int plc_address);
-//    int __fastcall GetPlcData(int plc_address, int bit_num);
-//    void __fastcall SetPcValue(int pc_address, int value);
-//    double __fastcall GetPcValue(int pc_address);
 
 // Define.h structure 데이터
 	REAL_TIME real_data;
@@ -485,7 +480,8 @@ public:		// User declarations
 	int cnt;
 	int acc_remeasure[MAXCHANNEL]; // ng count
     int acc_totaluse[MAXCHANNEL]; // total count
-    int acc_consng[MAXCHANNEL]; //consecutive ng count
+    int acc_consng[MAXCHANNEL]; // consecutive ng count
+    int acc_prevng[MAXCHANNEL]; // 이전측정 ng. 연속 ng를 계산하기 위해 바로 전 측정에서 NG가 발생했는지 기록
 	int acc_cnt;
 	AnsiString acc_init;
 	int chMap[MAXCHANNEL + 1];

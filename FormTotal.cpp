@@ -1561,12 +1561,16 @@ void __fastcall TTotalForm::BadInfomation()
 			{
 				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, true);
 				acc_remeasure[channel] += 1;   // 셀이 있고 에러일 때 count 증가
+                //* 연속 불량 확인 2025 10 13
+                if(acc_prevng[channel] == 1) acc_consng[channel] += 1;
+                acc_prevng[channel] = 1;
 				ngCount++;
 				NgCount++;
 			}
 			else if(tray.cell[channel] == 1 && tray.measure_result[channel] == 0)
 			{
 				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, false);
+                acc_prevng[channel] = 0;
 			}
             //* 셀이 없으면 1.
 			else
