@@ -666,7 +666,7 @@ object RemeasureForm: TRemeasureForm
       Width = 41
       Height = 19
       Caption = '??'
-      Color = 16770815
+      Color = clSilver
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -683,7 +683,7 @@ object RemeasureForm: TRemeasureForm
       Width = 54
       Height = 15
       Caption = '??1'
-      Color = 16771289
+      Color = clSkyBlue
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
       Font.Height = -11

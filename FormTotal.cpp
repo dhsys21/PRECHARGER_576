@@ -2283,7 +2283,7 @@ void __fastcall TTotalForm::btnMeasureInfoClick(TObject *Sender)
         MeasureInfoForm->pcurr[i]->Color = pnormal2->Color;
 	}	// 모두 초기화
 
-    MeasureInfoForm->SetChannelInfo();
+    //MeasureInfoForm->SetChannelInfo();
 	InitMeasureForm();
 }
 //---------------------------------------------------------------------------
