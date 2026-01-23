@@ -104,7 +104,7 @@ __published:	// IDE-managed Components
 	TAdvSmoothButton *btnENA;
 	TAdvSmoothButton *btnDST;
 	TAdvSmoothButton *btnDisChargeSet;
-	TAdvSmoothButton *btnDisCharge;
+	TAdvSmoothButton *btnIDN;
 	TTimer *Timer_SetStep;
 	TTimer *Timer_SetStep2;
 	TAdvSmoothButton *btnInit1;
@@ -113,6 +113,8 @@ __published:	// IDE-managed Components
 	TPanel *pnormal31;
 	TPanel *pnormal4;
 	TPanel *pnormal41;
+	TAdvSmoothButton *btnCheckStep;
+	TAdvSmoothButton *btnCLS;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall btnAutoClick(TObject *Sender);
 	void __fastcall btnProbeClick(TObject *Sender);
@@ -128,7 +130,6 @@ __published:	// IDE-managed Components
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnResetClick(TObject *Sender);
 	void __fastcall btnSetPrechargerClick(TObject *Sender);
-	void __fastcall GroupBox3Click(TObject *Sender);
 	void __fastcall btnRBTClick(TObject *Sender);
 	void __fastcall btnReportClick(TObject *Sender);
 	void __fastcall btnCALClick(TObject *Sender);
@@ -140,6 +141,10 @@ __published:	// IDE-managed Components
 	void __fastcall Timer_SetStep2Timer(TObject *Sender);
 	void __fastcall btnInit1Click(TObject *Sender);
 	void __fastcall btnInit2Click(TObject *Sender);
+	void __fastcall btnIDNClick(TObject *Sender);
+	void __fastcall btnCLSClick(TObject *Sender);
+	void __fastcall btnCheckStepClick(TObject *Sender);
+	void __fastcall GroupBox3DblClick(TObject *Sender);
 
 private:	// User declarations
 	void __fastcall MakePanel(AnsiString type);

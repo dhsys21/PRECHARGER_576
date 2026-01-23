@@ -507,9 +507,13 @@ void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
 //---------------------------------------------------------------------------
 bool __fastcall TTotalForm::ErrorCheck()
 {
+    DisplayError("");
 	if(!Client->Active)
 	{
-	  Panel_State->Caption = "PRECHARGER Connection Fail.";
+	  ErrorCheckStatus = "PRECHARGER Connection Fail.";
+      DisplayError(ErrorCheckStatus, true);
+      Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
+
       if(ReContactTimer->Enabled == false)
       	ReContactTimer->Enabled = true;
       DisplayStatus(nNoAnswer);
@@ -517,7 +521,10 @@ bool __fastcall TTotalForm::ErrorCheck()
 	}
     else if(stage.bconnected == false)
     {
-        Panel_State->Caption = "BT Connection Fail.";
+        ErrorCheckStatus = "BT Connection Fail.";
+        DisplayError(ErrorCheckStatus, true);
+        Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
+
       	DisplayStatus(nNoAnswer);
 	   return true;
     }
@@ -527,10 +534,26 @@ bool __fastcall TTotalForm::ErrorCheck()
         	DisplayStatus(nVacancy);
     }
 
+    if(Mod_PLC->GetPlcValue(this->Tag, PLC_D_PRE_TRAY_IN) == 0
+    	&& (stage.status == WDT || stage.status == REC)){
+        ErrorCheckStatus = "PRECHARGER is WDT Mode. Please [RESET] it.";
+        DisplayError(ErrorCheckStatus, true);
+        Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
+        return true;
+    }
+
+	if(charge[0].volt == 0 || charge[0].curr == 0 || charge[0].time == 0
+		|| charge[1].volt == 0 || charge[1].curr == 0 || charge[1].time == 0){
+        ErrorCheckStatus = "No Setting Values.";
+        DisplayError(ErrorCheckStatus, true);
+        Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
+        return true;
+    }
+
 	if(!Mod_PLC->ClientSocket_PC->Active && !Mod_PLC->ClientSocket_PLC->Active)
 	{
 		ErrorCheckStatus = "PLC - PC Connection Fail.";
-		Panel_State->Caption = ErrorCheckStatus;
+		DisplayError(ErrorCheckStatus, true);
 		if(OldErrorCheckStatus != ErrorCheckStatus) {
 			OldErrorCheckStatus = ErrorCheckStatus;
 			WritePLCLog("ErrorCheck", ErrorCheckStatus);
@@ -542,7 +565,7 @@ bool __fastcall TTotalForm::ErrorCheck()
 	if(Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_ERROR))
 	{
 		ErrorCheckStatus = "PLC - Error!!";
-		Panel_State->Caption = ErrorCheckStatus;
+		DisplayError(ErrorCheckStatus, true);
 		if(OldErrorCheckStatus != ErrorCheckStatus) {
 			OldErrorCheckStatus = ErrorCheckStatus;
 			WritePLCLog("ErrorCheck", ErrorCheckStatus);

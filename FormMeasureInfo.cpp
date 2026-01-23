@@ -517,12 +517,6 @@ void __fastcall TMeasureInfoForm::btnSetPrechargerClick(TObject *Sender)
     BaseForm->nForm[stage]->PreChargeSet();
 }
 //---------------------------------------------------------------------------
-void __fastcall TMeasureInfoForm::GroupBox3Click(TObject *Sender)
-{
-    if(GroupBox3->Height == 456) GroupBox3->Height = 230;
-    else GroupBox3->Height = 456;
-}
-//---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::btnRBTClick(TObject *Sender)
 {
     if(MessageBox(Handle, Form_Language->msgRbt.c_str(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
@@ -558,12 +552,31 @@ void __fastcall TMeasureInfoForm::btnDSTClick(TObject *Sender)
     BaseForm->nForm[stage]->CmdDST();
 }
 //---------------------------------------------------------------------------
+void __fastcall TMeasureInfoForm::btnIDNClick(TObject *Sender)
+{
+    //* IDN
+    BaseForm->nForm[stage]->CmdBID();
+}
+//---------------------------------------------------------------------------
 
+void __fastcall TMeasureInfoForm::btnCLSClick(TObject *Sender)
+{
+    //* CLS (BT 메모리 데이터 삭제)
+    BaseForm->nForm[stage]->CmdCLS();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMeasureInfoForm::btnCheckStepClick(TObject *Sender)
+{
+    BaseForm->nForm[stage]->CmdCheckStep(1);
+}
+//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // 컨트롤러 명령어
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::btnDisChargeSetClick(TObject *Sender)
 {
+    //* Discharge Setting
     BaseForm->nForm[stage]->SetSystemInfo();
 
     BaseForm->nForm[stage]->CmdDischargeSetStep();
@@ -690,3 +703,12 @@ void __fastcall TMeasureInfoForm::initChart(int volt, int curr)
 	chartCurrent->Series[2]->AddXY(400, curr - 1000);
 }
 //---------------------------------------------------------------------------
+
+
+void __fastcall TMeasureInfoForm::GroupBox3DblClick(TObject *Sender)
+{
+    if(GroupBox3->Height == 460) GroupBox3->Height = 230;
+    else GroupBox3->Height = 460;
+}
+//---------------------------------------------------------------------------
+

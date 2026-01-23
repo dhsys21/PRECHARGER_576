@@ -17,7 +17,7 @@ __fastcall TBaseForm::TBaseForm(TComponent* Owner)
 	: TForm(Owner)
 {
 	FormCnt = CONTCOUNT;
-	DeleteDay = 90;
+	DeleteDay = 180;
 	DeleteIndex = 0;
 	this->Left = 0;
 	this->Top = 0;
@@ -122,7 +122,7 @@ void __fastcall TBaseForm::ClockTimerTimer(TObject *Sender)
         SetColorPanel(pnlCONT, false);
 
 	if(Now().FormatString("hhnn") == "0700") {
-		DeleteDay = 90;	// 12시가 되면 DeleteDay를 90으로 초기화
+		DeleteDay = 180;	// 12시가 되면 DeleteDay를 90으로 초기화
 	}
 }
 //---------------------------------------------------------------------------

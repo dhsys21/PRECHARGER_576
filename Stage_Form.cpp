@@ -54,6 +54,22 @@ void __fastcall TTotalForm::DisplayProcess(int status, AnsiString Status_Step, A
 	}
 }
 //---------------------------------------------------------------------------
+void __fastcall TTotalForm::DisplayError(AnsiString msg, bool bError)
+{
+    Panel_State->Caption = msg;
+
+	if(bError == true)
+	{
+        Panel_State->Color = clRed;
+		Panel_State->Font->Color = clWhite;
+	}
+	else
+	{
+        Panel_State->Color = clWhite;
+		Panel_State->Font->Color = clBlack;
+    }
+}
+//---------------------------------------------------------------------------
 // 메인화면 검사 진행 표시
 void __fastcall TTotalForm::DisplayStatus(int status)
 {

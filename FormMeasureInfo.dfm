@@ -1183,7 +1183,7 @@ object MeasureInfoForm: TMeasureInfoForm
     Color = clWhite
     TabOrder = 2
     object GroupBox3: TGroupBox
-      Left = 5
+      Left = 0
       Top = 166
       Width = 190
       Height = 467
@@ -1195,7 +1195,7 @@ object MeasureInfoForm: TMeasureInfoForm
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 0
-      OnClick = GroupBox3Click
+      OnDblClick = GroupBox3DblClick
       object btnAuto: TAdvSmoothButton
         Left = 10
         Top = 125
@@ -1272,7 +1272,7 @@ object MeasureInfoForm: TMeasureInfoForm
       end
       object btnSetPrecharger: TAdvSmoothButton
         Left = 10
-        Top = 29
+        Top = 30
         Width = 80
         Height = 80
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -1309,7 +1309,7 @@ object MeasureInfoForm: TMeasureInfoForm
       end
       object btnReset: TAdvSmoothButton
         Left = 100
-        Top = 29
+        Top = 30
         Width = 80
         Height = 80
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -1348,10 +1348,10 @@ object MeasureInfoForm: TMeasureInfoForm
         Left = 10
         Top = 234
         Width = 80
-        Height = 48
+        Height = 42
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
-        Appearance.Font.Height = -16
+        Appearance.Font.Height = -15
         Appearance.Font.Name = 'Tahoma'
         Appearance.Font.Style = [fsBold]
         Appearance.Spacing = 0
@@ -1385,10 +1385,10 @@ object MeasureInfoForm: TMeasureInfoForm
         Left = 100
         Top = 234
         Width = 80
-        Height = 48
+        Height = 42
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
-        Appearance.Font.Height = -16
+        Appearance.Font.Height = -15
         Appearance.Font.Name = 'Tahoma'
         Appearance.Font.Style = [fsBold]
         Appearance.Spacing = 0
@@ -1420,12 +1420,12 @@ object MeasureInfoForm: TMeasureInfoForm
       end
       object btnCAL: TAdvSmoothButton
         Left = 10
-        Top = 284
+        Top = 278
         Width = 80
-        Height = 48
+        Height = 42
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
-        Appearance.Font.Height = -16
+        Appearance.Font.Height = -15
         Appearance.Font.Name = 'Tahoma'
         Appearance.Font.Style = [fsBold]
         Appearance.Spacing = 0
@@ -1457,12 +1457,12 @@ object MeasureInfoForm: TMeasureInfoForm
       end
       object btnSTC: TAdvSmoothButton
         Left = 100
-        Top = 284
+        Top = 278
         Width = 80
-        Height = 48
+        Height = 42
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
-        Appearance.Font.Height = -16
+        Appearance.Font.Height = -15
         Appearance.Font.Name = 'Tahoma'
         Appearance.Font.Style = [fsBold]
         Appearance.Spacing = 0
@@ -1494,12 +1494,12 @@ object MeasureInfoForm: TMeasureInfoForm
       end
       object btnENA: TAdvSmoothButton
         Left = 10
-        Top = 334
+        Top = 322
         Width = 80
-        Height = 48
+        Height = 42
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
-        Appearance.Font.Height = -16
+        Appearance.Font.Height = -15
         Appearance.Font.Name = 'Tahoma'
         Appearance.Font.Style = [fsBold]
         Appearance.Spacing = 0
@@ -1531,12 +1531,12 @@ object MeasureInfoForm: TMeasureInfoForm
       end
       object btnDST: TAdvSmoothButton
         Left = 100
-        Top = 334
+        Top = 322
         Width = 80
-        Height = 48
+        Height = 42
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
-        Appearance.Font.Height = -16
+        Appearance.Font.Height = -15
         Appearance.Font.Name = 'Tahoma'
         Appearance.Font.Style = [fsBold]
         Appearance.Spacing = 0
@@ -1568,12 +1568,12 @@ object MeasureInfoForm: TMeasureInfoForm
       end
       object btnDisChargeSet: TAdvSmoothButton
         Left = 10
-        Top = 405
+        Top = 366
         Width = 80
-        Height = 48
+        Height = 42
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
-        Appearance.Font.Height = -16
+        Appearance.Font.Height = -15
         Appearance.Font.Name = 'Tahoma'
         Appearance.Font.Style = [fsBold]
         Appearance.Spacing = 0
@@ -1603,14 +1603,14 @@ object MeasureInfoForm: TMeasureInfoForm
         OnClick = btnDisChargeSetClick
         TMSStyle = 8
       end
-      object btnDisCharge: TAdvSmoothButton
+      object btnIDN: TAdvSmoothButton
         Left = 100
-        Top = 405
+        Top = 366
         Width = 80
-        Height = 48
+        Height = 42
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
-        Appearance.Font.Height = -16
+        Appearance.Font.Height = -15
         Appearance.Font.Name = 'Tahoma'
         Appearance.Font.Style = [fsBold]
         Appearance.Spacing = 0
@@ -1632,11 +1632,86 @@ object MeasureInfoForm: TMeasureInfoForm
         Status.Appearance.Font.Name = 'Tahoma'
         Status.Appearance.Font.Style = []
         BevelColor = clMedGray
-        Caption = '-'
+        Caption = 'IDN'
         Color = clWhite
         ParentFont = False
         TabOrder = 11
         Version = '2.1.1.5'
+        OnClick = btnIDNClick
+        TMSStyle = 8
+      end
+      object btnCheckStep: TAdvSmoothButton
+        Left = 100
+        Top = 410
+        Width = 80
+        Height = 42
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWindowText
+        Appearance.Font.Height = -13
+        Appearance.Font.Name = 'Tahoma'
+        Appearance.Font.Style = [fsBold]
+        Appearance.Spacing = 0
+        Appearance.Rounding = 3
+        Appearance.WordWrapping = False
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Tahoma'
+        Status.Appearance.Font.Style = []
+        BevelColor = clMedGray
+        Caption = 'SEQ:STEP'
+        Color = clWhite
+        ParentFont = False
+        TabOrder = 12
+        Version = '2.1.1.5'
+        OnClick = btnCheckStepClick
+        TMSStyle = 8
+      end
+      object btnCLS: TAdvSmoothButton
+        Left = 10
+        Top = 410
+        Width = 80
+        Height = 42
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWindowText
+        Appearance.Font.Height = -15
+        Appearance.Font.Name = 'Tahoma'
+        Appearance.Font.Style = [fsBold]
+        Appearance.Spacing = 0
+        Appearance.Rounding = 3
+        Appearance.WordWrapping = False
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Tahoma'
+        Status.Appearance.Font.Style = []
+        BevelColor = clMedGray
+        Caption = 'CLS'
+        Color = clWhite
+        ParentFont = False
+        TabOrder = 13
+        Version = '2.1.1.5'
+        OnClick = btnCLSClick
         TMSStyle = 8
       end
     end

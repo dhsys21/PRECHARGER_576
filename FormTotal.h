@@ -350,6 +350,7 @@ private:	// User declarations
 	bool __fastcall ErrorCheck();
 	void __fastcall DisplayProcess(int status, AnsiString Status_Step, AnsiString msg, bool bError = false);
     void __fastcall DisplayTrayInfo(int traypos);
+    void __fastcall DisplayError(AnsiString msg, bool bError = false);
 
 //---------------------------------------------------------------------------
 // 肺弊 颇老 包访 积己
@@ -427,7 +428,10 @@ public:		// User declarations
     bool __fastcall CmdCheckSet();
     void __fastcall CmdReport();
     void __fastcall CmdCAL();
-    void __fastcall CmdSTC();;
+    void __fastcall CmdSTC();
+    void __fastcall CmdCLS();
+    void __fastcall CmdBID();
+    void __fastcall CmdCheckStep(int step);
 
 	AnsiString __fastcall GetCodeColor(TPanel *pnl, int index);
 	AnsiString __fastcall GetCodeColor2(TPanel *pnl, int index);

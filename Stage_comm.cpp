@@ -209,6 +209,18 @@ void __fastcall TTotalForm::CmdSTC()
     LASTCMD = "STC";
 }
 //---------------------------------------------------------------------------
+void __fastcall TTotalForm::CmdCLS()
+{
+    SendData("CLS");
+    LASTCMD = "CLS";
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::CmdBID()
+{
+    SendData("BID");
+    LASTCMD = "BID";
+}
+//---------------------------------------------------------------------------
 void __fastcall TTotalForm::CmdReport()
 {
     AnsiString CMD = "STAT:CELL:REP? (@1001:1032,2001:2032,3001:3032,4001:4032,5001:5016)";
@@ -271,7 +283,7 @@ void __fastcall TTotalForm::CmdDischargeSetStep()
 	AnsiString precharge_time = "20", precharge_curr = "1.0", precharge_volt = "2.0";
     AnsiString cTime, cCurr, cVolt;
 
-    cTime = config.time;
+    cTime = config.time + SETTLETIME;
 	cCurr = convertCondition2(config.curr);
 	cVolt = convertCondition2(config.volt);
 
@@ -281,6 +293,14 @@ void __fastcall TTotalForm::CmdDischargeSetStep()
     CMD = "TRB" + CMD + "\n";
     SendData(CMD);
     LASTCMD = "DEF";
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::CmdCheckStep(int step)
+{
+	AnsiString CMD = "SEQ:STEP:DEF? 1," + IntToStr(step);
+	CMD = "TRB" + CMD + "\n";
+	SendData(CMD);
+	LASTCMD = "STEP";
 }
 //---------------------------------------------------------------------------
 // 컨트롤러 명령어
