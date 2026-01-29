@@ -91,5 +91,7 @@ void __fastcall TForm_Language::LanguageChange(int LangIndex)
     msgCurrLimit = vle->Values["msgCurrLimit"];
     msgTimeLimit = vle->Values["msgTimeLimit"];
     msgSave = vle->Values["msgSave"];
+    msgInvalidPwd = vle->Values["msgInvalidPwd"];
+    msgInit = vle->Values["msgInit"];
 }
 //---------------------------------------------------------------------------

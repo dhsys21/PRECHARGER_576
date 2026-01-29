@@ -201,8 +201,6 @@ void __fastcall TTotalForm::ErrorMsg(int err)
 		ErrorLog();
 		//* 2023 06 14 설비가 멈췄을 경우 에러
 		DisplayProcess(nstatus, err1, err3, true);
-        //SetPcValue(PC_D_PRE_ERROR, 1);
-		//VisibleBox(GrpError);
 	}
 }
 //---------------------------------------------------------------------------

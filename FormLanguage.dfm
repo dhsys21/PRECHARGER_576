@@ -74,12 +74,16 @@ object Form_Language: TForm_Language
       'msgVoltLimit='#51204#50517#51012' 2000mV '#51060#49345' '#51077#47141#54616#49464#50836'.'
       'msgCurrLimit='#51204#47448#47484' 260mA '#51060#49345' '#51077#47141#54616#49464#50836'.'
       'msgTimeLimit='#49884#44036#51012' 30sec '#51060#49345' '#51077#47141#54616#49464#50836'.'
-      'msgSave='#51200#51109' '#54616#49884#44192#49845#45768#44620'?')
+      'msgSave='#51200#51109' '#54616#49884#44192#49845#45768#44620'?'
+      'msgInit=PRECHARGER'#47484' '#52488#44592#54868' '#54616#49884#44192#49845#45768#44620'?'
+      'msgInvalidPwd='#51096#47803#46108' '#50516#54840' '#51077#45768#45796'.')
     TabOrder = 0
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
+      18
       18
       18
       18
@@ -201,12 +205,16 @@ object Form_Language: TForm_Language
       'msgVoltLimit=Please use Voltage more than 2000mV'
       'msgCurrLimit=Please use Current more than 260mA'
       'msgTimeLimit=Please use Time more than 30sec'
-      'msgSave=Are you sure want to save?')
+      'msgSave=Are you sure want to save?'
+      'msgInit=Do you want to initialize the PRECHARGER?'
+      'msgInvalidPwd=Invalid password')
     TabOrder = 1
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
+      18
       18
       18
       18
@@ -326,12 +334,16 @@ object Form_Language: TForm_Language
       'msgVoltLimit='#35831#20351#29992#39640#20110' 2000mV '#30340#30005#21387#12290
       'msgCurrLimit='#35831#20351#29992#39640#20110' 260mA '#30340#30005#27969#12290
       'msgTimeLimit='#35831#20351#29992#19981#23569#20110' 30 '#31186#30340#26102#38388#12290
-      'msgSave='#30830#23450#35201#20445#23384#21527#65311)
+      'msgSave='#30830#23450#35201#20445#23384#21527#65311
+      'msgInit='#26159#21542#35201#21021#22987#21270' PRECHARGER'#65311
+      'msgInvalidPwd='#23494#30721#26080#25928)
     TabOrder = 2
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
+      18
       18
       18
       18

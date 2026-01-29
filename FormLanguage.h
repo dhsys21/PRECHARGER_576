@@ -40,6 +40,8 @@ public:		// User declarations
 	UnicodeString msgCurrLimit;
 	UnicodeString msgTimeLimit;
 	UnicodeString msgSave;
+    UnicodeString msgInvalidPwd;
+    UnicodeString msgInit;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm_Language *Form_Language;

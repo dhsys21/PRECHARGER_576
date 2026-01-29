@@ -568,7 +568,7 @@ bool __fastcall TTotalForm::ErrorCheck()
 			WritePLCLog("ErrorCheck", ErrorCheckStatus);
             ErrorLog(ErrorCheckStatus);
 		}
-        Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
+        //Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
 
         return true;
     }
@@ -679,7 +679,9 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 			}
 			else
 			{
-				DisplayStatus(nVacancy);
+                if(stage.alarm_status != nVacancy)
+        			DisplayStatus(nVacancy);
+
 				DisplayProcess(sReady, "AutoInspection_Wait", "[STEP 0] PreCharger is ready... ");
 			}
 			break;
@@ -968,7 +970,8 @@ void __fastcall TTotalForm::AutoInspection_Finish()
     Mod_PLC->SetPcValue(PC_D_PRE_CHARGING, 0);
 
 	double plc_tray_in;
-	//DisplayStatus(nFinish);
+	if(stage.alarm_status != nFinish)
+        DisplayStatus(nFinish);
 	switch(nStep)
 	{
 		case 0:       
@@ -1309,13 +1312,13 @@ void __fastcall TTotalForm::StageStatus()
 			stage.alarm_cnt = 0;
 			break;
 		case nIN:
-			if(stage.alarm_cnt > 100){
+			if(stage.alarm_cnt > 300){
 				ErrorMsg(nRedEnd);
 				stage.alarm_cnt = 0;
 			}
 			break;
 		case nREADY:
-			if(stage.alarm_cnt > 100){
+			if(stage.alarm_cnt > 300){
 				ErrorMsg(nReadyError);
 				stage.alarm_cnt = 0;
 			}
@@ -1327,13 +1330,13 @@ void __fastcall TTotalForm::StageStatus()
 			}
 			break;
 		case nEND:
-			if(stage.alarm_cnt > 100){
+			if(stage.alarm_cnt > 300){
 				ErrorMsg(nBlueEnd);
 				stage.alarm_cnt = 0;
 			}
 			break;
 		case nFinish:
-            if(stage.alarm_cnt > 100){
+            if(stage.alarm_cnt > 300){
 				ErrorMsg(nFinishError);
 				stage.alarm_cnt = 0;
 			}
@@ -2318,23 +2321,27 @@ AnsiString __fastcall TTotalForm::convertCondition2(int iCondition)
 //---------------------------------------------------------------------------
 void _fastcall TTotalForm::PreChargeSet()
 {
+    WideString message;
     if(tray.ams == false)
 	{
 		int volt = editChargeVolt->Text.ToIntDef(4200);
         if(volt < 2000) {
-        	ShowMessage("Please use Voltage more than 2000mV");
+            message = Form_Language->msgVoltLimit;
+            ShowMessage(message.c_bstr());
             editChargeVolt->Text = "2000";
         }
 
 		int curr = editChargeCurrent->Text.ToIntDef(260);
         if(curr < 260) {
-            ShowMessage("Please use Current more than 260mA");
+            message = Form_Language->msgCurrLimit;
+            ShowMessage(message.c_bstr());
             editChargeCurrent->Text = "260";
         }
 
 		int time = editChargeTime->Text.ToIntDef(240);
         if(time < 30) {
-            ShowMessage("Please use Time more than 30sec");
+            message = Form_Language->msgTimeLimit;
+            ShowMessage(message.c_bstr());
             editChargeTime->Text = "30";
         }
 
@@ -2347,7 +2354,11 @@ void _fastcall TTotalForm::PreChargeSet()
 		if(time >= max_time) editChargeTime->Text = FormatFloat("00", max_time);
 
 
-		if(MessageBox(Handle, L"Are you sure want to save?", L"SAVE", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+		WideString message = Form_Language->msgSave;
+        UnicodeString str;
+        str = "Are you sure you want to save?";
+        if(MessageBox(Handle, message.c_bstr(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+        //    if(MessageBox(Handle, str.c_str(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
 			//CmdSetStep();
 			WriteSystemInfo();
 			ReadSystemInfo();

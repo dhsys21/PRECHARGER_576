@@ -403,11 +403,12 @@ void __fastcall TBaseForm::WriteSystemInfo()
 //---------------------------------------------------------------------------
 void __fastcall TBaseForm::PasswordBtnClick(TObject *Sender)
 {
+    WideString message = Form_Language->msgInvalidPwd;
 	if(PassEdit->Text == "0000"){
 		Application->Terminate();
 	}
 	else{
-		MessageBox(Handle, L"Are you sure you¡¯re spelling your password correctly?", L"ERROR", MB_OK|MB_ICONERROR);
+		MessageBox(Handle, message.c_bstr(), L"ERROR", MB_OK|MB_ICONERROR);
 	}
 }
 //---------------------------------------------------------------------------
@@ -464,7 +465,13 @@ void __fastcall TBaseForm::lblTitleClick(TObject *Sender)
 
 void __fastcall TBaseForm::btnInitClick(TObject *Sender)
 {
-    nForm[0]->Initialization();
+    WideString message = Form_Language->msgInit;
+    UnicodeString str;
+	str = "Do you want to initialize the PRECHARGER?";
+    if(MessageBox(Handle, message.c_bstr(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+    //    if(MessageBox(Handle, str.c_str(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+    	nForm[0]->Initialization();
+    }
 }
 //---------------------------------------------------------------------------
 
