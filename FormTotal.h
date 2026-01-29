@@ -347,6 +347,7 @@ private:	// User declarations
 	bool bconfig;
 	void __fastcall MakePanel(AnsiString type);
 	bool __fastcall ErrorCheck();
+    bool __fastcall ErrorCheck_Manual();
 	void __fastcall DisplayProcess(int status, AnsiString Status_Step, AnsiString msg, bool bError = false);
     void __fastcall DisplayTrayInfo(int traypos);
     void __fastcall DisplayError(AnsiString msg, bool bError = false);
@@ -356,6 +357,7 @@ private:	// User declarations
 	void __fastcall WriteSystemInfo();
 	bool __fastcall ReadSystemInfo();
 	void __fastcall ErrorLog();
+    void __fastcall ErrorLog(AnsiString msg);
     void __fastcall ErrorMsg(int err);
     void __fastcall WriteCommLog(AnsiString Type, AnsiString Msg);
     //int __fastcall GetTrayPos();

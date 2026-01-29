@@ -154,7 +154,7 @@ void __fastcall TTotalForm::ErrorLog()
 	dir = (AnsiString)LOG_PATH + Now().FormatString("yyyymmdd") + "\\";
     ForceDirectories((AnsiString)dir);
 
-	str = dir + "ERROR" + FormatFloat("000", this->Tag+1) + "_" + Now().FormatString("yymmdd-hh") + ".log";
+	str = dir + "ERROR" + FormatFloat("000", this->Tag+1) + "_" + Now().FormatString("yymmdd") + ".log";
 
 	if(FileExists(str))
 		file_handle = FileOpen(str, fmOpenWrite);
@@ -165,6 +165,30 @@ void __fastcall TTotalForm::ErrorLog()
 	FileSeek(file_handle, 0, 2);
 
 	str = Now().FormatString("yyyy-mm-dd hh:nn:ss> ") + error1->Caption + ", " + error3->Caption + ", " + error4->Caption + "\n";
+	FileWrite(file_handle, str.c_str(), str.Length());
+
+	FileClose(file_handle);
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::ErrorLog(AnsiString msg)
+{
+    AnsiString str, dir;
+	int file_handle;
+
+	dir = (AnsiString)LOG_PATH + Now().FormatString("yyyymmdd") + "\\";
+    ForceDirectories((AnsiString)dir);
+
+	str = dir + "ERROR" + FormatFloat("000", this->Tag+1) + "_" + Now().FormatString("yymmdd") + ".log";
+
+	if(FileExists(str))
+		file_handle = FileOpen(str, fmOpenWrite);
+	else{
+		file_handle = FileCreate(str);
+	}
+
+	FileSeek(file_handle, 0, 2);
+
+	str = Now().FormatString("yyyy-mm-dd hh:nn:ss> ") + msg + "\n";
 	FileWrite(file_handle, str.c_str(), str.Length());
 
 	FileClose(file_handle);

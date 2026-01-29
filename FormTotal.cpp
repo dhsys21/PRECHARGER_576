@@ -510,35 +510,46 @@ bool __fastcall TTotalForm::ErrorCheck()
     DisplayError("");
 	if(!Client->Active)
 	{
-	  ErrorCheckStatus = "PRECHARGER Connection Fail.";
-      DisplayError(ErrorCheckStatus, true);
-      Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
+        ErrorCheckStatus = "PRECHARGER Connection Fail.";
+        DisplayError(ErrorCheckStatus, true);
+        if(OldErrorCheckStatus != ErrorCheckStatus) {
+            OldErrorCheckStatus = ErrorCheckStatus;
+            WritePLCLog("ErrorCheck", ErrorCheckStatus);
+            ErrorLog(ErrorCheckStatus);
+        }
+        Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
 
-      if(ReContactTimer->Enabled == false)
-      	ReContactTimer->Enabled = true;
-      DisplayStatus(nNoAnswer);
-	   return true;
+        if(ReContactTimer->Enabled == false)
+        ReContactTimer->Enabled = true;
+        DisplayStatus(nNoAnswer);
+        return true;
 	}
     else if(stage.bconnected == false)
     {
         ErrorCheckStatus = "BT Connection Fail.";
         DisplayError(ErrorCheckStatus, true);
+        if(OldErrorCheckStatus != ErrorCheckStatus) {
+			OldErrorCheckStatus = ErrorCheckStatus;
+			WritePLCLog("ErrorCheck", ErrorCheckStatus);
+            ErrorLog(ErrorCheckStatus);
+		}
         Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
 
       	DisplayStatus(nNoAnswer);
 	   return true;
-    }
-	else{
-        Panel_State->Caption = "";
-		if(stage.alarm_status == nNoAnswer)
-        	DisplayStatus(nVacancy);
     }
 
     if(Mod_PLC->GetPlcValue(this->Tag, PLC_D_PRE_TRAY_IN) == 0
     	&& (stage.status == WDT || stage.status == REC)){
         ErrorCheckStatus = "PRECHARGER is WDT Mode. Please [RESET] it.";
         DisplayError(ErrorCheckStatus, true);
+        if(OldErrorCheckStatus != ErrorCheckStatus) {
+			OldErrorCheckStatus = ErrorCheckStatus;
+			WritePLCLog("ErrorCheck", ErrorCheckStatus);
+            ErrorLog(ErrorCheckStatus);
+		}
         Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
+
         return true;
     }
 
@@ -546,7 +557,13 @@ bool __fastcall TTotalForm::ErrorCheck()
 		|| charge[1].volt == 0 || charge[1].curr == 0 || charge[1].time == 0){
         ErrorCheckStatus = "No Setting Values.";
         DisplayError(ErrorCheckStatus, true);
+        if(OldErrorCheckStatus != ErrorCheckStatus) {
+			OldErrorCheckStatus = ErrorCheckStatus;
+			WritePLCLog("ErrorCheck", ErrorCheckStatus);
+            ErrorLog(ErrorCheckStatus);
+		}
         Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
+
         return true;
     }
 
@@ -557,6 +574,7 @@ bool __fastcall TTotalForm::ErrorCheck()
 		if(OldErrorCheckStatus != ErrorCheckStatus) {
 			OldErrorCheckStatus = ErrorCheckStatus;
 			WritePLCLog("ErrorCheck", ErrorCheckStatus);
+            ErrorLog(ErrorCheckStatus);
 		}
 
 		return true;
@@ -569,10 +587,54 @@ bool __fastcall TTotalForm::ErrorCheck()
 		if(OldErrorCheckStatus != ErrorCheckStatus) {
 			OldErrorCheckStatus = ErrorCheckStatus;
 			WritePLCLog("ErrorCheck", ErrorCheckStatus);
+            ErrorLog(ErrorCheckStatus);
 		}
         BaseForm->advPLCInterfaceShow->Color = clRed;
 
 		return true;
+	}
+
+    if(Mod_PLC->GetPcValue(PC_D_PRE_ERROR) == 1)
+    	Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
+	return false;
+}
+//---------------------------------------------------------------------------
+bool __fastcall TTotalForm::ErrorCheck_Manual()
+{
+    DisplayError("");
+	if(!Client->Active)
+	{
+        ErrorCheckStatus = "PRECHARGER Connection Fail.";
+        DisplayError(ErrorCheckStatus, true);
+	}
+    else if(stage.bconnected == false)
+    {
+        ErrorCheckStatus = "BT Connection Fail.";
+        DisplayError(ErrorCheckStatus, true);
+    }
+
+    if(Mod_PLC->GetPlcValue(this->Tag, PLC_D_PRE_TRAY_IN) == 0
+    	&& (stage.status == WDT || stage.status == REC)){
+        ErrorCheckStatus = "PRECHARGER is WDT Mode. Please [RESET] it.";
+        DisplayError(ErrorCheckStatus, true);
+    }
+
+	if(charge[0].volt == 0 || charge[0].curr == 0 || charge[0].time == 0
+		|| charge[1].volt == 0 || charge[1].curr == 0 || charge[1].time == 0){
+        ErrorCheckStatus = "No Setting Values.";
+        DisplayError(ErrorCheckStatus, true);
+    }
+
+	if(!Mod_PLC->ClientSocket_PC->Active && !Mod_PLC->ClientSocket_PLC->Active)
+	{
+		ErrorCheckStatus = "PLC - PC Connection Fail.";
+		DisplayError(ErrorCheckStatus, true);
+	}
+
+	if(Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_ERROR))
+	{
+		ErrorCheckStatus = "PLC - Error!!";
+		DisplayError(ErrorCheckStatus, true);
 	}
 
 	return false;
@@ -2420,6 +2482,7 @@ void __fastcall TTotalForm::btnManualClick(TObject *Sender)
 		this->CmdManualMod(true);
 		VisibleBox(GrpLocal);
 
+        ErrorCheck_Manual();
         InitMeasureForm();
 		MeasureInfoForm->pLocal->Visible = true;
 	//}
