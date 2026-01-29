@@ -16,6 +16,7 @@ object RemeasureForm: TRemeasureForm
   OldCreateOrder = False
   Position = poDesigned
   Scaled = False
+  OnClose = FormClose
   OnCreate = FormCreate
   OnHide = FormHide
   OnShow = FormShow

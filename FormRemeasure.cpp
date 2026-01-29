@@ -396,7 +396,11 @@ void __fastcall TRemeasureForm::chInitdblClick(TObject *Sender)
 
 void __fastcall TRemeasureForm::AccInitBtnClick(TObject *Sender)
 {
-	if(MessageBox(Handle, L"Do you want to initialize all channels?", L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+	WideString message = Form_Language->msgDelAllChRecord;
+    UnicodeString str;
+	str = "Do you want to initialize all channel record?";
+    if(MessageBox(Handle, message.c_bstr(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+    //    if(MessageBox(Handle, str.c_str(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
 		for(int i=0; i<MAXCHANNEL; ++i) {
         	acc_remeasure[i] = 0;
             acc_totaluse[i] = 0;
@@ -430,3 +434,9 @@ void __fastcall TRemeasureForm::ChInfoMouseLeave(TObject *Sender)
 	pnlPos->Caption = "";
 }
 //---------------------------------------------------------------------------s
+void __fastcall TRemeasureForm::FormClose(TObject *Sender, TCloseAction &Action)
+{
+    BaseForm->nForm[stage]->WriteRemeasureInfo();
+}
+//---------------------------------------------------------------------------
+

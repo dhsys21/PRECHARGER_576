@@ -86,6 +86,7 @@ __published:	// IDE-managed Components
 	void __fastcall AccInitBtnClick(TObject *Sender);
     void __fastcall ChInfoMouseEnter(TObject *Sender);
 	void __fastcall ChInfoMouseLeave(TObject *Sender);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 private:	// User declarations
 	void __fastcall MakePanel(AnsiString type);
 	void __fastcall MakeUIPanel(AnsiString type);

@@ -27,7 +27,7 @@ void __fastcall TForm_Language::LanguageChange(int LangIndex)
 	//-------------------------------------------------------------------------
 	for(int i = 0; i < BaseForm->FormCnt; i++){
         BaseForm->nForm[i]->btnSaveConnConfig->Caption = vle->Values["SAVE"];
-        BaseForm->nForm[i]->btnCloseConnConfig->Caption = vle->Values["CANCEL"];
+        BaseForm->nForm[i]->btnCloseConnConfig->Caption = vle->Values["CLOSE"];
         BaseForm->nForm[i]->btnConfig->Caption = vle->Values["CONFIG"];
         BaseForm->nForm[i]->btnManual->Caption = vle->Values["MANUAL"];
         BaseForm->nForm[i]->btnAuto->Caption = vle->Values["AUTO"];

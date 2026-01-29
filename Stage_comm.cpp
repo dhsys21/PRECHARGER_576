@@ -71,6 +71,8 @@ void __fastcall TTotalForm::CmdTrayOut()
 		WriteResultFile();
     }
 
+    Mod_PLC->SetPcValue(PC_D_PRE_DATA_WRITE, 1);
+
     Sleep(100);
 	// 자동검사 9(끝). 트레이 방출
 	if(/*NgCount == (tray.cell_count1 + tray.cell_count2) || */
@@ -93,6 +95,8 @@ void __fastcall TTotalForm::CmdTrayOut_Original()
 	BadInfomation();
 	WriteVoltCurrValue();
     WriteResultFile();
+
+    Mod_PLC->SetPcValue(PC_D_PRE_DATA_WRITE, 1);
 }
 //--------------------------------------------------------------------------
 void __fastcall TTotalForm::CmdManualMod(bool Set)

@@ -82,11 +82,12 @@ const int PC_D_PRE_COMPLETE2		                =   8;
 const int PC_D_PRE_TRAY_POS_MOVE	                =   9;
 
 const int PC_D_PRE_NG_COUNT                      	=   10;
-const int PC_D_PRE_CURRENT_MIN                      =   11;
-const int PC_D_PRE_CHARGE_VOLTAGE                   =   13;
-const int PC_D_PRE_CHARGE_CURRENT                   =   15;
-const int PC_D_PRE_CHARGE_TIME                      =   17;
+const int PC_D_PRE_CURRENT_MIN                      =   11; // 2word
+const int PC_D_PRE_CHARGE_VOLTAGE                   =   13; // 2word
+const int PC_D_PRE_CHARGE_CURRENT                   =   15; // 2word
+const int PC_D_PRE_CHARGE_TIME                      =   17; // 2word
 const int PC_D_PRE_NG_ALARM                         =   19;
+const int PC_D_PRE_DATA_WRITE                       =   20;
 
 // OK/NG - D34030 : 16bit * 36
 const int PC_D_PRE_MEASURE_OK_NG			   		=	30;

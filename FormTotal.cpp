@@ -227,6 +227,7 @@ void __fastcall TTotalForm::PLCInitialization(int traypos)
 	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_ERROR, 0);
 
 	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_COUNT, 0);
+    Mod_PLC->SetPcValue(PC_D_PRE_DATA_WRITE, 0);
 
     if(traypos == 1){
         Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_COMPLETE1, 0);
@@ -537,6 +538,11 @@ bool __fastcall TTotalForm::ErrorCheck()
 
       	DisplayStatus(nNoAnswer);
 	   return true;
+    }
+    else{
+        DisplayError("");
+		if(stage.alarm_status == nNoAnswer)
+        	DisplayStatus(nVacancy);
     }
 
     if(Mod_PLC->GetPlcValue(this->Tag, PLC_D_PRE_TRAY_IN) == 0
@@ -974,6 +980,7 @@ void __fastcall TTotalForm::AutoInspection_Finish()
                 Mod_PLC->SetPcValue(PC_D_PRE_TRAY_OUT, 0);
                 Mod_PLC->SetPcValue(PC_D_PRE_PROB_OPEN, 0);
                 Mod_PLC->SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
+                Mod_PLC->SetPcValue(PC_D_PRE_DATA_WRITE, 0);
 
 				DisplayProcess(sTrayOut, "AutoInspection_Finish", "[STEP 0] PreCharger Tray Out ... ");
 
@@ -2577,7 +2584,11 @@ void __fastcall TTotalForm::btnSaveConfigClick(TObject *Sender)
 	{
 		if(stage.arl == nLocal && nSection == STEP_WAIT && nStep == 0)
 		{
-			if(MessageBox(Handle, L"Are you sure want to save?", L"SAVE", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+			WideString message = Form_Language->msgSave;
+            UnicodeString str;
+            str = "Are you sure you want to save?";
+            if(MessageBox(Handle, message.c_bstr(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+            //    if(MessageBox(Handle, str.c_str(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
 				WriteSystemInfo();
 				WriteRemeasureInfo();
 				ReadSystemInfo();
