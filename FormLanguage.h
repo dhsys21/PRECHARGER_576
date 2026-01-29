@@ -29,6 +29,17 @@ public:		// User declarations
     UnicodeString msgRbt;
     UnicodeString msgTooManyNG;
     UnicodeString msgErrorSet;
+    UnicodeString msgWDTMode;
+	UnicodeString msgNoSetValues;
+	UnicodeString msgPLCConnFail;
+	UnicodeString msgPREConnFail;
+	UnicodeString msgBTConnFail;
+	UnicodeString msgDelEachChRecord;
+	UnicodeString msgDelAllChRecord;
+	UnicodeString msgVoltLimit;
+	UnicodeString msgCurrLimit;
+	UnicodeString msgTimeLimit;
+	UnicodeString msgSave;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm_Language *Form_Language;

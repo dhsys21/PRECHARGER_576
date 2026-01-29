@@ -1308,7 +1308,7 @@ object MeasureInfoForm: TMeasureInfoForm
         TMSStyle = 8
       end
       object btnReset: TAdvSmoothButton
-        Left = 100
+        Left = 96
         Top = 30
         Width = 80
         Height = 80

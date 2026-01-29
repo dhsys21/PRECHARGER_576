@@ -40,6 +40,7 @@ void __fastcall TForm_PLCInterface::SetListViewPLC(int nTag)
 	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_PROB_OPEN), "PROB OPEN");
 	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_PROB_CLOSE), "PROB CLOSE");
     AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_POS), "TRAY POS");
+    AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_PLC_AUTOMODE), "PLC AUTO MODE");
 	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_ID), "IN TRAY BCR DATA");
 
 	// CELL INFO => 1 : YES, 0 : NO
@@ -81,11 +82,6 @@ void __fastcall TForm_PLCInterface::SetListViewPC(int nTag)
 	for(int i = 0; i < 36; i++)
 		AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_MEASURE_OK_NG + i), "PRECHARGE OK/NG #" + IntToStr(i + 1));
 
-//	for(int i = 0; i < MAXCHANNEL; i++)
-//		AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_VOLTAGE_VALUE + i), "PRECHARGE VOLTAGE #" + IntToStr(i + 1));
-//
-//	for(int i = 0; i < MAXCHANNEL; i++)
-//		AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_CURRENT + PC_D_PRE_CURRENT_VALUE + i), "PRECHARGE CURRENT #" + IntToStr(i + 1));
     for(int i = 0; i < LINECOUNT; i++)
 		AddListView(ListView_PC, "D" + IntToStr(PC_D_INTERFACE_VOLTAGE + PC_D_PRE_VOLTAGE_VALUE + i * LINECOUNT), "VOLT VALUE #" + IntToStr(i * LINECOUNT + 1));
 
@@ -131,6 +127,7 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_PROB_OPEN);
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_PROB_CLOSE);
             nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_POS);
+            nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_PLC_AUTOMODE);
 			nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetString(Mod_PLC->plc_Interface_Data, PLC_D_PRE_TRAY_ID, 10);
 
 			AnsiString cellinfo;

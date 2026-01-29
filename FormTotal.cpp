@@ -582,13 +582,15 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 {
 	AnsiString trayid;
 	int trayin = 0;
+    int plcautomode = 0;
     int channel;
 
 	switch(nStep)
 	{
 		case 0: //* Tray In 확인
             trayin = Mod_PLC->GetPlcValue(PLC_D_PRE_TRAY_IN);
-			if(trayin)
+            plcautomode = Mod_PLC->GetPlcValue(PLC_D_PRE_PLC_AUTOMODE);
+			if(trayin && plcautomode)
 			{
 				if(chkBypass->Checked == true)
 				{
@@ -690,7 +692,10 @@ void __fastcall TTotalForm::AutoInspection_Wait()
                 }else if(nTrayPos == 2){
                     tray.pos2_complete = false;
                     //* pvolt, pcurr 가 volt, curr 값이 아니고 초기값 (채널 1-1) 이면 result 파일 읽어서 표시
-                    ReadResultFile(1);
+                    if(ReadResultFile(1) == true){
+                        tray.pos1_complete = true;
+                        Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE1, 1);
+                    }
                     DisplayTrayInfo(2);
 
                     DisplayProcess(sProbeDown, "AutoInspection_Wait", "[STEP 3] (Tray Pos 2) PROBE IS CLOSED ... ");
@@ -1197,7 +1202,7 @@ void __fastcall TTotalForm::ChannelStatus()
     //* mon data : 시작 후 precharge 10초, precharge2 config.time초, idle 2초
     //* 37(precharge2) + 10(precharge) + 2(idle) = 49
     //* 파텍 마련 기준 : config.time 30 + settle time 7 + precharge 10 + idle 2 = 49 => 30 + 19;
-    int extraTime = 19;
+    int extraTime = 9;//19;
 	if(tray.ams == true && dTime > 30 && testTime->Caption.ToIntDef(0) > (config.time + extraTime))
 	{
         CmdStop();
@@ -1853,16 +1858,16 @@ void __fastcall TTotalForm::ProcessMON(AnsiString param)
     int runtimelen = 16;
     AnsiString runtime = monData2.SubString(1, runtimelen);
 
-    int statuslen = 4 * MAXCHANNEL;
+    int statuslen = 4 * MAXCHANNEL / 2;
     AnsiString status = monData2.SubString(runtimelen + 1, statuslen);
 
-    int currentlen = 8 * MAXCHANNEL;
+    int currentlen = 8 * MAXCHANNEL / 2;
     AnsiString current = monData2.SubString(runtimelen + statuslen + 1, currentlen);
 
-    int voltagelen = 8 * MAXCHANNEL;
+    int voltagelen = 8 * MAXCHANNEL / 2;
     AnsiString voltage = monData2.SubString(runtimelen + statuslen + currentlen + 1, voltagelen);
 
-    int capacitylen = 8 * MAXCHANNEL;
+    int capacitylen = 8 * MAXCHANNEL / 2;
     AnsiString capacity = monData2.SubString(runtimelen + statuslen + currentlen + voltagelen + 1, capacitylen);
 
     SET_MONDATA(run_count, runtime, status, current, voltage, capacity);
@@ -2253,9 +2258,9 @@ void _fastcall TTotalForm::PreChargeSet()
         }
 
 		int curr = editChargeCurrent->Text.ToIntDef(260);
-        if(curr < 200) {
-            ShowMessage("Please use Current more than 500mA");
-            editChargeCurrent->Text = "500";
+        if(curr < 260) {
+            ShowMessage("Please use Current more than 260mA");
+            editChargeCurrent->Text = "260";
         }
 
 		int time = editChargeTime->Text.ToIntDef(240);
@@ -2363,6 +2368,8 @@ void __fastcall TTotalForm::btnNgInfoClick(TObject *Sender)
 {
     RemeasureForm->stage            = this->Tag;
 	RemeasureForm->acc_remeasure 	= acc_remeasure;
+    RemeasureForm->acc_totaluse     = acc_totaluse;
+    RemeasureForm->acc_consng       = acc_consng;
 	RemeasureForm->acc_init 		= &acc_init;
 	RemeasureForm->acc_cnt			= &acc_cnt;
 

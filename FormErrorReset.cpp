@@ -36,6 +36,8 @@ void __fastcall TForm_ErrorReset::DisplayErrorMessage(int nStage)
 //---------------------------------------------------------------------------
 void __fastcall TForm_ErrorReset::btnResetClick(TObject *Sender)
 {
+    Timer_BringToFront->Enabled = false;
+
     BaseForm->nForm[stage]->CmdReset();
     Sleep(1000);
     BaseForm->nForm[stage]->CmdResetTimer();
@@ -44,6 +46,8 @@ void __fastcall TForm_ErrorReset::btnResetClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm_ErrorReset::btnCancelClick(TObject *Sender)
 {
+    Timer_BringToFront->Enabled = false;
+
     this->Close();
 }
 //---------------------------------------------------------------------------

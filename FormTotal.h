@@ -331,7 +331,6 @@ private:	// User declarations
 	void __fastcall ChannelStatus();
     void __fastcall DisplayChannelInfo(int traypos);
     void __fastcall WriteMonData(int traypos);
-    void __fastcall WriteMonDataSort(int traypos);
     void __fastcall WriteResultFile();
     void __fastcall WriteResultFile(int traypos);
 
@@ -410,7 +409,7 @@ public:		// User declarations
 	void __fastcall CmdManualMod(bool Set);
     void __fastcall AutoTestFinish(int traypos);
 	void __fastcall ReadchannelMapping();
-    void __fastcall ReadResultFile(int traypos);
+    bool __fastcall ReadResultFile(int traypos);
 
 //---------------------------------------------------------------------------
 // Controller ¸í·É¾î
@@ -424,6 +423,7 @@ public:		// User declarations
     void __fastcall CmdEna();
 	void __fastcall CmdStop();
     void __fastcall CmdSetStep();
+    void __fastcall CmdSetStep2();
     void __fastcall CmdDischargeSetStep();
     bool __fastcall CmdCheckSet();
     void __fastcall CmdReport();

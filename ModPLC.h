@@ -59,7 +59,7 @@ const int PLC_D_PRE_TRAY_IN	    	  		        =   3;
 const int PLC_D_PRE_PROB_OPEN   	  		        =   4;
 const int PLC_D_PRE_PROB_CLOSE 		   	  	        =   5;
 const int PLC_D_PRE_TRAY_POS	                    =   6;
-
+const int PLC_D_PRE_PLC_AUTOMODE                  =   7; //* PLC 자동모드에서 PC 자동측정 시작 추가 20260128
 const int PLC_D_PRE_TRAY_ID    	  			        =   10;
 
 // TRAY INFO - 576 : 16bit * 36

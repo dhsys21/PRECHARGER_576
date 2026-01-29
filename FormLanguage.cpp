@@ -79,5 +79,17 @@ void __fastcall TForm_Language::LanguageChange(int LangIndex)
     msgTooManyNG = vle->Values["msgTooManyNG"];
     msgErrorSet = vle->Values["msgErrorSet"];
     Form_ErrorSet->ChangeMessage(msgErrorSet);
+
+    msgWDTMode = vle->Values["msgWDTMode"];
+    msgNoSetValues = vle->Values["msgNoSetValues"];
+    msgPLCConnFail = vle->Values["msgPLCConnFail"];
+    msgPREConnFail = vle->Values["msgPREConnFail"];
+    msgBTConnFail = vle->Values["msgBTConnFail"];
+    msgDelEachChRecord = vle->Values["msgDelEachChRecord"];
+    msgDelAllChRecord = vle->Values["msgDelAllChRecord"];
+    msgVoltLimit = vle->Values["msgVoltLimit"];
+    msgCurrLimit = vle->Values["msgCurrLimit"];
+    msgTimeLimit = vle->Values["msgTimeLimit"];
+    msgSave = vle->Values["msgSave"];
 }
 //---------------------------------------------------------------------------

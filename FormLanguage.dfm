@@ -60,15 +60,37 @@ object Form_Language: TForm_Language
       'FAIL='#48520#47049
       'OUTFLOW='#49472' '#50976#52636
       'NOCELL='#49472' '#50630#51020
+      'msgWDTMode=PRECHARGER'#44032' WDT '#47784#46300#51077#45768#45796'. RESET '#54616#49464#50836'.'
+      'msgNoSetValues='#49483#54021#44050#51060' '#50630#49845#45768#45796'.'
+      'msgPLCConnFail=PLC - PC '#50672#44208' '#49892#54056'.'
+      'msgPREConnFail=PRECHARGER '#50672#44208' '#49892#54056'.'
+      'msgBTConnFail=BT '#50672#44208' '#49892#54056'.'
       'msgRBT=Reboot'#51008' 60'#52488' '#51221#46020' '#49548#50836#46121#45768#45796'. Reboot '#54616#49884#44192#49845#45768#44620'?'
       'msgRST=Reset'#51008' 15'#52488' '#51221#46020' '#49548#50836#46121#45768#45796'. Reset '#54616#49884#44192#49845#45768#44620'?'
       'msgTooManyNG=NG '#49472#51060' '#45320#47924' '#47566#49845#45768#45796'. '#54869#51064#54644#51452#49464#50836
-      'msgErrorSet='#54788#51116' '#49444#51221' '#44050#51060' '#50732#48148#47476#51648' '#50506#49845#45768#45796'. \r\n\r\n'#45796#49884' '#49444#51221#54644' '#51452#49464#50836'.')
+      'msgErrorSet='#54788#51116' '#49444#51221' '#44050#51060' '#50732#48148#47476#51648' '#50506#49845#45768#45796'. \r\n\r\n'#45796#49884' '#49444#51221#54644' '#51452#49464#50836'.'
+      'msgDelEachChRecord='#54644#45817' '#52292#45328' '#44592#47197#51012' '#49325#51228' '#54624#44620#50836'?'
+      'msgDelAllChRecord='#47784#46304' '#52292#45328' '#44592#47197#51012' '#52488#44592#54868' '#54624#44620#50836'?'
+      'msgVoltLimit='#51204#50517#51012' 2000mV '#51060#49345' '#51077#47141#54616#49464#50836'.'
+      'msgCurrLimit='#51204#47448#47484' 260mA '#51060#49345' '#51077#47141#54616#49464#50836'.'
+      'msgTimeLimit='#49884#44036#51012' 30sec '#51060#49345' '#51077#47141#54616#49464#50836'.'
+      'msgSave='#51200#51109' '#54616#49884#44192#49845#45768#44620'?')
     TabOrder = 0
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
       18
       18
       18
@@ -163,17 +185,39 @@ object Form_Language: TForm_Language
       'FAIL=FAIL'
       'OUTFLOW=OUTFLOW'
       'NOCELL=NO CELL'
+      'msgWDTMode=PRECHARGER is WDT Mode. Please [RESET] it.'
+      'msgNoSetValues=No Setting Values.'
+      'msgPLCConnFail=PLC - PC Connection Fail.'
+      'msgPREConnFail=PRECHARGER Connection Fail.'
+      'msgBTConnFail=BT Connection Fail.'
       'msgRBT=Rebooting takes 60 seconds. Do you want to reboot?'
       'msgRST=Reset takes 15 seconds. Do you want to reset?'
       'msgTooManyNG=Too many NG cells. Please check it.'
       
         'msgErrorSet=The current settings are invalid. \r\n\r\nPlease res' +
-        'et and try again.')
+        'et and try again.'
+      'msgDelEachChRecord=Do you want to initialize the channel record?'
+      'msgDelAllChRecord=Do you want to initialize all channels?'
+      'msgVoltLimit=Please use Voltage more than 2000mV'
+      'msgCurrLimit=Please use Current more than 260mA'
+      'msgTimeLimit=Please use Time more than 30sec'
+      'msgSave=Are you sure want to save?')
     TabOrder = 1
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
       18
       18
       18
@@ -268,15 +312,37 @@ object Form_Language: TForm_Language
       'FAIL='#38169#35823
       'OUTFLOW=CELL'#27969#20986
       'NOCELL='#26080' CELL'
-      'msgRBT=Rebooting takes 60 seconds. Do you want to reboot?'
-      'msgRST=Reset takes 15 seconds. Do you want to reset?'
-      'msgTooManyNG='#19981#33391#21697#36807#22810#65292#35831#26816#26597#12290
-      'msgErrorSet='#24403#21069#35774#32622#26080#25928#65292'\r\n\r\n'#35831#37325#26032#35774#32622#12290)
+      'msgWDTMode=PRECHARGER '#22788#20110' WDT '#27169#24335#12290#35831#12304#37325#32622#12305#12290
+      'msgNoSetValues='#27809#26377#35774#32622#20540#12290
+      'msgPLCConnFail=PLC '#19982' PC '#36830#25509#22833#36133#12290
+      'msgPREConnFail=PRECHARGER '#36830#25509#22833#36133#12290
+      'msgBTConnFail=BT '#36830#25509#22833#36133#12290
+      'msgRBT='#37325#21551#38656#35201' 60 '#31186#12290#26159#21542#35201#37325#21551#65311
+      'msgRST='#37325#32622#38656#35201' 15 '#31186#12290#26159#21542#35201#37325#32622#65311
+      'msgTooManyNG=NG '#30005#33455#25968#37327#36807#22810#12290#35831#26816#26597#12290
+      'msgErrorSet='#24403#21069#35774#32622#26080#25928#12290'\r\n\r\n'#35831#37325#32622#21518#37325#35797#12290
+      'msgDelEachChRecord='#26159#21542#35201#21021#22987#21270#35813#36890#36947#30340#35760#24405#65311
+      'msgDelAllChRecord='#26159#21542#35201#21021#22987#21270#25152#26377#36890#36947#65311
+      'msgVoltLimit='#35831#20351#29992#39640#20110' 2000mV '#30340#30005#21387#12290
+      'msgCurrLimit='#35831#20351#29992#39640#20110' 260mA '#30340#30005#27969#12290
+      'msgTimeLimit='#35831#20351#29992#19981#23569#20110' 30 '#31186#30340#26102#38388#12290
+      'msgSave='#30830#23450#35201#20445#23384#21527#65311)
     TabOrder = 2
     ColWidths = (
       150
       148)
     RowHeights = (
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
+      18
       18
       18
       18
