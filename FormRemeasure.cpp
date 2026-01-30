@@ -24,7 +24,7 @@ void __fastcall TRemeasureForm::RefreshForm()
 {
 	for(int i = 0; i < MAXCHANNEL; ++i){
         //* 총 누적 불량, 연속불량
-		pre[i]->Caption = IntToStr(acc_consng[i]) + ", " + IntToStr(acc_remeasure[i]);
+		pre[i]->Caption = IntToStr(acc_consng[i]) + " / " + IntToStr(acc_remeasure[i]);
 		if(acc_remeasure[i] < pcolor2->Caption.ToIntDef(3)){
 			pre[i]->Color = pcolor1->Color;
 			pre[i]->ParentBackground = false;
@@ -427,12 +427,19 @@ void __fastcall TRemeasureForm::ChInfoMouseEnter(TObject *Sender)
 
     int ch = BaseForm->nForm[stage]->chReverseMap[index + 1];
     pnlPos->Caption = SetChannelHint(ch);
+
+    pnlTotalUse->Caption = acc_totaluse[index];
+    pnlConsNg->Caption = acc_consng[index];
+    pnlTotalNg->Caption = acc_remeasure[index];
 }
 //---------------------------------------------------------------------------
 void __fastcall TRemeasureForm::ChInfoMouseLeave(TObject *Sender)
 {
 	pnlCh->Caption = "";
 	pnlPos->Caption = "";
+    pnlTotalUse->Caption = "";
+    pnlConsNg->Caption = "";
+    pnlTotalNg->Caption = "";
 }
 //---------------------------------------------------------------------------s
 void __fastcall TRemeasureForm::FormClose(TObject *Sender, TCloseAction &Action)

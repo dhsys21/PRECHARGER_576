@@ -38,6 +38,7 @@ __fastcall TTotalForm::TTotalForm(TComponent* Owner)
 	MakePanel(BaseForm->lblLineNo->Caption);
 
 	curr_min = StringToDouble(editCurrMin->Text, 50);
+    write_delay_time = 0;
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::FormShow(TObject *Sender)
@@ -739,6 +740,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
             //* tray pos 2 이고 셀 갯수가 1개 이상이면 측정. 셀 갯수가 0개면 종료
             if(tray.cell_count1 == 0 && tray.cell_count2 == 0){
                 DisplayProcess(sBarcode, "AutoInspection_Wait", "[STEP 3] NO CELL ... ", true);
+                nStep = 2;
 				return;
             }
             else if(nTrayPos == 1 && tray.cell_count1 == 0){
@@ -823,9 +825,22 @@ void __fastcall TTotalForm::AutoInspection_Wait()
             //* 해당 트레이 위치에서 셀이 없을 때 처리 -
             //* 트레이 위치가 1이고 셀이 없으면 트레이 위치이동 pos1_complete = 1, tray_pos_move = 1
             //* 트레이 위치가 2이고 셀이 없으면 pos1_complete = pos2_complete = 1 이므로 종료.
-            if(tray.pos1_complete == true && tray.pos2_complete == true){
+            //* 결과 값 저장및 PLC 쓰기
+            if(Mod_PLC->GetPcValue(PC_D_PRE_COMPLETE1) == 1 && Mod_PLC->GetPcValue(PC_D_PRE_COMPLETE2) == 1){
                 //* NG count 후 셋팅값(20개) 이상이면 에러창
-                DisplayProcess(sFinish, "AutoInspection_Measure", " TRAY POS1 and POS2 : PreCharger Finish ... ");
+                DisplayProcess(sFinish, "AutoInspection_Measure", " TRAY POS1 and POS2 : Write Data ... ");
+				WriteValue();
+                write_delay_time = 0;
+				nStep = 9;
+            }
+        	break;
+        case 9:
+            write_delay_time++;
+            //* NG 갯수 확인 및 Tray Out
+            if(write_delay_time > 5){
+                write_delay_time = 0;
+                //* NG count 후 셋팅값(20개) 이상이면 에러창
+                DisplayProcess(sFinish, "AutoInspection_Measure", " TRAY POS1 and POS2 : PreCharger Finish. Tray Out ... ");
 				CmdTrayOut();
 				nStep = 0;
 				nSection = STEP_FINISH;
@@ -954,9 +969,20 @@ void __fastcall TTotalForm::AutoInspection_Measure()
             }
         	break;
         case 8:
-            if(tray.pos1_complete == true && tray.pos2_complete == true){
-                //* NG count 후 셋팅값(20개) 이상이면 에러창
-                DisplayProcess(sFinish, "AutoInspection_Measure", "[STEP 7] PreCharger Finish ... ");
+            //* 결과 값 저장및 PLC 쓰기
+            if(Mod_PLC->GetPcValue(PC_D_PRE_COMPLETE1) == 1 && Mod_PLC->GetPcValue(PC_D_PRE_COMPLETE2) == 1){
+                DisplayProcess(sFinish, "AutoInspection_Measure", "[STEP 8] Write Data ... ");
+				WriteValue();
+                write_delay_time = 0;
+                nStep = 9;
+            }
+        	break;
+        case 9:
+            write_delay_time++;
+            //* NG 갯수 확인 및 Tray Out
+            if(write_delay_time > 5){
+                write_delay_time = 0;
+                DisplayProcess(sFinish, "AutoInspection_Measure", "[STEP 9] PreCharger Finish. Tray Out ... ");
 				CmdTrayOut();
 				nStep = 0;
 				nSection = STEP_FINISH;

@@ -55,7 +55,7 @@ void __fastcall TTotalForm::CmdForceStop_Original()
 	}
 }
 //---------------------------------------------------------------------------
-void __fastcall TTotalForm::CmdTrayOut()
+void __fastcall TTotalForm::CmdTrayOut2()
 {
 	AnsiString cell_serial_filename;
     int nCellSerial = 0;
@@ -71,7 +71,8 @@ void __fastcall TTotalForm::CmdTrayOut()
 		WriteResultFile();
     }
 
-    WaitForMilliSeconds(1500);
+    //WaitForMilliSeconds(1500); //* timer 중이기 때문에 이 코드가 안됨
+    Sleep(300);
     Mod_PLC->SetPcValue(PC_D_PRE_DATA_WRITE, 1);
 
     Sleep(100);
@@ -85,6 +86,47 @@ void __fastcall TTotalForm::CmdTrayOut()
         if(BaseForm->chkTest->Checked == false){
         	Mod_PLC->SetPcValue(PC_D_PRE_TRAY_OUT, 1);
             WritePLCLog("CmdTrayOut", "IROCV TRAY OUT = 1");
+        }
+		DisplayStatus(nFinish);
+		Panel_State->Caption = " PreCharger Tray Out ... ";
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::WriteValue()
+{
+	AnsiString cell_serial_filename;
+    int nCellSerial = 0;
+    if(chkBypass->Checked == false){
+        //* 2번 모두 측정 한 후에 ok/ng 쓰기
+    	BadInfomation();
+        nCellSerial = ReadCellSerial();
+        if(nCellSerial != (tray.cell_count1 + tray.cell_count2))
+        	WritePLCLog("WriteValue",
+                "Cell Serial Count Error. CellSerial : " + IntToStr(nCellSerial)
+                + ", CellCount : " + IntToStr(tray.cell_count1 + tray.cell_count2));
+        WriteVoltCurrValue();
+		WriteResultFile();
+        WritePLCLog("WriteValue", "BadInfomation(), WriteVoltCurrValue(), WriteResultFile()");
+        Panel_State->Caption = " Write result values to PLC ";
+    }
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::CmdTrayOut()
+{
+	// 자동검사 9(끝). 트레이 방출
+	if(/*NgCount == (tray.cell_count1 + tray.cell_count2) || */
+    	NgCount > editNGAlarmCount->Text.ToIntDef(10)){
+        Form_Error->Tag = this->Tag;
+        Form_Error->DisplayErrorMessage(this->Tag, nNgErr);
+	}
+	else{
+        if(BaseForm->chkTest->Checked == false){
+            Mod_PLC->SetPcValue(PC_D_PRE_DATA_WRITE, 1);
+    		WritePLCLog("CmdTrayOut", "DATA WRITE COMPLETE = 1");
+
+        	Mod_PLC->SetPcValue(PC_D_PRE_TRAY_OUT, 1);
+            WritePLCLog("CmdTrayOut", "IROCV TRAY OUT = 1");
+
         }
 		DisplayStatus(nFinish);
 		Panel_State->Caption = " PreCharger Tray Out ... ";

@@ -416,6 +416,8 @@ public:		// User declarations
 	void __fastcall AutoInspection_Measure();
 	void __fastcall AutoInspection_Finish();
 
+    void __fastcall CmdTrayOut2();
+    void __fastcall WriteValue();
 	void __fastcall CmdTrayOut();
 	void __fastcall CmdTrayOut_Original();
 	void __fastcall CmdForceStop(int traypos);
@@ -514,6 +516,7 @@ public:		// User declarations
 
     int nFinishCount;
 	int mon_count;
+    int write_delay_time;
 
     void __fastcall StageStatus();
 	void __fastcall ReadRemeasureInfo();
