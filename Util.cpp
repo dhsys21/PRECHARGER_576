@@ -6,6 +6,22 @@
 #include "RVMO_main.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+AnsiString getSettingValue(AnsiString str, int nIndex)
+{
+    AnsiString setval = "";
+    TStringList *tokens = new TStringList;
+    tokens->Delimiter = ' ';
+    tokens->StrictDelimiter = true;   // Áß¿ä!
+    tokens->DelimitedText = str;
+
+    if(nIndex == 1) setval = tokens->Strings[0]; // "0mv"
+    else if(nIndex == 2) setval = tokens->Strings[1]; // "0ma"
+    else if(nIndex == 3) setval = tokens->Strings[2]; // "0s"
+
+    delete tokens;
+
+    return setval;
+}
 int __fastcall StringToInt(UnicodeString str, int def)
 {
 	int iVal;

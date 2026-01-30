@@ -818,7 +818,7 @@ object TotalForm: TTotalForm
         end
         object btnMeasureInfo: TAdvSmoothButton
           Left = 7
-          Top = 222
+          Top = 237
           Width = 102
           Height = 32
           Appearance.Font.Charset = DEFAULT_CHARSET
@@ -856,7 +856,7 @@ object TotalForm: TTotalForm
         end
         object btnNgInfo: TAdvSmoothButton
           Left = 7
-          Top = 74
+          Top = 75
           Width = 100
           Height = 50
           Appearance.Font.Charset = DEFAULT_CHARSET
@@ -893,7 +893,7 @@ object TotalForm: TTotalForm
         end
         object btnTrayOut: TAdvSmoothButton
           Left = 7
-          Top = 19
+          Top = 20
           Width = 100
           Height = 50
           Appearance.Font.Charset = DEFAULT_CHARSET
@@ -964,6 +964,123 @@ object TotalForm: TTotalForm
           Version = '2.1.1.5'
           OnClick = ConfigBtn1Click
           TMSStyle = 8
+        end
+        object pnlTrayPos1: TAdvSmoothPanel
+          Left = 7
+          Top = 219
+          Width = 45
+          Height = 34
+          Cursor = crDefault
+          Caption.Text = '1'
+          Caption.Location = plCenterCenter
+          Caption.HTMLFont.Charset = DEFAULT_CHARSET
+          Caption.HTMLFont.Color = clWindowText
+          Caption.HTMLFont.Height = -11
+          Caption.HTMLFont.Name = 'Tahoma'
+          Caption.HTMLFont.Style = []
+          Caption.HTMLURLColor = clBlack
+          Caption.Font.Charset = DEFAULT_CHARSET
+          Caption.Font.Color = clWindowText
+          Caption.Font.Height = -19
+          Caption.Font.Name = 'Tahoma'
+          Caption.Font.Style = []
+          Caption.ColorStart = clWhite
+          Caption.ColorEnd = clWhite
+          Caption.LineColor = clBlack
+          Caption.Line = False
+          Caption.TextAlignment = taCenter
+          Fill.Color = clRed
+          Fill.ColorTo = clRed
+          Fill.ColorMirror = clRed
+          Fill.ColorMirrorTo = clRed
+          Fill.GradientType = gtVertical
+          Fill.GradientMirrorType = gtVertical
+          Fill.BorderColor = 14922381
+          Fill.Rounding = 1
+          Fill.ShadowOffset = 0
+          Fill.Glow = gmNone
+          Version = '1.5.2.1'
+          TabOrder = 5
+          TMSStyle = 0
+        end
+        object pnlTrayPos2: TAdvSmoothPanel
+          Left = 62
+          Top = 219
+          Width = 45
+          Height = 34
+          Cursor = crDefault
+          Caption.Text = '2'
+          Caption.Location = plCenterCenter
+          Caption.HTMLFont.Charset = DEFAULT_CHARSET
+          Caption.HTMLFont.Color = clWindowText
+          Caption.HTMLFont.Height = -11
+          Caption.HTMLFont.Name = 'Tahoma'
+          Caption.HTMLFont.Style = []
+          Caption.HTMLURLColor = clBlack
+          Caption.Font.Charset = DEFAULT_CHARSET
+          Caption.Font.Color = clWindowText
+          Caption.Font.Height = -19
+          Caption.Font.Name = 'Tahoma'
+          Caption.Font.Style = []
+          Caption.ColorStart = clWhite
+          Caption.ColorEnd = clWhite
+          Caption.LineColor = clBlack
+          Caption.Line = False
+          Caption.TextAlignment = taCenter
+          Fill.Color = clRed
+          Fill.ColorTo = clRed
+          Fill.ColorMirror = clRed
+          Fill.ColorMirrorTo = clRed
+          Fill.GradientType = gtVertical
+          Fill.GradientMirrorType = gtVertical
+          Fill.BorderColor = 14922381
+          Fill.Rounding = 1
+          Fill.ShadowOffset = 0
+          Fill.Glow = gmNone
+          Version = '1.5.2.1'
+          TabOrder = 6
+          TMSStyle = 0
+        end
+        object AdvSmoothPanel4: TAdvSmoothPanel
+          Left = 7
+          Top = 197
+          Width = 100
+          Height = 20
+          Cursor = crDefault
+          Margins.Top = 1
+          Margins.Bottom = 1
+          Caption.Text = 'POSITION'
+          Caption.Location = plCenterCenter
+          Caption.HTMLFont.Charset = DEFAULT_CHARSET
+          Caption.HTMLFont.Color = clWindowText
+          Caption.HTMLFont.Height = -11
+          Caption.HTMLFont.Name = 'Tahoma'
+          Caption.HTMLFont.Style = []
+          Caption.HTMLLocation = plBottomCenter
+          Caption.HTMLURLColor = clBlack
+          Caption.Font.Charset = DEFAULT_CHARSET
+          Caption.Font.Color = clBlack
+          Caption.Font.Height = -13
+          Caption.Font.Name = 'Tahoma'
+          Caption.Font.Style = [fsBold]
+          Caption.ColorStart = clBlack
+          Caption.ColorEnd = clBlack
+          Caption.LineColor = clBlack
+          Caption.Line = False
+          Caption.TextAlignment = taCenter
+          Fill.Color = clWhite
+          Fill.ColorTo = clWhite
+          Fill.ColorMirror = clWhite
+          Fill.ColorMirrorTo = clWhite
+          Fill.GradientType = gtVertical
+          Fill.GradientMirrorType = gtVertical
+          Fill.BorderColor = 14922381
+          Fill.Rounding = 1
+          Fill.ShadowOffset = 0
+          Fill.Glow = gmNone
+          Version = '1.5.2.1'
+          TabOrder = 7
+          TMSStyle = 0
         end
       end
     end

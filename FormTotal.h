@@ -241,6 +241,9 @@ __published:	// IDE-managed Components
 	TPanel *Panel5;
 	TEdit *editCurrentMin;
 	TAdvSmoothButton *btnDisconnPRECHARGER;
+	TAdvSmoothPanel *pnlTrayPos1;
+	TAdvSmoothPanel *pnlTrayPos2;
+	TAdvSmoothPanel *AdvSmoothPanel4;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnSaveConfigClick(TObject *Sender);
 	void __fastcall BitmapBtn5Click(TObject *Sender);

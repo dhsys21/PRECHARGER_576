@@ -559,8 +559,9 @@ bool __fastcall TTotalForm::ErrorCheck()
         return true;
     }
 
-	if(charge[0].volt == 0 || charge[0].curr == 0 || charge[0].time == 0
-		|| charge[1].volt == 0 || charge[1].curr == 0 || charge[1].time == 0){
+    AnsiString setval = lblSet1->Caption;
+	if(getSettingValue(setval, 1) == "0mV" || getSettingValue(setval, 2) == "0mA"
+    	|| getSettingValue(setval, 3) == "0s"){
         ErrorCheckStatus = "No Setting Values.";
         DisplayError(ErrorCheckStatus, true);
         if(OldErrorCheckStatus != ErrorCheckStatus) {
@@ -1301,6 +1302,13 @@ void __fastcall TTotalForm::StatusTimerTimer(TObject *Sender)
 
     nTrayPos = Mod_PLC->GetTrayPos();
     pnlTrayPos->Caption->Text = IntToStr(nTrayPos);
+    if(nTrayPos == 1) {
+    	ShowPLCSignal(pnlTrayPos1, true);
+        ShowPLCSignal(pnlTrayPos2, false);
+    } else if(nTrayPos == 2){
+        ShowPLCSignal(pnlTrayPos1, false);
+        ShowPLCSignal(pnlTrayPos2, true);
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::StageStatus()

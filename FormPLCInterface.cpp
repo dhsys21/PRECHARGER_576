@@ -1,4 +1,5 @@
-﻿#pragma link "AdvSmoothButton"
+﻿#pragma link "AdvSmoothPanel"
+#pragma link "AdvSmoothButton"
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -32,62 +33,107 @@ __fastcall TForm_PLCInterface::TForm_PLCInterface(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TForm_PLCInterface::SetListViewPLC(int nTag)
 {
-	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_HEART_BEAT), "PLC HEART BEAT");
-	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_AUTO_MANUAL), "PLC MANUAL/AUTO");
-	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_ERROR), "PLC ERROR");
+    const int count = chkAllData->Checked ? MAXCHANNEL : LINECOUNT;
 
-	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_IN), "TRAY IN");
-	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_PROB_OPEN), "PROB OPEN");
-	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_PROB_CLOSE), "PROB CLOSE");
-    AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_POS), "TRAY POS");
-    AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_PLC_AUTOMODE), "PLC AUTO MODE");
-	AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_ID), "IN TRAY BCR DATA");
+    ListView_PLC->Items->BeginUpdate();
+    try
+    {
+        ListView_PLC->Items->Clear();
 
-	// CELL INFO => 1 : YES, 0 : NO
-    //* 16(bit)개씩 36개
-	for(int i = 0; i < 36; i++)
-	{
-		AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_CELL_DATA + i), "TRAY CELL DATA #" + IntToStr(i + 1));
-	}
+        AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_HEART_BEAT), "PLC HEART BEAT");
+        AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_AUTO_MANUAL), "PLC MANUAL/AUTO");
+        AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_ERROR), "PLC ERROR");
 
-    for(int i = 0; i < LINECOUNT; i++)
-       AddListView(ListView_PLC, "D" + IntToStr(PLC_D_CELL_SERIAL_NUM + PLC_D_PRE_CELL_SERIAL + (i * 10 * LINECOUNT)), "CELL SERIAL #" + IntToStr(i * LINECOUNT + 1));
+        AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_IN), "TRAY IN");
+        AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_PROB_OPEN), "PROB OPEN");
+        AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_PROB_CLOSE), "PROB CLOSE");
+        AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_POS), "TRAY POS");
+        AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_PLC_AUTOMODE), "PLC AUTO MODE");
+        AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_ID), "IN TRAY BCR DATA");
+
+        // CELL INFO => 1 : YES, 0 : NO
+        //* 16(bit)개씩 36개
+        for(int i = 0; i < 36; i++)
+        {
+            AddListView(nListView_PLC[nTag], "D" + IntToStr(PLC_D_INTERFACE_START_DEV_NUM + PLC_D_PRE_TRAY_CELL_DATA + i), "TRAY CELL DATA #" + IntToStr(i + 1));
+        }
+
+        if(chkAllData->Checked == false){
+            for(int i = 0; i < LINECOUNT; i++)
+               AddListView(ListView_PLC, "D" + IntToStr(PLC_D_CELL_SERIAL_NUM + PLC_D_PRE_CELL_SERIAL + (i * 10 * LINECOUNT)), "CELL SERIAL #" + IntToStr(i * LINECOUNT + 1));
+        }else {
+            for(int i = 0; i < MAXCHANNEL; i++)
+               AddListView(ListView_PLC, "D" + IntToStr(PLC_D_CELL_SERIAL_NUM + PLC_D_PRE_CELL_SERIAL + (i * 10)), "CELL SERIAL #" + IntToStr(i + 1));
+        }
+    }
+    __finally
+    {
+        ListView_PLC->Items->EndUpdate();
+    }
+
+    // 보통 EndUpdate로 충분하지만, 즉시 화면 반영이 필요하면:
+    ListView_PLC->Invalidate();
+    ListView_PLC->Update();
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm_PLCInterface::SetListViewPC(int nTag)
 {
-	// PC - CELL PP
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_HEART_BEAT), "PC HEART BEAT");
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_STAGE_AUTO_READY), "STAGE AUTO READY");
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_ERROR), "PC ERROR");
+    const int count = chkAllData->Checked ? MAXCHANNEL : LINECOUNT;
 
-	// PC - PRE CHARGER
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_TRAY_OUT), "TRAY OUT");
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_PROB_OPEN), "PROB OPEN");
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_PROB_CLOSE), "PROB CLOSE");
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGING), "CHARGING");
-    AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_COMPLETE1), "COMPLETE1");
-    AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_COMPLETE2), "COMPLETE2");
-    AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_TRAY_POS_MOVE), "TRAY POS MOVE");
+    ListView_PC->Items->BeginUpdate();
+    try
+    {
+        ListView_PC->Items->Clear();
 
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_NG_COUNT), "PRECHARGER NG COUNT");
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CURRENT_MIN), "CURRENT MIN. VALUE");
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGE_VOLTAGE), "CHARGE VOLTAGE");
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGE_CURRENT), "CHARGE CURRENT");
-	AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGE_TIME), "CHARGE TIME");
-    AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_NG_ALARM), "NG ALARM");
-    AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_DATA_WRITE), "DATA WRITE COMPLETE");
+        // PC - CELL PP
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_HEART_BEAT), "PC HEART BEAT");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_STAGE_AUTO_READY), "STAGE AUTO READY");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_ERROR), "PC ERROR");
 
-	// PRECHARGE RESULT OK/NG => 1 : NG, 0 : OK or NO CELL
-    //* 16 bit * 36
-	for(int i = 0; i < 36; i++)
-		AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_MEASURE_OK_NG + i), "PRECHARGE OK/NG #" + IntToStr(i + 1));
+        // PC - PRE CHARGER
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_TRAY_OUT), "TRAY OUT");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_PROB_OPEN), "PROB OPEN");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_PROB_CLOSE), "PROB CLOSE");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGING), "CHARGING");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_COMPLETE1), "COMPLETE1");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_COMPLETE2), "COMPLETE2");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_TRAY_POS_MOVE), "TRAY POS MOVE");
 
-    for(int i = 0; i < LINECOUNT; i++)
-		AddListView(ListView_PC, "D" + IntToStr(PC_D_INTERFACE_VOLTAGE + PC_D_PRE_VOLTAGE_VALUE + i * LINECOUNT), "VOLT VALUE #" + IntToStr(i * LINECOUNT + 1));
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_NG_COUNT), "PRECHARGER NG COUNT");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CURRENT_MIN), "CURRENT MIN. VALUE");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGE_VOLTAGE), "CHARGE VOLTAGE");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGE_CURRENT), "CHARGE CURRENT");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGE_TIME), "CHARGE TIME");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_NG_ALARM), "NG ALARM");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_DATA_WRITE), "DATA WRITE COMPLETE");
 
-	for(int i = 0; i < LINECOUNT; i++)
-		AddListView(ListView_PC, "D" + IntToStr(PC_D_INTERFACE_CURRENT + PC_D_PRE_CURRENT_VALUE + i  * LINECOUNT), "CURR VALUE #" + IntToStr(i * LINECOUNT + 1));
+        // PRECHARGE RESULT OK/NG => 1 : NG, 0 : OK or NO CELL
+        //* 16 bit * 36
+        for(int i = 0; i < 36; i++)
+            AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_MEASURE_OK_NG + i), "PRECHARGE OK/NG #" + IntToStr(i + 1));
+
+        if(chkAllData->Checked == false){
+            for(int i = 0; i < LINECOUNT; i++)
+                AddListView(ListView_PC, "D" + IntToStr(PC_D_INTERFACE_VOLTAGE + PC_D_PRE_VOLTAGE_VALUE + i * LINECOUNT), "VOLT VALUE #" + IntToStr(i * LINECOUNT + 1));
+
+            for(int i = 0; i < LINECOUNT; i++)
+                AddListView(ListView_PC, "D" + IntToStr(PC_D_INTERFACE_CURRENT + PC_D_PRE_CURRENT_VALUE + i  * LINECOUNT), "CURR VALUE #" + IntToStr(i * LINECOUNT + 1));
+        } else {
+            for(int i = 0; i < MAXCHANNEL; i++)
+                AddListView(ListView_PC, "D" + IntToStr(PC_D_INTERFACE_VOLTAGE + PC_D_PRE_VOLTAGE_VALUE + i), "VOLT VALUE #" + IntToStr(i + 1));
+
+            for(int i = 0; i < MAXCHANNEL; i++)
+                AddListView(ListView_PC, "D" + IntToStr(PC_D_INTERFACE_CURRENT + PC_D_PRE_CURRENT_VALUE + i), "CURR VALUE #" + IntToStr(i + 1));
+        }
+    }
+    __finally
+    {
+        ListView_PC->Items->EndUpdate();
+    }
+
+    // 보통 EndUpdate로 충분하지만, 즉시 화면 반영이 필요하면:
+    ListView_PC->Invalidate();
+    ListView_PC->Update();
 }
 //---------------------------------------------------------------------------
 
@@ -143,8 +189,13 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 				nListView_PLC[nTag]->Items->Item[index++]->SubItems->Strings[1] = cellinfo;
 			}
 
-            for(int i = 0; i < LINECOUNT; i++)
-            	ListView_PLC->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetCellSrial(PLC_D_PRE_CELL_SERIAL, i * LINECOUNT, 10);
+            if(chkAllData->Checked == false) {
+                for(int i = 0; i < LINECOUNT; i++)
+                    ListView_PLC->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetCellSrial(PLC_D_PRE_CELL_SERIAL, i * LINECOUNT, 10);
+            } else {
+                for(int i = 0; i < MAXCHANNEL; i++)
+                    ListView_PLC->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetCellSrial(PLC_D_PRE_CELL_SERIAL, i, 10);
+            }
 		}
 	}
 
@@ -184,25 +235,25 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 				nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = okng_bin;
 			}
 
-			double vol1 = 0.0, vol2 = 0.0;
-			// PRECHARGE RESULT VOLTAGE VALUE
-//			for(int i = 0; i < MAXCHANNEL; i++)
-//			{
-//				vol1 = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_VOLTAGE_VALUE + i);
-//                nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = vol1;
-//			}
-            for(int i = 0; i < LINECOUNT; i++)
-        		ListView_PC->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetVoltValue(PC_D_PRE_VOLTAGE_VALUE, i * LINECOUNT);
+            if(chkAllData->Checked == false) {
+                // PRECHARGE RESULT VOLTAGE VALUE
+                for(int i = 0; i < LINECOUNT; i++)
+                    ListView_PC->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetVoltValue(PC_D_PRE_VOLTAGE_VALUE, i * LINECOUNT);
 
 
-			// PRECHARGE RESULT CURRENT VALUE
-//			for(int i = 0; i < MAXCHANNEL; i++)
-//			{
-//				nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1]
-//					= Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Curr_Data, PC_D_PRE_CURRENT_VALUE + i);
-//			}
-            for(int i = 0; i < LINECOUNT; i++)
-	        	ListView_PC->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetCurrValue(PC_D_PRE_CURRENT_VALUE, i * LINECOUNT);
+                // PRECHARGE RESULT CURRENT VALUE
+                for(int i = 0; i < LINECOUNT; i++)
+                    ListView_PC->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetCurrValue(PC_D_PRE_CURRENT_VALUE, i * LINECOUNT);
+            } else {
+                // PRECHARGE RESULT VOLTAGE VALUE
+                for(int i = 0; i < MAXCHANNEL; i++)
+                    ListView_PC->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetVoltValue(PC_D_PRE_VOLTAGE_VALUE, i);
+
+
+                // PRECHARGE RESULT CURRENT VALUE
+                for(int i = 0; i < MAXCHANNEL; i++)
+                    ListView_PC->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetCurrValue(PC_D_PRE_CURRENT_VALUE, i);
+            }
 		}
 	}
 }
@@ -266,6 +317,16 @@ void __fastcall TForm_PLCInterface::btnWriteIrOcvValueClick(TObject *Sender)
 	{
 		double current = static_cast<int32_t>(current_base * 10.0) + i;
 		Mod_PLC->SetCurrValue(PC_D_PRE_CURRENT_VALUE, i, current);
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm_PLCInterface::chkAllDataClick(TObject *Sender)
+{
+    //BaseForm->FormCnt
+	for(int i = 0; i < 1; i++){
+		SetListViewPLC(i);
+		SetListViewPC(i);
 	}
 }
 //---------------------------------------------------------------------------
