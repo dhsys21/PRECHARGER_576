@@ -35,6 +35,7 @@ void __fastcall TTotalForm::WriteSystemInfo()
 	ini->WriteString("PRECHARGER", "PORT", editPRECHARGERPort->Text);
 
     ini->WriteString("CELLINFO", "MODELNAME", editModelName->Text);
+    ini->WriteString("PASSWORD", "PWD", editPwd->Text);
 
 	delete ini;
 }
@@ -84,8 +85,7 @@ bool __fastcall TTotalForm::ReadSystemInfo()
     }
 
     editModelName->Text = ini->ReadString("CELLINFO", "MODELNAME", "20PQ");
-
-    //btnConnectPRECHARGERClick(this);
+    editPwd->Text = ini->ReadString("PASSWORD", "PWD", "0000");
 
 	delete ini;
 }
@@ -537,12 +537,12 @@ void __fastcall TTotalForm::WriteRemeasureInfo()	// Tray가 Vacancy 상태일때 기록
     RemeasureAlarm(nRemeasureAlarmCount);
 
 	ini->WriteInteger(title, "REMEASURE_ALARM_COUNT", editRemeasureAlarmCount->Text.ToIntDef(3));
-	ini->WriteString(title, "TOTAL_USE", strNg);
-	ini->WriteString(title, "NG", strTotalUse);
+	ini->WriteString(title, "TOTAL_USE", strTotalUse);
+	ini->WriteString(title, "NG", strNg);
     ini->WriteString(title, "CONSECUTIVE_NG", strConsNg);
     ini->WriteString(title, "PREV_NG", strPrevNg);
 	ini->WriteString(title, "ACCMULATE_DAY", acc_init);
-	ini->WriteInteger(title, "ACC_CNT", acc_cnt);
+	ini->WriteInteger(title, "ACC_CNT", acc_cnt); //* 이 버전에서는 안쓰는 변수
 
 	delete ini;
 }
@@ -550,13 +550,11 @@ void __fastcall TTotalForm::WriteRemeasureInfo()	// Tray가 Vacancy 상태일때 기록
 void __fastcall TTotalForm::RemeasureAlarm(int remeasure_alarm_count)
 {
 	if(remeasure_alarm_count > 0) {
-		//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_NG_ALARM, 1);
         Mod_PLC->SetPcValue(PC_D_PRE_NG_ALARM, 1);
 		btnNgInfo->Color = clRed;
 		lblRemeasureAlarmCheck->Visible = true;
 	}
 	else{
-        //Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_NG_ALARM, 0);
         Mod_PLC->SetPcValue(PC_D_PRE_NG_ALARM, 0);
 		btnNgInfo->Color = clWhite;
 		lblRemeasureAlarmCheck->Visible = false;

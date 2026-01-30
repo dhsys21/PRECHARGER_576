@@ -490,9 +490,11 @@ void __fastcall TMeasureInfoForm::btnStopClick(TObject *Sender)
 {
 	BaseForm->nForm[stage]->Timer_ManualInspection->Enabled = false;
     BaseForm->nForm[stage]->CmdStop();
-    if(BaseForm->WaitForMilliSeconds(1000) == true){
-        BaseForm->nForm[stage]->CmdAutoStop(BaseForm->nForm[stage]->nTrayPos);
-	}
+//    if(BaseForm->WaitForMilliSeconds(1000) == true){
+//        BaseForm->nForm[stage]->CmdAutoStop(BaseForm->nForm[stage]->nTrayPos);
+//	}
+    WaitForMilliSeconds(1000);
+    BaseForm->nForm[stage]->CmdAutoStop(BaseForm->nForm[stage]->nTrayPos);
 
 	if(BaseForm->nForm[stage]->Timer_Reset->Enabled == true)
 		BaseForm->nForm[stage]->Timer_Reset->Enabled = false;
@@ -580,7 +582,7 @@ void __fastcall TMeasureInfoForm::btnDisChargeSetClick(TObject *Sender)
     BaseForm->nForm[stage]->SetSystemInfo();
 
     BaseForm->nForm[stage]->CmdDischargeSetStep();
-    BaseForm->WaitForMilliSeconds(1000);
+    WaitForMilliSeconds(1000);
     BaseForm->nForm[stage]->CmdEna();
 }
 //---------------------------------------------------------------------------

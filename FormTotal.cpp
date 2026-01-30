@@ -2435,10 +2435,10 @@ void __fastcall TTotalForm::lblChargingProcessDblClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnConfigClick(TObject *Sender)
 {
-	pnlConfig->Visible = !pnlConfig->Visible;
-    pnlConfig->BringToFront();
-	pnlConfig->Left = 20;
-    pnlConfig->Top = 60;
+    pPassword->Visible = !pPassword->Visible;
+    pPassword->Left = 299;
+    pPassword->Top = 48;
+    nPwdIndex = 1;
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnConnectPLCClick(TObject *Sender)
@@ -2455,15 +2455,10 @@ void __fastcall TTotalForm::btnDisConnectPLCClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnNgInfoClick(TObject *Sender)
 {
-    RemeasureForm->stage            = this->Tag;
-	RemeasureForm->acc_remeasure 	= acc_remeasure;
-    RemeasureForm->acc_totaluse     = acc_totaluse;
-    RemeasureForm->acc_consng       = acc_consng;
-	RemeasureForm->acc_init 		= &acc_init;
-	RemeasureForm->acc_cnt			= &acc_cnt;
-
-	RemeasureForm->pstage->Caption	= lblTitle->Caption;
-	RemeasureForm->Visible = true;
+    pPassword->Visible = !pPassword->Visible;
+    pPassword->Left = 371;
+    pPassword->Top = 175;
+    nPwdIndex = 2;
 }
 //---------------------------------------------------------------------------
 // 수동 전지 검사
@@ -2705,6 +2700,46 @@ void __fastcall TTotalForm::Edit1KeyPress(TObject *Sender, System::WideChar &Key
 	}
 }
 //---------------------------------------------------------------------------
+void __fastcall TTotalForm::PasswordBtnClick(TObject *Sender)
+{
+    WideString message = Form_Language->msgInvalidPwd;
+	if(PassEdit->Text == "0000"){
+        if(nPwdIndex == 1){
+            ShowConfigPanel();
+        } else if(nPwdIndex == 2){
+            ShowRemeasurePanel();
+        }
+        PassEdit->Text = "";
+        pPassword->Visible = false;
+	}
+	else{
+		MessageBox(Handle, message.c_bstr(), L"ERROR", MB_OK|MB_ICONERROR);
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::ShowConfigPanel()
+{
+    pnlConfig->Visible = !pnlConfig->Visible;
+    pnlConfig->BringToFront();
+    pnlConfig->Left = 20;
+    pnlConfig->Top = 60;
+}
+void __fastcall TTotalForm::ShowRemeasurePanel()
+{
+    RemeasureForm->stage            = this->Tag;
+	RemeasureForm->acc_remeasure 	= acc_remeasure;
+    RemeasureForm->acc_totaluse     = acc_totaluse;
+    RemeasureForm->acc_consng       = acc_consng;
+	RemeasureForm->acc_init 		= &acc_init;
+	RemeasureForm->acc_cnt			= &acc_cnt;
 
-
+	RemeasureForm->pstage->Caption	= lblTitle->Caption;
+	RemeasureForm->Visible = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::cancelBtn2Click(TObject *Sender)
+{
+    pPassword->Visible = false;
+}
+//---------------------------------------------------------------------------
 

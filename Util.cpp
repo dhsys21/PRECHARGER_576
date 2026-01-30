@@ -1,12 +1,25 @@
 //---------------------------------------------------------------------------
 
 #pragma hdrstop
+#include <DateUtils.hpp>
 
 #include "Util.h"
 #include "RVMO_main.h"
+
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
-AnsiString getSettingValue(AnsiString str, int nIndex)
+
+bool __fastcall WaitForMilliSeconds(int milliseconds)
+{
+    TDateTime startTime = Now();
+
+    while (MilliSecondsBetween(Now(), startTime) < milliseconds)
+    {
+        Application->ProcessMessages();  // UI가 멈추지 않도록 함
+    }
+    return true;
+}
+AnsiString __fastcall getSettingValue(AnsiString str, int nIndex)
 {
     AnsiString setval = "";
     TStringList *tokens = new TStringList;
@@ -149,7 +162,7 @@ AnsiString GetChPosR(int* chReverseMap, int index, AnsiString type)
     return IntToStr((rch - 1) % LINECOUNT + 1);
 }
 //---------------------------------------------------------------------------
-void OpenFolder(UnicodeString path)
+void __fastcall OpenFolder(UnicodeString path)
 {
 	 ShellExecute(NULL, L"open", path.c_str(), NULL, NULL, SW_SHOW);
 }

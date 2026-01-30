@@ -244,6 +244,13 @@ __published:	// IDE-managed Components
 	TAdvSmoothPanel *pnlTrayPos1;
 	TAdvSmoothPanel *pnlTrayPos2;
 	TAdvSmoothPanel *AdvSmoothPanel4;
+	TPanel *pPassword;
+	TPanel *Panel61;
+	TEdit *PassEdit;
+	TAdvSmoothButton *cancelBtn2;
+	TAdvSmoothButton *PasswordBtn;
+	TGroupBox *GroupBox8;
+	TEdit *editPwd;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnSaveConfigClick(TObject *Sender);
 	void __fastcall BitmapBtn5Click(TObject *Sender);
@@ -284,6 +291,8 @@ __published:	// IDE-managed Components
 	void __fastcall pnlTrayPosClick(TObject *Sender);
 	void __fastcall Edit1KeyPress(TObject *Sender, System::WideChar &Key);
 	void __fastcall btnDisconnPRECHARGERClick(TObject *Sender);
+	void __fastcall PasswordBtnClick(TObject *Sender);
+	void __fastcall cancelBtn2Click(TObject *Sender);
 
 private:	// User declarations
 //---------------------------------------------------------------------------
@@ -485,6 +494,8 @@ public:		// User declarations
 	void __fastcall SetTrayID(AnsiString str_id);
 	AnsiString __fastcall GetStatus(AnsiString status);
     void __fastcall ShowPLCSignal(TAdvSmoothPanel *advPanel, bool bOn);
+    void __fastcall ShowConfigPanel();
+    void __fastcall ShowRemeasurePanel();
 
 	int cnt;
 	int acc_remeasure[MAXCHANNEL]; // ng count
@@ -496,6 +507,7 @@ public:		// User declarations
 	int chMap[MAXCHANNEL + 1];
 	int chReverseMap[MAXCHANNEL + 1];
     int nTrayPos;
+    int nPwdIndex;
 
 	double curr_min;
 	TDateTime dt1StartTime, dt1FinishTime, dt1CurrentTime;

@@ -10,7 +10,8 @@
 //---------------------------------------------------------------------------
 #include "define.h"
 
-AnsiString getSettingValue(AnsiString str, int nIndex);
+bool __fastcall WaitForMilliSeconds(int milliseconds);
+AnsiString __fastcall getSettingValue(AnsiString str, int nIndex);
 int __fastcall StringToInt(UnicodeString str, int def);
 double __fastcall StringToDouble(UnicodeString str, double def);
 bool compareChannelInfoByMappedChannel(const CHANNELINFO& a, const CHANNELINFO& b);
@@ -25,4 +26,4 @@ AnsiString GetChPosF(int* chReverseMap, int index, AnsiString type);
 AnsiString GetChPosR(int index);
 AnsiString GetChPosR(int stage, int index, AnsiString type);
 AnsiString GetChPosR(int* chReverseMap, int index, AnsiString type);
-void OpenFolder(UnicodeString path);
+void __fastcall OpenFolder(UnicodeString path);

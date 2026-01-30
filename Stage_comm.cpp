@@ -71,6 +71,7 @@ void __fastcall TTotalForm::CmdTrayOut()
 		WriteResultFile();
     }
 
+    WaitForMilliSeconds(1500);
     Mod_PLC->SetPcValue(PC_D_PRE_DATA_WRITE, 1);
 
     Sleep(100);
@@ -96,6 +97,7 @@ void __fastcall TTotalForm::CmdTrayOut_Original()
 	WriteVoltCurrValue();
     WriteResultFile();
 
+    WaitForMilliSeconds(1500);
     Mod_PLC->SetPcValue(PC_D_PRE_DATA_WRITE, 1);
 }
 //--------------------------------------------------------------------------

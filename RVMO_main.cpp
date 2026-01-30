@@ -275,34 +275,6 @@ void __fastcall TBaseForm::btnDisConnectPLCClick(TObject *Sender)
 //---------------------------------------------------------------------------
 //--------------------- 함수 정리  ------------------------------------------
 //---------------------------------------------------------------------------
-//double __fastcall TBaseForm::HexToDouble(UnicodeString str, int def)
-//{
-//    double dVal;
-//
-//}bool __fastcall TBaseForm::WaitForMilliSeconds(int milliseconds)
-{
-    TDateTime startTime = Now();
-
-    while (MilliSecondsBetween(Now(), startTime) < milliseconds)
-    {
-        Application->ProcessMessages();  // UI가 멈추지 않도록 함
-    }
-    return true;
-}
-//int __fastcall TBaseForm::StringToInt(UnicodeString str, int def)
-//{
-//	int iVal;
-//	if(TryStrToInt(str, iVal) == true) return iVal;
-//	else return def;
-//}
-//---------------------------------------------------------------------------
-//double __fastcall TBaseForm::StringToDouble(UnicodeString str, double def)
-//{
-//	double dVal;
-//	if(TryStrToFloat(str, dVal) == true) return dVal;
-//	else return def;
-//}
-//---------------------------------------------------------------------------
 vector<int> __fastcall TBaseForm::StringToVector(UnicodeString str)
 {
 	vector<int> numbers;
@@ -498,8 +470,14 @@ void __fastcall TBaseForm::Button1Click(TObject *Sender)
 {
 //    nForm[0]->tray.trayid = "12345678";
 //    nForm[0]->ReadResultFile(1);
-    if(Form_ErrorSet->Visible == false)
-	    Form_ErrorSet->DisplayErrorMessage(0);
+//    if(Form_ErrorSet->Visible == false)
+//	    Form_ErrorSet->DisplayErrorMessage(0);
+
+//      Button1->Caption = "0";
+//      WaitForMilliSeconds(1000);
+//      Button1->Caption = "1000";
+
+    nForm[0]->CmdTrayOut();
 }
 //---------------------------------------------------------------------------
 
