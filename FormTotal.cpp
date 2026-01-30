@@ -626,8 +626,9 @@ bool __fastcall TTotalForm::ErrorCheck_Manual()
         DisplayError(ErrorCheckStatus, true);
     }
 
-	if(charge[0].volt == 0 || charge[0].curr == 0 || charge[0].time == 0
-		|| charge[1].volt == 0 || charge[1].curr == 0 || charge[1].time == 0){
+	AnsiString setval = lblSet1->Caption;
+	if(getSettingValue(setval, 1) == "0mV" || getSettingValue(setval, 2) == "0mA"
+    	|| getSettingValue(setval, 3) == "0s"){
         ErrorCheckStatus = "No Setting Values.";
         DisplayError(ErrorCheckStatus, true);
     }
