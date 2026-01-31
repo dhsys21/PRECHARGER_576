@@ -576,7 +576,7 @@ bool __fastcall TTotalForm::ErrorCheck()
 		return true;
 	}
 
-    if(stage.arl == nAuto && Mod_PLC->GetPcValue(PC_D_PRE_STAGE_AUTO_READY) == 0)
+    if(stage.arl == nLocal && Mod_PLC->GetPcValue(PC_D_PRE_STAGE_AUTO_READY) == 0)
     {
         DisplayError("PRECHARGER is not in AutoMode", true);
 		return true;
