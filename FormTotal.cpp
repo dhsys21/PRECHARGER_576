@@ -582,9 +582,9 @@ bool __fastcall TTotalForm::ErrorCheck()
 		return true;
     }
 
-    //* PC Error 처리 후 PLC 에러 확인
-    if(Mod_PLC->GetPcValue(PC_D_PRE_ERROR) == 1)
-    	Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
+    //* PC Error 처리 후 PLC 에러 확인  - 자동모드에서 문제발생. 코드 삭제
+//    if(Mod_PLC->GetPcValue(PC_D_PRE_ERROR) == 1)
+//    	Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
 
 	if(Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_ERROR))
 	{
@@ -1010,6 +1010,8 @@ void __fastcall TTotalForm::AutoInspection_Finish()
                 Mod_PLC->SetPcValue(PC_D_PRE_TRAY_OUT, 0);
                 Mod_PLC->SetPcValue(PC_D_PRE_PROB_OPEN, 0);
                 Mod_PLC->SetPcValue(PC_D_PRE_PROB_CLOSE, 0);
+                Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE1, 0);
+                Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE2, 0);
                 Mod_PLC->SetPcValue(PC_D_PRE_DATA_WRITE, 0);
 
 				DisplayProcess(sTrayOut, "AutoInspection_Finish", "[STEP 0] PreCharger Tray Out ... ");
