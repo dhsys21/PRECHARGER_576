@@ -461,6 +461,8 @@ void __fastcall TTotalForm::Timer_PLCConnectTimer(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
 {
+    if(ErrorCheck()) return;
+
 	if(stage.arl == nAuto && Mod_PLC->GetPcValue(PC_D_PRE_STAGE_AUTO_READY) == 0){
         Mod_PLC->SetPcValue(PC_D_PRE_STAGE_AUTO_READY, 1);
 		PreChargerStatus = "PreCharger STAGE AUTO READY = 1";
@@ -470,21 +472,6 @@ void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
         Mod_PLC->SetPcValue(PC_D_PRE_STAGE_AUTO_READY, 0);
 		PreChargerStatus = "PreCharger STAGE AUTO READY = 0";
 		WritePLCLog("PreCharger STAGE AUTO/MANUAL", PreChargerStatus);
-	}
-
-    if(ErrorCheck())
-	{
-		Panel_State->Color = clRed;
-		Panel_State->Font->Color = clWhite;
-		return;
-	}
-	else
-	{
-		Panel_State->Caption = "";
-		Panel_State->Color = clWhite;
-		Panel_State->Font->Color = clBlack;
-
-        BaseForm->advPLCInterfaceShow->Color = clWhite;
 	}
 
 	if(stage.arl == nAuto && BaseForm->nForm[0]->Client->Active == true)
@@ -589,6 +576,16 @@ bool __fastcall TTotalForm::ErrorCheck()
 		return true;
 	}
 
+    if(stage.arl == nAuto && Mod_PLC->GetPcValue(PC_D_PRE_STAGE_AUTO_READY) == 0)
+    {
+        DisplayError("PRECHARGER is not in AutoMode", true);
+		return true;
+    }
+
+    //* PC Error 처리 후 PLC 에러 확인
+    if(Mod_PLC->GetPcValue(PC_D_PRE_ERROR) == 1)
+    	Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
+
 	if(Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data, PLC_D_PRE_ERROR))
 	{
 		ErrorCheckStatus = "PLC - Error!!";
@@ -602,9 +599,9 @@ bool __fastcall TTotalForm::ErrorCheck()
 
 		return true;
 	}
+    else
+        BaseForm->advPLCInterfaceShow->Color = clWhite;
 
-    if(Mod_PLC->GetPcValue(PC_D_PRE_ERROR) == 1)
-    	Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
 	return false;
 }
 //---------------------------------------------------------------------------
@@ -1329,6 +1326,9 @@ void __fastcall TTotalForm::StatusTimerTimer(TObject *Sender)
 
     if(Mod_PLC->GetPlcValue(PLC_D_PRE_PROB_CLOSE) == 1) ShowSignal(pnlProbeClose, true);
     else ShowSignal(pnlProbeClose, false);
+
+    if(Mod_PLC->GetPlcValue(PLC_D_AUTO_MANUAL) == 1) ShowSignal(pnlPlcAuto, true);
+    else ShowSignal(pnlPlcAuto, false);
 
     //* PC 신호 표시
     if(Mod_PLC->GetPcValue(PC_D_PRE_TRAY_OUT) == 1) ShowSignal(pnlTrayOut, true);
