@@ -35,12 +35,12 @@ void __fastcall TMeasureInfoForm::FormShow(TObject *Sender)
 
     chartVoltage->Width = 998;
     chartVoltage->Height = 433;
-    chartVoltage->Left = pnl_nw + 4;
+    chartVoltage->Left = 4;
     chartVoltage->Top = pnl_nh + 6;
 
     chartCurrent->Width = 998;
     chartCurrent->Height = 433;
-    chartCurrent->Left = pnl_nw + 4;
+    chartCurrent->Left = 4;
     chartCurrent->Top = chartVoltage->Height + pnl_nh + 8;
 
     //* 기본 색상
@@ -231,6 +231,8 @@ void __fastcall TMeasureInfoForm::SetChannelInfo(int traypos)
 void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)
 {
 	int nx, ny, nw, nh;
+    int pUIy_nx;
+    int pUIx_ny;
 
     nw = pnl_nw;
 	nh = pnl_nh + 1;
@@ -241,7 +243,7 @@ void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)
 	clocv->Height = nh/2;
 
 	clir->Top = 2;
-	clocv->Top = clir->Height +4;
+	clocv->Top = clir->Height + 4;
 
     if(type == "1"){
         ny = Panel2->Height - (nh) - 2;
@@ -306,14 +308,22 @@ void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)
         }
     }
     else if(type == "4"){
-        ny = nh + 4;
-        nx = Panel2->Width - (nw + 2);;
+        clir->Left = Panel2->Width - (clir->Width + 4);
+        clocv->Left = Panel2->Width - (clocv->Width + 4);
+
+        //* 가로열의 y값 - 가로는 nx가 바뀜
+        pUIx_ny = Panel35->Top;
+        //* 세로열의 x값 - 세로는 ny가 바뀜
+        pUIy_nx = clir->Left;
+
+        ny = nh + 5;
+        nx = clir->Left - (clir->Width + 4);
         for(int index = 0; index < LINECOUNT;){
             pUIx[index] = new TPanel(this);
             pUIy[index] = new TPanel(this);
 
-            SetUIOption(pUIx[index], nx, Panel35->Top, nw, nh, index);
-            SetUIOption(pUIy[index], 2, ny, nw, nh, index);
+            SetUIOption(pUIx[index], nx, pUIx_ny, nw, nh, index);
+            SetUIOption(pUIy[index], pUIy_nx, ny, nw, nh, index);
             pUIx[index]->ParentBackground = false;
             pUIy[index]->ParentBackground = false;
 

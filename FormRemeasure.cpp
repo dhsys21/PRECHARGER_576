@@ -219,6 +219,8 @@ void __fastcall TRemeasureForm::MakePanel(AnsiString type)
 void __fastcall TRemeasureForm::MakeUIPanel(AnsiString type)
 {
 	int nx, ny, nw, nh;
+    int pUIy_nx;
+    int pUIx_ny;
 
 	nw = pnl_nw;
 	nh = pnl_nh + 1;
@@ -292,16 +294,23 @@ void __fastcall TRemeasureForm::MakeUIPanel(AnsiString type)
         }
     }
     else if(type == "4"){
-        ny = nh + 4;
-        nx = Panel2->Width - (nw + 2);;
+        Panel1->Left = Panel2->Width - (Panel1->Width + 4);
+
+        //* 가로열의 y값 - 가로는 nx가 바뀜
+        pUIx_ny = Panel35->Top;
+        //* 세로열의 x값 - 세로는 ny가 바뀜
+        pUIy_nx = Panel1->Left;
+
+        ny = nh + 5;
+        nx = Panel1->Left - (Panel1->Width + 4);
         for(int index = 0; index < LINECOUNT;){
             if(pUIy[index] != NULL && pUIy[index] != NULL) return;
 
             pUIx[index] = new TPanel(this);
             pUIy[index] = new TPanel(this);
 
-            SetUIOption(pUIx[index], nx, Panel35->Top, nw, nh, index);
-            SetUIOption(pUIy[index], 2, ny, nw, nh, index);
+            SetUIOption(pUIx[index], nx, pUIx_ny, nw, nh, index);
+            SetUIOption(pUIy[index], pUIy_nx, ny, nw, nh, index);
             pUIx[index]->ParentBackground = false;
             pUIy[index]->ParentBackground = false;
 
