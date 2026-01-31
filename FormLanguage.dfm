@@ -60,6 +60,11 @@ object Form_Language: TForm_Language
       'FAIL='#48520#47049
       'OUTFLOW='#49472' '#50976#52636
       'NOCELL='#49472' '#50630#51020
+      'CHANNEL='#52292#45328
+      'POS='#50948#52824
+      'TOTALUSE='#51204#52404#54943#49688
+      'CONSNG='#50672#49549' NG'
+      'TOTALNG='#51204#52404' NG'
       'msgWDTMode=PRECHARGER'#44032' WDT '#47784#46300#51077#45768#45796'. RESET '#54616#49464#50836'.'
       'msgNoSetValues='#49483#54021#44050#51060' '#50630#49845#45768#45796'.'
       'msgPLCConnFail=PLC - PC '#50672#44208' '#49892#54056'.'
@@ -82,6 +87,11 @@ object Form_Language: TForm_Language
       150
       148)
     RowHeights = (
+      18
+      18
+      18
+      18
+      18
       18
       18
       18
@@ -189,6 +199,11 @@ object Form_Language: TForm_Language
       'FAIL=FAIL'
       'OUTFLOW=OUTFLOW'
       'NOCELL=NO CELL'
+      'CHANNEL=CHANNEL'
+      'POS=POS'
+      'TOTALUSE=Total Use'
+      'CONSNG=Cons. NG'
+      'TOTALNG=Total NG'
       'msgWDTMode=PRECHARGER is WDT Mode. Please [RESET] it.'
       'msgNoSetValues=No Setting Values.'
       'msgPLCConnFail=PLC - PC Connection Fail.'
@@ -213,6 +228,11 @@ object Form_Language: TForm_Language
       150
       148)
     RowHeights = (
+      18
+      18
+      18
+      18
+      18
       18
       18
       18
@@ -320,6 +340,11 @@ object Form_Language: TForm_Language
       'FAIL='#38169#35823
       'OUTFLOW=CELL'#27969#20986
       'NOCELL='#26080' CELL'
+      'CHANNEL='#36890#36947
+      'POS='#20301#32622
+      'TOTALUSE='#24635#20351#29992#37327
+      'CONSNG='#36830#32493'NG'
+      'TOTALNG='#24635'NG'
       'msgWDTMode=PRECHARGER '#22788#20110' WDT '#27169#24335#12290#35831#12304#37325#32622#12305#12290
       'msgNoSetValues='#27809#26377#35774#32622#20540#12290
       'msgPLCConnFail=PLC '#19982' PC '#36830#25509#22833#36133#12290
@@ -342,6 +367,11 @@ object Form_Language: TForm_Language
       150
       148)
     RowHeights = (
+      18
+      18
+      18
+      18
+      18
       18
       18
       18

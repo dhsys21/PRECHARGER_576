@@ -177,7 +177,6 @@ __published:	// IDE-managed Components
 	TPanel *Panel19;
 	TPanel *pStatus;
 	TAdvSmoothPanel *pnlTrayIn;
-	TAdvSmoothPanel *pnlTrayOut;
 	TAdvSmoothPanel *pnlProbeClose;
 	TAdvSmoothPanel *pnlProbeOpen;
 	TPanel *Panel8;
@@ -251,6 +250,9 @@ __published:	// IDE-managed Components
 	TAdvSmoothButton *PasswordBtn;
 	TGroupBox *GroupBox8;
 	TEdit *editPwd;
+	TAdvSmoothPanel *pnlTrayOut;
+	TAdvSmoothPanel *pnlPcError;
+	TAdvSmoothPanel *pnlDataWrite;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnSaveConfigClick(TObject *Sender);
 	void __fastcall BitmapBtn5Click(TObject *Sender);
@@ -495,7 +497,7 @@ public:		// User declarations
 	void __fastcall ShowAlarm(AnsiString err1, AnsiString err2, AnsiString err3 , AnsiString err4);
 	void __fastcall SetTrayID(AnsiString str_id);
 	AnsiString __fastcall GetStatus(AnsiString status);
-    void __fastcall ShowPLCSignal(TAdvSmoothPanel *advPanel, bool bOn);
+    void __fastcall ShowSignal(TAdvSmoothPanel *advPanel, bool bOn);
     void __fastcall ShowConfigPanel();
     void __fastcall ShowRemeasurePanel();
 
