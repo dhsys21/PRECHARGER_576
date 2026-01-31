@@ -67,6 +67,27 @@ int GetChannel(int trayPos, int index)
     return offset + index + 1;
 }
 //---------------------------------------------------------------------------
+int __fastcall GetPaired(int stage, int nIndex)
+{
+    int rch = BaseForm->nForm[stage]->chReverseMap[nIndex + 1];
+    //* chReverseMap을 사용해서 계산
+    if(rch >= 289) rch  = rch - 288;
+    else rch = rch + 288;
+    int paired = BaseForm->nForm[stage]->chMap[rch];
+
+    return paired;
+}
+//---------------------------------------------------------------------------
+int __fastcall GetBoardNo(int stage, int nIndex)
+{
+    int reversechannel = BaseForm->nForm[stage]->chReverseMap[nIndex + 1];
+    //* chReverseMap을 사용해서 계산
+    if(reversechannel >= 289) reversechannel  = reversechannel - 288;
+    int board_no = (reversechannel - 1) / LINECOUNT + 1;
+
+    return board_no;
+}
+//---------------------------------------------------------------------------
 AnsiString SetChannelHint(int reversechannel)
 {
     AnsiString hint = "";

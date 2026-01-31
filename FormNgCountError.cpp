@@ -90,7 +90,7 @@ void __fastcall TForm_NgCountError::btnOKClick(TObject *Sender)
 {
     Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
 	BaseForm->nForm[stage]->Initialization();
-	BaseForm->nForm[stage]->WritePLCLog("RESTART", "NG TRAY RESTART");
+	BaseForm->nForm[stage]->WritePLCLog("RESTART", "NG TRAY RESTART. Initialization()");
     BaseForm->nForm[stage]->CmdForceStop_Original();
 	timerErrorOff->Enabled = true;
 }

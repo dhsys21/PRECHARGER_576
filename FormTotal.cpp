@@ -50,6 +50,7 @@ void __fastcall TTotalForm::FormShow(TObject *Sender)
 
 	ReadSystemInfo();
 	Initialization();
+    WritePLCLog("FormShow", "Initialization()");
 
 	Timer_PLCConnect->Enabled = true;
 	//btnConnectPRECHARGERClick(this);
@@ -677,6 +678,7 @@ void __fastcall TTotalForm::AutoInspection_Wait()
 
 					m_dateTime = Now();
 					Initialization();
+                    DisplayProcess(sTrayIn, "AutoInspection_Wait", "[STEP 0] Initialization ...");
 					nStep = 1;
 				}
 			}
@@ -2657,7 +2659,7 @@ void __fastcall TTotalForm::btnSaveConfigClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnInitClick(TObject *Sender)
 {
-	WritePLCLog("Init", "Initialization()");
+	WritePLCLog("Init Button", "Initialization()");
 
 	Initialization();
 }

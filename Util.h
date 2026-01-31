@@ -27,3 +27,5 @@ AnsiString GetChPosR(int index);
 AnsiString GetChPosR(int stage, int index, AnsiString type);
 AnsiString GetChPosR(int* chReverseMap, int index, AnsiString type);
 void __fastcall OpenFolder(UnicodeString path);
+int __fastcall GetPaired(int stage, int nIndex);
+int __fastcall GetBoardNo(int stage, int nIndex);
