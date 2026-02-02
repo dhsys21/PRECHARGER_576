@@ -1711,10 +1711,12 @@ void __fastcall TTotalForm::BadInfomation()
 			if((tray.cell[channel] == 1) && tray.measure_result[channel] == 1)
 			{
 				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, true);
+
 				acc_remeasure[channel] += 1;   // 셀이 있고 에러일 때 count 증가
                 //* 연속 불량 확인 2025 10 13
                 if(acc_prevng[channel] == 1) acc_consng[channel] += 1;
                 acc_prevng[channel] = 1;
+
 				ngCount++;
 				NgCount++;
 			}
@@ -2636,27 +2638,19 @@ void __fastcall TTotalForm::FormClose(TObject *Sender, TCloseAction &Action)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnSaveConfigClick(TObject *Sender)
 {
-	//if(editMaxChargeCurrent->Text.ToDouble() <= 2500)
-    if(StringToDouble(editMaxChargeCurrent->Text, 1200) <= 3000)
-	{
-		if(stage.arl == nLocal && nSection == STEP_WAIT && nStep == 0)
-		{
-			WideString message = Form_Language->msgSave;
-            UnicodeString str;
-            str = "Are you sure you want to save?";
-            if(MessageBox(Handle, message.c_bstr(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
-            //    if(MessageBox(Handle, str.c_str(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
-				WriteSystemInfo();
-				WriteRemeasureInfo();
-				ReadSystemInfo();
-			}
-		}
-		else ShowMessage("You can't set up while charging.");
-	}
-	else
-	{
-		ShowMessage("Current can't be set above 3000mA.");
-	}
+    if(stage.arl == nLocal || (nSection == STEP_WAIT && nStep == 0))
+    {
+        WideString message = Form_Language->msgSave;
+        UnicodeString str;
+        str = "Are you sure you want to save?";
+        if(MessageBox(Handle, message.c_bstr(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+        //    if(MessageBox(Handle, str.c_str(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+            WriteSystemInfo();
+            WriteRemeasureInfo();
+            ReadSystemInfo();
+        }
+    }
+    else ShowMessage("You can't set up while charging.");
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnInitClick(TObject *Sender)
@@ -2785,4 +2779,5 @@ void __fastcall TTotalForm::cancelBtn2Click(TObject *Sender)
     pPassword->Visible = false;
 }
 //---------------------------------------------------------------------------
+
 

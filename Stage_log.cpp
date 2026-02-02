@@ -12,6 +12,9 @@ void __fastcall TTotalForm::WriteSystemInfo()
 	file = (AnsiString)BIN_PATH + "SystemInfo_"+ IntToStr(this->Tag) + ".inf";
 	ini = new TIniFile(file);
 
+    if(StringToDouble(editMaxChargeVolt->Text, 0) > 4200) editMaxChargeVolt->Text = 4200;
+    if(StringToDouble(editMaxChargeCurrent->Text, 0) > 5000) editMaxChargeCurrent->Text = 5000;
+
 	ini->WriteString("PRECHARGE", "MAX_VOLTAGE", editMaxChargeVolt->Text);
 	ini->WriteString("PRECHARGE", "MAX_CURRENT", editMaxChargeCurrent->Text);
 	ini->WriteString("PRECHARGE", "MAX_TIME", editMaxChargeTime->Text);

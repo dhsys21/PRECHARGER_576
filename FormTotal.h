@@ -297,6 +297,7 @@ __published:	// IDE-managed Components
 	void __fastcall PasswordBtnClick(TObject *Sender);
 	void __fastcall cancelBtn2Click(TObject *Sender);
 
+
 private:	// User declarations
 //---------------------------------------------------------------------------
 // Controller 데이터 처리
