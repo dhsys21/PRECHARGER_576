@@ -55,15 +55,16 @@ void __fastcall TForm_Error::DisplayErrorMessage(int nStage, int nError)
 {
     stage = nStage;
     AnsiString title, msg1, msg2;
-
+    WideString message, message2;
 	if(!this->Visible)
 	{
 		Timer_BringToFront->Enabled = true;
 
-		//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data,  PC_D_PRE_ERROR, 1);
         Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
 
         if(nError == nNgErr){
+            message = Form_Language->msgTooManyNG; //message.c_bstr()
+            message2 = Form_Language->msgSelectTrayOut;
             title = "PreCharger #" + IntToStr(nStage + 1) + " NG ERROR";
             msg1 = "There is too many ng cells. Please check it.";
             msg2 = "Select [Tray Out] or [Restart]";
@@ -97,9 +98,15 @@ void __fastcall TForm_Error::DisplayErrorMessage(int nStage, int nError)
             btnOK->Visible = true;
         }
 
-		Label_Title->Caption = title;
-		Label_Msg1->Caption = msg1;
-		Label_Msg2->Caption = msg2;
+        if(nError == nNgErr){
+            Label_Title->Caption = title;
+            Label_Msg1->Caption = message;
+            Label_Msg2->Caption = message2;
+        } else{
+            Label_Title->Caption = title;
+            Label_Msg1->Caption = msg1;
+            Label_Msg2->Caption = msg2;
+        }
 
 		int width = 0;
 		if(Label_Title->Width > width) width = Label_Title->Width;
@@ -177,7 +184,6 @@ void __fastcall TForm_Error::btnTrayOutClick(TObject *Sender)
 	BaseForm->nForm[this->Tag]->WritePLCLog("TRAY OUT", "NG TRAY OUT");
 	BaseForm->nForm[this->Tag]->DisplayStatus(nFinish);
 	timerErrorOff->Enabled = true;
-	//this->Close();
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm_Error::btnRestartClick(TObject *Sender)
@@ -186,7 +192,6 @@ void __fastcall TForm_Error::btnRestartClick(TObject *Sender)
 	BaseForm->nForm[this->Tag]->btnInitClick(this);
 	BaseForm->nForm[this->Tag]->WritePLCLog("RESTART", "NG TRAY RESTART");
 	timerErrorOff->Enabled = true;
-	//this->Close();
 }
 //---------------------------------------------------------------------------
 

@@ -28,6 +28,7 @@ public:		// User declarations
 	UnicodeString msgRst;
     UnicodeString msgRbt;
     UnicodeString msgTooManyNG;
+    UnicodeString msgSelectTrayOut;
     UnicodeString msgErrorSet;
     UnicodeString msgWDTMode;
 	UnicodeString msgNoSetValues;

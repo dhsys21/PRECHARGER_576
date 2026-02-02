@@ -64,6 +64,7 @@ object Form_Language: TForm_Language
       'POS='#50948#52824
       'TOTALUSE='#51204#52404#54943#49688
       'CONSNG='#50672#49549' NG'
+      'PREVNG='#51060#51204' NG'
       'TOTALNG='#51204#52404' NG'
       'msgWDTMode=PRECHARGER'#44032' WDT '#47784#46300#51077#45768#45796'. RESET '#54616#49464#50836'.'
       'msgNoSetValues='#49483#54021#44050#51060' '#50630#49845#45768#45796'.'
@@ -72,7 +73,8 @@ object Form_Language: TForm_Language
       'msgBTConnFail=BT '#50672#44208' '#49892#54056'.'
       'msgRBT=Reboot'#51008' 60'#52488' '#51221#46020' '#49548#50836#46121#45768#45796'. Reboot '#54616#49884#44192#49845#45768#44620'?'
       'msgRST=Reset'#51008' 15'#52488' '#51221#46020' '#49548#50836#46121#45768#45796'. Reset '#54616#49884#44192#49845#45768#44620'?'
-      'msgTooManyNG=NG '#49472#51060' '#45320#47924' '#47566#49845#45768#45796'. '#54869#51064#54644#51452#49464#50836
+      'msgTooManyNG=NG '#49472#51060' '#45320#47924' '#47566#49845#45768#45796'. '#54869#51064#54644#51452#49464#50836'.'
+      'msgSelectTrayOut=[TRAY OUT] / [RESTART] '#47484' '#49440#53469#54616#49464#50836'.'
       'msgErrorSet='#54788#51116' '#49444#51221' '#44050#51060' '#50732#48148#47476#51648' '#50506#49845#45768#45796'. \r\n\r\n'#45796#49884' '#49444#51221#54644' '#51452#49464#50836'.'
       'msgDelEachChRecord='#54644#45817' '#52292#45328' '#44592#47197#51012' '#49325#51228' '#54624#44620#50836'?'
       'msgDelAllChRecord='#47784#46304' '#52292#45328' '#44592#47197#51012' '#52488#44592#54868' '#54624#44620#50836'?'
@@ -87,6 +89,8 @@ object Form_Language: TForm_Language
       150
       148)
     RowHeights = (
+      18
+      18
       18
       18
       18
@@ -203,6 +207,7 @@ object Form_Language: TForm_Language
       'POS=POS'
       'TOTALUSE=Total Use'
       'CONSNG=Cons. NG'
+      'PREVNG=Prev. NG'
       'TOTALNG=Total NG'
       'msgWDTMode=PRECHARGER is WDT Mode. Please [RESET] it.'
       'msgNoSetValues=No Setting Values.'
@@ -212,6 +217,7 @@ object Form_Language: TForm_Language
       'msgRBT=Rebooting takes 60 seconds. Do you want to reboot?'
       'msgRST=Reset takes 15 seconds. Do you want to reset?'
       'msgTooManyNG=Too many NG cells. Please check it.'
+      'msgSelectTrayOut=Select [TRAY OUT] / [RESTART].'
       
         'msgErrorSet=The current settings are invalid. \r\n\r\nPlease res' +
         'et and try again.'
@@ -228,6 +234,8 @@ object Form_Language: TForm_Language
       150
       148)
     RowHeights = (
+      18
+      18
       18
       18
       18
@@ -344,6 +352,7 @@ object Form_Language: TForm_Language
       'POS='#20301#32622
       'TOTALUSE='#24635#20351#29992#37327
       'CONSNG='#36830#32493'NG'
+      'PREVNG='#19978#19968#27425' NG'
       'TOTALNG='#24635'NG'
       'msgWDTMode=PRECHARGER '#22788#20110' WDT '#27169#24335#12290#35831#12304#37325#32622#12305#12290
       'msgNoSetValues='#27809#26377#35774#32622#20540#12290
@@ -353,6 +362,7 @@ object Form_Language: TForm_Language
       'msgRBT='#37325#21551#38656#35201' 60 '#31186#12290#26159#21542#35201#37325#21551#65311
       'msgRST='#37325#32622#38656#35201' 15 '#31186#12290#26159#21542#35201#37325#32622#65311
       'msgTooManyNG=NG '#30005#33455#25968#37327#36807#22810#12290#35831#26816#26597#12290
+      'msgSelectTrayOut='#35831#36873#25321'[TRAY OUT] / [RESTART]'#12290
       'msgErrorSet='#24403#21069#35774#32622#26080#25928#12290'\r\n\r\n'#35831#37325#32622#21518#37325#35797#12290
       'msgDelEachChRecord='#26159#21542#35201#21021#22987#21270#35813#36890#36947#30340#35760#24405#65311
       'msgDelAllChRecord='#26159#21542#35201#21021#22987#21270#25152#26377#36890#36947#65311
@@ -367,6 +377,8 @@ object Form_Language: TForm_Language
       150
       148)
     RowHeights = (
+      18
+      18
       18
       18
       18

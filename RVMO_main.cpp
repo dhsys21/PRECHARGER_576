@@ -422,11 +422,7 @@ void __fastcall TBaseForm::rbKoreanClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TBaseForm::btnNgCountErrClick(TObject *Sender)
 {
-    AnsiString stagename = "STAGE " + IntToStr(this->Tag + 1);
-    WideString message = Form_Language->msgTooManyNG;
-    Form_NgCountError->DisplayErrorMessage(stagename + " NG ERROR",
-                                        message.c_bstr(),
-                                        "Click [OK] button.", this->Tag);
+    Form_Error->DisplayErrorMessage(this->Tag, nNgErr);
 }
 //---------------------------------------------------------------------------
 void __fastcall TBaseForm::lblTitleClick(TObject *Sender)

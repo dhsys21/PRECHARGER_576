@@ -2772,6 +2772,7 @@ void __fastcall TTotalForm::ShowRemeasurePanel()
 	RemeasureForm->acc_remeasure 	= acc_remeasure;
     RemeasureForm->acc_totaluse     = acc_totaluse;
     RemeasureForm->acc_consng       = acc_consng;
+    RemeasureForm->acc_prevng       = acc_prevng;
 	RemeasureForm->acc_init 		= &acc_init;
 	RemeasureForm->acc_cnt			= &acc_cnt;
 

@@ -444,6 +444,7 @@ void __fastcall TRemeasureForm::ChInfoMouseEnter(TObject *Sender)
 
     pnlTotalUse->Caption = acc_totaluse[index];
     pnlConsNg->Caption = acc_consng[index];
+    pnlPrevNg->Caption = acc_prevng[index];
     pnlTotalNg->Caption = acc_remeasure[index];
 }
 //---------------------------------------------------------------------------
