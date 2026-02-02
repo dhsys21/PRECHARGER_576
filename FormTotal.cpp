@@ -979,7 +979,7 @@ void __fastcall TTotalForm::AutoInspection_Measure()
         case 9:
             write_delay_time++;
             //* NG 갯수 확인 및 Tray Out
-            if(write_delay_time > 5){
+            if(write_delay_time > 3){
                 write_delay_time = 0;
                 DisplayProcess(sFinish, "AutoInspection_Measure", "[STEP 9] PreCharger Finish. Tray Out ... ");
 				CmdTrayOut();
@@ -1335,6 +1335,9 @@ void __fastcall TTotalForm::StatusTimerTimer(TObject *Sender)
     //* PC 신호 표시
     if(Mod_PLC->GetPcValue(PC_D_PRE_TRAY_OUT) == 1) ShowSignal(pnlTrayOut, true);
     else ShowSignal(pnlTrayOut, false);
+
+    if(Mod_PLC->GetPcValue(PC_D_PRE_PROB_CLOSE) == 1) ShowSignal(pnlProbeClose_PC, true);
+    else ShowSignal(pnlProbeClose_PC, false);
 
     if(Mod_PLC->GetPcValue(PC_D_PRE_DATA_WRITE) == 1) ShowSignal(pnlDataWrite, true);
     else ShowSignal(pnlDataWrite, false);

@@ -478,8 +478,8 @@ object TotalForm: TTotalForm
           TabOrder = 3
         end
         object chkCycle: TCheckBox
-          Left = 95
-          Top = 5
+          Left = 117
+          Top = 2
           Width = 92
           Height = 16
           Caption = 'TEST MODE'
@@ -496,8 +496,8 @@ object TotalForm: TTotalForm
           OnMouseUp = chkBypassMouseUp
         end
         object chkBypass: TCheckBox
-          Left = 189
-          Top = 5
+          Left = 117
+          Top = 17
           Width = 68
           Height = 16
           Caption = 'BYPASS'
@@ -514,9 +514,9 @@ object TotalForm: TTotalForm
           OnMouseUp = chkBypassMouseUp
         end
         object pnlTrayOut: TAdvSmoothPanel
-          Left = 387
+          Left = 398
           Top = 5
-          Width = 60
+          Width = 50
           Height = 24
           Cursor = crDefault
           Caption.Text = 'T. Out'
@@ -552,12 +552,12 @@ object TotalForm: TTotalForm
           TMSStyle = 0
         end
         object pnlPcError: TAdvSmoothPanel
-          Left = 265
+          Left = 248
           Top = 5
-          Width = 60
+          Width = 50
           Height = 24
           Cursor = crDefault
-          Caption.Text = 'Pc Error'
+          Caption.Text = 'Pc Err'
           Caption.Location = plCenterCenter
           Caption.HTMLFont.Charset = DEFAULT_CHARSET
           Caption.HTMLFont.Color = clWindowText
@@ -590,12 +590,12 @@ object TotalForm: TTotalForm
           TMSStyle = 0
         end
         object pnlDataWrite: TAdvSmoothPanel
-          Left = 326
+          Left = 348
           Top = 5
-          Width = 60
+          Width = 50
           Height = 24
           Cursor = crDefault
-          Caption.Text = 'Data Write'
+          Caption.Text = 'D. Write'
           Caption.Location = plCenterCenter
           Caption.HTMLFont.Charset = DEFAULT_CHARSET
           Caption.HTMLFont.Color = clWindowText
@@ -625,6 +625,44 @@ object TotalForm: TTotalForm
           Fill.Glow = gmNone
           Version = '1.5.2.1'
           TabOrder = 8
+          TMSStyle = 0
+        end
+        object pnlProbeClose_PC: TAdvSmoothPanel
+          Left = 298
+          Top = 5
+          Width = 50
+          Height = 24
+          Cursor = crDefault
+          Caption.Text = 'P. Close'
+          Caption.Location = plCenterCenter
+          Caption.HTMLFont.Charset = DEFAULT_CHARSET
+          Caption.HTMLFont.Color = clWindowText
+          Caption.HTMLFont.Height = -11
+          Caption.HTMLFont.Name = 'Tahoma'
+          Caption.HTMLFont.Style = []
+          Caption.HTMLURLColor = clBlack
+          Caption.Font.Charset = DEFAULT_CHARSET
+          Caption.Font.Color = clWindowText
+          Caption.Font.Height = -11
+          Caption.Font.Name = 'Tahoma'
+          Caption.Font.Style = []
+          Caption.ColorStart = clWhite
+          Caption.ColorEnd = clWhite
+          Caption.LineColor = clBlack
+          Caption.Line = False
+          Caption.TextAlignment = taCenter
+          Fill.Color = clRed
+          Fill.ColorTo = clRed
+          Fill.ColorMirror = clRed
+          Fill.ColorMirrorTo = clRed
+          Fill.GradientType = gtVertical
+          Fill.GradientMirrorType = gtVertical
+          Fill.BorderColor = 14922381
+          Fill.Rounding = 1
+          Fill.ShadowOffset = 0
+          Fill.Glow = gmNone
+          Version = '1.5.2.1'
+          TabOrder = 9
           TMSStyle = 0
         end
       end
