@@ -230,6 +230,7 @@ void __fastcall TTotalForm::PLCInitialization(int traypos)
 
 	Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_COUNT, 0);
     Mod_PLC->SetPcValue(PC_D_PRE_DATA_WRITE, 0);
+    Mod_PLC->SetPcValue(PC_D_PRE_RESTART, 0);
 
     if(traypos == 1){
         Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_COMPLETE1, 0);
@@ -1338,6 +1339,9 @@ void __fastcall TTotalForm::StatusTimerTimer(TObject *Sender)
 
     if(Mod_PLC->GetPcValue(PC_D_PRE_PROB_CLOSE) == 1) ShowSignal(pnlProbeClose_PC, true);
     else ShowSignal(pnlProbeClose_PC, false);
+
+    if(Mod_PLC->GetPcValue(PC_D_PRE_RESTART) == 1) ShowSignal(pnlRestart, true);
+    else ShowSignal(pnlRestart, false);
 
     if(Mod_PLC->GetPcValue(PC_D_PRE_DATA_WRITE) == 1) ShowSignal(pnlDataWrite, true);
     else ShowSignal(pnlDataWrite, false);
@@ -2717,10 +2721,10 @@ void __fastcall TTotalForm::ShowSignal(TAdvSmoothPanel *advPanel, bool bOn)
 		advPanel->Fill->ColorMirrorTo = BaseForm->pon->Color;
 		advPanel->Fill->ColorTo = BaseForm->pon->Color;
 	}else{
-		advPanel->Fill->Color = BaseForm->poff->Color;
-		advPanel->Fill->ColorMirror = BaseForm->poff->Color;
-		advPanel->Fill->ColorMirrorTo = BaseForm->poff->Color;
-		advPanel->Fill->ColorTo = BaseForm->poff->Color;
+		advPanel->Fill->Color = BaseForm->poff2->Color;
+		advPanel->Fill->ColorMirror = BaseForm->poff2->Color;
+		advPanel->Fill->ColorMirrorTo = BaseForm->poff2->Color;
+		advPanel->Fill->ColorTo = BaseForm->poff2->Color;
 	}
 }
 //---------------------------------------------------------------------------

@@ -106,6 +106,7 @@ void __fastcall TForm_PLCInterface::SetListViewPC(int nTag)
         AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_CHARGE_TIME), "CHARGE TIME");
         AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_NG_ALARM), "NG ALARM");
         AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_DATA_WRITE), "DATA WRITE COMPLETE");
+        AddListView(nListView_PC[nTag], "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM + PC_D_PRE_RESTART), "PRECHARGER RESTART");
 
         // PRECHARGE RESULT OK/NG => 1 : NG, 0 : OK or NO CELL
         //* 16 bit * 36
@@ -223,6 +224,7 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 			nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_CHARGE_TIME);
             nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_ALARM);
             nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_DATA_WRITE);
+            nListView_PC[nTag]->Items->Item[index++]->SubItems->Strings[1] = Mod_PLC->GetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_RESTART);
 			// PRECHARGE RESULT OK/NG
 			AnsiString okng_bin;
             //* 16 bit * 36

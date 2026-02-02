@@ -88,6 +88,7 @@ const int PC_D_PRE_CHARGE_CURRENT                   =   15; // 2word
 const int PC_D_PRE_CHARGE_TIME                      =   17; // 2word
 const int PC_D_PRE_NG_ALARM                         =   19;
 const int PC_D_PRE_DATA_WRITE                       =   20;
+const int PC_D_PRE_RESTART							=   21;
 
 // OK/NG - D34030 : 16bit * 36
 const int PC_D_PRE_MEASURE_OK_NG			   		=	30;

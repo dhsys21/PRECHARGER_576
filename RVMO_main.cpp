@@ -428,6 +428,7 @@ void __fastcall TBaseForm::btnNgCountErrClick(TObject *Sender)
 void __fastcall TBaseForm::lblTitleClick(TObject *Sender)
 {
     GroupBox2->Visible = !GroupBox2->Visible;
+    chkTest->Visible = !chkTest->Visible;
 }
 //---------------------------------------------------------------------------
 

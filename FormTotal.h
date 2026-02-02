@@ -255,6 +255,7 @@ __published:	// IDE-managed Components
 	TAdvSmoothPanel *pnlDataWrite;
 	TAdvSmoothPanel *pnlPlcAuto;
 	TAdvSmoothPanel *pnlProbeClose_PC;
+	TAdvSmoothPanel *pnlRestart;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnSaveConfigClick(TObject *Sender);
 	void __fastcall BitmapBtn5Click(TObject *Sender);

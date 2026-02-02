@@ -9,7 +9,7 @@ object BaseForm: TBaseForm
   VertScrollBar.Range = 83
   VertScrollBar.Visible = False
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Precharger (Ver.260202 003)'
+  Caption = 'Precharger (Ver.260202 005)'
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -6456,6 +6456,7 @@ object BaseForm: TBaseForm
     Font.Style = []
     ParentFont = False
     TabOrder = 15
+    Visible = False
   end
   object btnInit: TAdvSmoothButton
     Left = 1491
@@ -6531,6 +6532,17 @@ object BaseForm: TBaseForm
     Version = '1.5.2.1'
     TabOrder = 17
     TMSStyle = 0
+  end
+  object poff2: TPanel
+    Left = 713
+    Top = 98
+    Width = 185
+    Height = 41
+    Caption = 'poff2'
+    Color = clSilver
+    ParentBackground = False
+    TabOrder = 18
+    Visible = False
   end
   object ClockTimer: TTimer
     OnTimer = ClockTimerTimer
