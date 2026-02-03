@@ -538,7 +538,7 @@ public:		// User declarations
     AnsiString LimitVolt[MAXCHANNEL], LimitCurr[MAXCHANNEL];
 
 	int currMin, setChargeVolt, setChargeCurr, setChargeTime;
-
+    void __fastcall TestBadInfo();
 	__fastcall TTotalForm(TComponent* Owner);
 };
 //---------------------------------------------------------------------------

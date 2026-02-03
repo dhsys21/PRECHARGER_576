@@ -449,7 +449,7 @@ void __fastcall TTotalForm::ReadRemeasureInfo()
     strPrevNg = ini->ReadString(title, "PREV_NG", "-1");
 
     int nRemeasureAlarmCount = 0;
-	config.remeasure_alarm_cnt = ini->ReadInteger("MAIN", "REMEASURE_ALARM_COUNT", 3);
+	config.remeasure_alarm_cnt = ini->ReadInteger(title, "REMEASURE_ALARM_COUNT", 3);
 	editRemeasureAlarmCount->Text = config.remeasure_alarm_cnt;
 	RemeasureForm->pcolor2->Caption = config.remeasure_alarm_cnt;
 

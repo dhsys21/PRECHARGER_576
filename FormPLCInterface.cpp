@@ -276,29 +276,36 @@ void __fastcall TForm_PLCInterface::btnWriteNgValueClick(TObject *Sender)
 {
     AnsiString strIrocvNg = editIrOcvNg->Text;
 	vector<int> ngchannels = BaseForm->StringToVector(strIrocvNg);
-
+    int stageno = 0;
+    //* 해당 채널 IR/OCV 값을 spec보다 크거나 작게
     int ngCount = 0;
     //* 16 bit * 36
 	for(int i = 0; i < 36; ++i){
 		for(int j = 0; j < 16; j++)
 		{
 			int nChannel = i * 16 + j + 1;
+            BaseForm->nForm[stageno]->tray.cell[nChannel - 1] = 1;
 			if(find(ngchannels.begin(), ngchannels.end(), nChannel) != ngchannels.end())
 			{
-				//Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, true);
                 Mod_PLC->SetPcData(PC_D_PRE_MEASURE_OK_NG + i, j, true);
 				ngCount++;
+                BaseForm->nForm[stageno]->real_data.final_volt[nChannel - 1] = 0;
+                BaseForm->nForm[stageno]->real_data.final_curr[nChannel - 1] = 0;
+                BaseForm->nForm[stageno]->tray.measure_result[nChannel - 1] = 1;
 			}
 			else
 			{
-				//Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, false);
                 Mod_PLC->SetPcData(PC_D_PRE_MEASURE_OK_NG + i, j, false);
+                BaseForm->nForm[stageno]->real_data.final_volt[nChannel - 1] = 2100;
+                BaseForm->nForm[stageno]->real_data.final_curr[nChannel - 1] = 600;
+                BaseForm->nForm[stageno]->tray.measure_result[nChannel - 1] = 0;
 			}
 		}
 	}
 
-	//Mod_PLC->SetDouble(Mod_PLC->pc_Interface_Data, PC_D_PRE_NG_COUNT, ngCount);
     Mod_PLC->SetPcValue(PC_D_PRE_NG_COUNT, ngCount);
+    BaseForm->nForm[stageno]->TestBadInfo();
+    BaseForm->nForm[stageno]->WriteRemeasureInfo();
 }
 //---------------------------------------------------------------------------
 

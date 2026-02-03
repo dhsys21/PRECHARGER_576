@@ -395,9 +395,9 @@ void __fastcall TRemeasureForm::chInitdblClick(TObject *Sender)
         acc_totaluse[ch] = 0;
         acc_consng[ch] = 0;
 
-        acc_remeasure[pairedch] = 0;
-        acc_totaluse[pairedch] = 0;
-        acc_consng[pairedch] = 0;
+        acc_remeasure[pairedch - 1] = 0;
+        acc_totaluse[pairedch - 1] = 0;
+        acc_consng[pairedch - 1] = 0;
 
 		for(int index=0; index<MAXCHANNEL; ++index){
 			if(acc_consng[index] >= pcolor2->Caption.ToIntDef(3))

@@ -1705,6 +1705,10 @@ void __fastcall TTotalForm::SetResultList(int traypos)
 	//CmdForceStop(traypos);
 }
 //---------------------------------------------------------------------------
+void __fastcall TTotalForm::TestBadInfo()
+{
+    BadInfomation();
+}
 void __fastcall TTotalForm::BadInfomation()
 {
     int channel;
@@ -1719,6 +1723,7 @@ void __fastcall TTotalForm::BadInfomation()
 			{
 				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, true);
 
+                acc_totaluse[channel] += 1; // 셀이 있으면 use 증가
 				acc_remeasure[channel] += 1;   // 셀이 있고 에러일 때 count 증가
                 //* 연속 불량 확인 2025 10 13
                 if(acc_prevng[channel] == 1) acc_consng[channel] += 1;
@@ -1730,6 +1735,8 @@ void __fastcall TTotalForm::BadInfomation()
 			else if(tray.cell[channel] == 1 && tray.measure_result[channel] == 0)
 			{
 				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data, PC_D_PRE_MEASURE_OK_NG + i, j, false);
+
+                acc_totaluse[channel] += 1;  // 셀이 있으면 use 증가
                 acc_prevng[channel] = 0;
 			}
             //* 셀이 없으면 1.
@@ -2555,6 +2562,8 @@ void __fastcall TTotalForm::btnManualClick(TObject *Sender)
 		this->CmdManualMod(true);
 		VisibleBox(GrpLocal);
 
+        //* 20260203 수동일 때 plc 도 수동으로 바꿔야 하기 때문에 error 신호를 달라고 요청함
+        Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 1);
         ErrorCheck_Manual();
         InitMeasureForm();
 		MeasureInfoForm->pLocal->Visible = true;
@@ -2571,6 +2580,9 @@ void __fastcall TTotalForm::btnAutoClick(TObject *Sender)
     MeasureInfoForm->pLocal->Visible = false;
 	this->CmdManualMod(false);
 	VisibleBox(GrpMain);
+
+    //* 20260203 수동일 때 error 신호를 주기 때문에 자동에서는 off
+    Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnTrayOutClick(TObject *Sender)
