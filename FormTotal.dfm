@@ -5504,7 +5504,7 @@ object TotalForm: TTotalForm
         ImeName = 'Microsoft Office IME 2007'
         ParentFont = False
         TabOrder = 0
-        Text = '192.168.10.230'
+        Text = '192.168.100.201'
       end
       object Panel23: TPanel
         Left = 15
@@ -6068,7 +6068,7 @@ object TotalForm: TTotalForm
         ImeName = 'Microsoft Office IME 2007'
         ParentFont = False
         TabOrder = 0
-        Text = '192.168.100.101'
+        Text = '17.91.71.221'
       end
       object Panel2: TPanel
         Left = 15
@@ -6212,7 +6212,7 @@ object TotalForm: TTotalForm
         ImeName = 'Microsoft Office IME 2007'
         ParentFont = False
         TabOrder = 6
-        Text = '8901'
+        Text = '6003'
       end
       object editPLCPortPLC: TEdit
         Left = 103
@@ -6228,7 +6228,7 @@ object TotalForm: TTotalForm
         ImeName = 'Microsoft Office IME 2007'
         ParentFont = False
         TabOrder = 7
-        Text = '8902'
+        Text = '6004'
       end
     end
     object GroupBox1: TGroupBox

@@ -522,7 +522,7 @@ public:		// User declarations
 
     int nFinishCount;
 	int mon_count;
-    int write_delay_time;
+    int start_delay_time, write_delay_time;
 
     void __fastcall StageStatus();
 	void __fastcall ReadRemeasureInfo();

@@ -33,13 +33,17 @@ void __fastcall TTotalForm::CmdForceStop(int traypos)
     WriteResultFile(nTrayPos);
 
     Mod_PLC->SetPcValue(PC_D_PRE_PROB_OPEN, 1);
+    DisplayProcess(sFinish, "AutoInspection_Measure", "[STEP 3] Tray Position : " + IntToStr(nTrayPos)
+            	+ " PRECHARGER Charging is complete. Write PROB_OPEN = 1.");
     MeasureInfoForm->probeTimer->Enabled = true;
     if(nTrayPos == 1){
         Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE1, 1);
-        WritePLCLog("AutoInspection_Measure", "PreCharger Complete ... , COMPLETE1 on, PC_INTERFACE_PROB_OPEN on");
+        DisplayProcess(sFinish, "AutoInspection_Measure", "[STEP 3] Tray Position : " + IntToStr(nTrayPos)
+            	+ " PRECHARGER Charging is complete. Write COMPLETE1 = 1.");
     } else if(nTrayPos == 2){
         Mod_PLC->SetPcValue(PC_D_PRE_COMPLETE2, 1);
-        WritePLCLog("AutoInspection_Measure", "PreCharger Complete ... , COMPLETE2 on, PC_INTERFACE_PROB_OPEN on");
+        DisplayProcess(sFinish, "AutoInspection_Measure", "[STEP 3] Tray Position : " + IntToStr(nTrayPos)
+            	+ " PRECHARGER Charging is complete. Write COMPLETE2 = 1.");
     }
 }
 //---------------------------------------------------------------------------
@@ -106,8 +110,8 @@ void __fastcall TTotalForm::WriteValue()
                 + ", CellCount : " + IntToStr(tray.cell_count1 + tray.cell_count2));
         WriteVoltCurrValue();
 		WriteResultFile();
-        WritePLCLog("WriteValue", "BadInfomation(), WriteVoltCurrValue(), WriteResultFile()");
-        Panel_State->Caption = " Write result values to PLC ";
+        DisplayProcess(sTrayOut, "AutoInspection_Measure",
+        	"[STEP 8] Write result info : BadInfomation, WriteVoltCurrValue, WriteResultFile");
     }
 }
 //---------------------------------------------------------------------------
@@ -122,14 +126,12 @@ void __fastcall TTotalForm::CmdTrayOut()
 	else{
         if(BaseForm->chkTest->Checked == false){
             Mod_PLC->SetPcValue(PC_D_PRE_DATA_WRITE, 1);
-    		WritePLCLog("CmdTrayOut", "DATA WRITE COMPLETE = 1");
-
         	Mod_PLC->SetPcValue(PC_D_PRE_TRAY_OUT, 1);
-            WritePLCLog("CmdTrayOut", "IROCV TRAY OUT = 1");
 
+            DisplayProcess(sTrayOut, "AutoInspection_Measure", "[STEP 9] Write DATA_WRITE = 1, TRAY_OUT = 1.");
         }
+
 		DisplayStatus(nFinish);
-		Panel_State->Caption = " PreCharger Tray Out ... ";
 	}
 }
 //---------------------------------------------------------------------------

@@ -190,14 +190,13 @@ void __fastcall TForm_Error::btnTrayOutClick(TObject *Sender)
 void __fastcall TForm_Error::btnRestartClick(TObject *Sender)
 {
 	Mod_PLC->SetPcValue(PC_D_PRE_ERROR, 0);
+	BaseForm->nForm[this->Tag]->btnInitClick(this);
     Mod_PLC->SetPcValue(PC_D_PRE_RESTART, 1);
 
-	BaseForm->nForm[this->Tag]->btnInitClick(this);
 	BaseForm->nForm[this->Tag]->WritePLCLog("RESTART", "NG TRAY RESTART");
 	timerErrorOff->Enabled = true;
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TForm_Error::btnOKClick(TObject *Sender)
 {
     this->Close();

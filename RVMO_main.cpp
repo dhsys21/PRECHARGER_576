@@ -423,6 +423,7 @@ void __fastcall TBaseForm::rbKoreanClick(TObject *Sender)
 void __fastcall TBaseForm::btnNgCountErrClick(TObject *Sender)
 {
     Form_Error->DisplayErrorMessage(this->Tag, nNgErr);
+    //* probe open/close 신호 죽이기
 }
 //---------------------------------------------------------------------------
 void __fastcall TBaseForm::lblTitleClick(TObject *Sender)
