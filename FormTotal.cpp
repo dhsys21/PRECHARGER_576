@@ -262,6 +262,9 @@ void __fastcall TTotalForm::PLCInitialization(int traypos)
 	}
 
 	WriteMINMAX(Tag);
+
+    WritePLCLog("PLCInitialization", "Tray Position : " + IntToStr(nTrayPos) + " Initialize PLC DATAs ...");
+    OldPLCStatus = "";
 }
 //---------------------------------------------------------------------------
 // 측정정보보기 버튼
