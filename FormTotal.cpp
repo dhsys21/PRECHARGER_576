@@ -872,11 +872,9 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 	//* Charging
 	if(tray.ams == true && tray.amf == false){
         Mod_PLC->SetPcValue(PC_D_PRE_CHARGING, 1);
-		//DisplayProcess(sCharge, "AutoInspection_Measure", "[STEP -1] Tray Position : " + IntToStr(nTrayPos) + " -> Start charging. Start ASB. ");
 	}
 	else{
         Mod_PLC->SetPcValue(PC_D_PRE_CHARGING, 0);
-        //DisplayProcess(sCharge, "AutoInspection_Measure", "[STEP -1] Tray Position : " + IntToStr(nTrayPos) + " -> Ready to charting. Waiting ASB.");
 	}
 
 	double plc_probe_close, plc_tray_in, plc_probe_open;
@@ -912,7 +910,6 @@ void __fastcall TTotalForm::AutoInspection_Measure()
                 nStep = 2;
             }
 
-            //WriteCommLog("AutoInspection_Measure", "[STEP 1] Set for charging, DisplayStatus(nRUN)");
 			DisplayStatus(nRUN);
 			break;
 		case 2:
@@ -923,19 +920,15 @@ void __fastcall TTotalForm::AutoInspection_Measure()
 				nStep = 3;
                 DisplayProcess(sCharge, "AutoInspection_Measure", "[STEP 2] Tray Position : " + IntToStr(nTrayPos)
                 	+ " Setting is ok.");
-                //WriteCommLog("AutoInspection_Measure", "[STEP 2] verify setting and start charging, DisplayStatus(nRUN)");
 			}
 			else{
                 if(nStep_Count > 3){
                     nStep_Count = 0;
-                    //* 2025 09 07 - nStep 1로 이동해서 다시 셋팅
-                    //nStep = 1;
                     //* 2025 09 09 - 셋팅값이 틀리면 에러창 표시
                     if(Form_ErrorSet->Visible == false)
 					    Form_ErrorSet->DisplayErrorMessage(0);
                     DisplayProcess(sCharge, "AutoInspection_Measure", "[STEP 2] Tray Position : " + IntToStr(nTrayPos)
                     	+ " Setting is fail.");
-                    //WriteCommLog("AutoInspection_Measure", "[STEP 2] Precharger is not set. - run CmdSetStep()");
                 }
 			}
 			break;
@@ -2771,10 +2764,10 @@ void __fastcall TTotalForm::ShowSignal(TAdvSmoothPanel *advPanel, bool bOn)
 		advPanel->Fill->ColorMirrorTo = BaseForm->pon->Color;
 		advPanel->Fill->ColorTo = BaseForm->pon->Color;
 	}else{
-		advPanel->Fill->Color = BaseForm->poff2->Color;
-		advPanel->Fill->ColorMirror = BaseForm->poff2->Color;
-		advPanel->Fill->ColorMirrorTo = BaseForm->poff2->Color;
-		advPanel->Fill->ColorTo = BaseForm->poff2->Color;
+		advPanel->Fill->Color = BaseForm->poff->Color;
+		advPanel->Fill->ColorMirror = BaseForm->poff->Color;
+		advPanel->Fill->ColorMirrorTo = BaseForm->poff->Color;
+		advPanel->Fill->ColorTo = BaseForm->poff->Color;
 	}
 }
 //---------------------------------------------------------------------------

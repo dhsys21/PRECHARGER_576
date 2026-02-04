@@ -6068,7 +6068,7 @@ object TotalForm: TTotalForm
         ImeName = 'Microsoft Office IME 2007'
         ParentFont = False
         TabOrder = 0
-        Text = '17.91.71.221'
+        Text = '17.91.71.160'
       end
       object Panel2: TPanel
         Left = 15

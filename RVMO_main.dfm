@@ -9,7 +9,7 @@ object BaseForm: TBaseForm
   VertScrollBar.Range = 83
   VertScrollBar.Visible = False
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Precharger (Ver.260203 004)'
+  Caption = 'Precharger (Ver.260204 001)'
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
