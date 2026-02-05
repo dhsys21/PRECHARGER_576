@@ -405,8 +405,8 @@ void __fastcall TTotalForm::WriteMonData(int traypos)
 		file_handle = FileCreate(filename);
 
     	file = "DATETIME,RUNCOUNT";
-    	for(int nIndex = 0; nIndex < CHANNELCOUNT; nIndex++){
-        	channel = (nTrayPos - 1) * 288 + nIndex;
+    	for(int nIndex = 0; nIndex < MAXCHANNEL; nIndex++){
+        	channel = nIndex;//(nTrayPos - 1) * 288 + nIndex;
         	file += ",CH" + IntToStr(channel + 1) + " STATUS,CH" + IntToStr(channel + 1) + " VOLTAGE,CH" + IntToStr(channel + 1) + " CURRENT";
         }
     	file += "\r\n";
@@ -416,8 +416,8 @@ void __fastcall TTotalForm::WriteMonData(int traypos)
 
     file += Now().FormatString("yyyy/mm/dd hh:nn:ss.zzz") + "," + stage.runcount;
 
-	for(int i = 0; i < CHANNELCOUNT; ++i){
-        channel = (nTrayPos - 1) * 288 + i;
+	for(int i = 0; i < MAXCHANNEL; ++i){
+        channel = i; //(nTrayPos - 1) * 288 + i;
         file += "," + IntToStr(real_data.status[channel]);
         file += "," + FormatFloat("0.0", StringToDouble(real_data.volt[channel], 0.0));
         file += "," + FormatFloat("0.0", StringToDouble(real_data.curr[channel], 0.0));
