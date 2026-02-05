@@ -209,12 +209,10 @@ void __fastcall TMeasureInfoForm::SetChannelInfo(int traypos)
         channel = GetChMap(stage, traypos, index) - 1;
 
         pvolt[channel]->Caption = IntToStr(channel + 1);
-        //pvolt[channel]->Color = pnormal1->Color;
 
         int ch = BaseForm->nForm[stage]->chReverseMap[channel + 1];
         pcurr[channel]->Caption = SetChannelHint(ch);
         pcurr[channel]->Hint = "CH " + SetChannelHint(ch);
-        //pcurr[channel]->Color = pnormal2->Color;
         pcurr[channel]->Refresh();
 
         if(channel % 4 == 0 || channel % 4 == 1) {

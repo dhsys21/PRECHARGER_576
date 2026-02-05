@@ -367,7 +367,6 @@ private:	// User declarations
 	bool __fastcall ErrorCheck();
     bool __fastcall ErrorCheck_Manual();
 	void __fastcall DisplayProcess(int status, AnsiString Status_Step, AnsiString msg, bool bError = false);
-    void __fastcall DisplayTrayInfo(int traypos);
     void __fastcall DisplayError(AnsiString msg, bool bError = false);
 
 //---------------------------------------------------------------------------
@@ -417,6 +416,7 @@ public:		// User declarations
     void __fastcall WriteMINMAX(int stage_num);
 	void __fastcall PLCInitialization(int traypos);
 	void __fastcall DisplayStatus(int status);
+    void __fastcall DisplayTrayInfo(int traypos);
 
 	void __fastcall AutoInspection_Wait();
 	void __fastcall AutoInspection_Measure();

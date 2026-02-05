@@ -133,8 +133,24 @@ void __fastcall TTotalForm::DisplayTrayInfo(int traypos)
 		}
 
 		panel[channel]->Color = clr;
-		MeasureInfoForm->pcurr[channel]->Color = clr;
-		MeasureInfoForm->pvolt[channel]->Color = clr;
+
+        if(tray.cell[channel] == 1){
+            //* 2026 02 05 셀 정보 읽고 display tray info시에 색상이 clLine 색으로 모두 바뀌는 문제 수정
+            if(channel % 4 == 0 || channel % 4 == 1) {
+                MeasureInfoForm->pvolt[channel]->Color = MeasureInfoForm->pnormal3->Color;
+                MeasureInfoForm->pcurr[channel]->Color = MeasureInfoForm->pnormal31->Color;
+            }
+            else {
+                MeasureInfoForm->pvolt[channel]->Color = MeasureInfoForm->pnormal4->Color;
+                MeasureInfoForm->pcurr[channel]->Color = MeasureInfoForm->pnormal41->Color;
+            }
+        }
+        else{
+            MeasureInfoForm->pvolt[channel]->Color = clNoCell;
+            MeasureInfoForm->pcurr[channel]->Color = clNoCell;
+        }
+//		MeasureInfoForm->pcurr[channel]->Color = clr;
+//		MeasureInfoForm->pvolt[channel]->Color = clr;
 		MeasureInfoForm->pcurr[channel]->Caption = sCurr;
 		MeasureInfoForm->pvolt[channel]->Caption = sVolt;
 	}

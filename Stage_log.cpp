@@ -367,8 +367,12 @@ bool __fastcall TTotalForm::ReadResultFile(int traypos)
                     volt = cols->Strings[3].Trim();
                     curr = cols->Strings[4].Trim();
                     result = cols->Strings[5].Trim();
-                	MeasureInfoForm->pvolt[channel]->Caption = volt;
-                	MeasureInfoForm->pcurr[channel]->Caption = curr;
+
+                    //* 2026 02 05 NO CELL 일때 화면에 값 표시 안함.
+                    if(tray.cell[channel] == 1){
+                        MeasureInfoForm->pvolt[channel]->Caption = volt;
+                        MeasureInfoForm->pcurr[channel]->Caption = curr;
+                    }
 
                     real_data.final_volt[channel] = StringToDouble(volt, 0);
 					real_data.final_curr[channel] = StringToDouble(curr, 0);

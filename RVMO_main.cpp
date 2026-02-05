@@ -426,12 +426,6 @@ void __fastcall TBaseForm::btnNgCountErrClick(TObject *Sender)
     //* probe open/close ½ÅÈ£ Á×ÀÌ±â
 }
 //---------------------------------------------------------------------------
-void __fastcall TBaseForm::lblTitleClick(TObject *Sender)
-{
-    GroupBox2->Visible = !GroupBox2->Visible;
-    chkTest->Visible = !chkTest->Visible;
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TBaseForm::btnInitClick(TObject *Sender)
 {
@@ -475,7 +469,24 @@ void __fastcall TBaseForm::Button1Click(TObject *Sender)
 //      WaitForMilliSeconds(1000);
 //      Button1->Caption = "1000";
 
-    nForm[0]->CmdTrayOut();
+    for(int i = 0; i < MAXCHANNEL; i++){
+        if(i < 430)
+        	nForm[0]->tray.cell[i] = 1;
+        else
+            nForm[0]->tray.cell[i] = 0;
+      }
+      nForm[0]->DisplayTrayInfo(1);
+      nForm[0]->DisplayTrayInfo(2);
+      AnsiString trayid = "HC525070086";
+      nForm[0]->tray.trayid = trayid;
+      nForm[0]->ReadResultFile(1);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TBaseForm::lblTitleDblClick(TObject *Sender)
+{
+    GroupBox2->Visible = !GroupBox2->Visible;
+    chkTest->Visible = !chkTest->Visible;
 }
 //---------------------------------------------------------------------------
 

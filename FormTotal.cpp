@@ -1580,8 +1580,11 @@ void __fastcall TTotalForm::DisplayChannelInfo(int traypos)
 					}
 				}
 
-				MeasureInfoForm->pvolt[channel]->Caption = m_sTempVlot[channel];
-				MeasureInfoForm->pcurr[channel]->Caption = m_sTempCurr[channel];
+                //* 2026 02 05 NO CELL 일때 화면에 값 표시 안함.
+                if(tray.cell[channel] == 1){
+                    MeasureInfoForm->pvolt[channel]->Caption = m_sTempVlot[channel];
+                    MeasureInfoForm->pcurr[channel]->Caption = m_sTempCurr[channel];
+                }
 
                 //* Graph Start
                 MeasureInfoForm->chartVoltage->Series[0]->YValue[i + 1] = StringToDouble(m_sTempVlot[i], 0);

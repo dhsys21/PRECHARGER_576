@@ -9,7 +9,7 @@ object BaseForm: TBaseForm
   VertScrollBar.Range = 83
   VertScrollBar.Visible = False
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Precharger (Ver.260205 001)'
+  Caption = 'Precharger (Ver.260205 003)'
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -488,7 +488,7 @@ object BaseForm: TBaseForm
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    OnClick = lblTitleClick
+    OnDblClick = lblTitleDblClick
   end
   object lblLineNo: TLabel
     Left = 210
