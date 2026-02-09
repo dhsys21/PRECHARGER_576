@@ -452,7 +452,7 @@ void __fastcall TTotalForm::ReadRemeasureInfo()
     strConsNg = ini->ReadString(title, "CONSECUTIVE_NG", "-1" );
     strPrevNg = ini->ReadString(title, "PREV_NG", "-1");
 
-    int nRemeasureAlarmCount = 0;
+    int nRemeasureAlarmCount = 0, nTotalUseAlarmCount = 0;
 	config.remeasure_alarm_cnt = ini->ReadInteger(title, "REMEASURE_ALARM_COUNT", 3);
 	editRemeasureAlarmCount->Text = config.remeasure_alarm_cnt;
 	RemeasureForm->pcolor2->Caption = config.remeasure_alarm_cnt;
@@ -479,6 +479,8 @@ void __fastcall TTotalForm::ReadRemeasureInfo()
 		for(int index = 0; index < MAXCHANNEL; ++index){
 			posTotalNg = strTotalUse.Pos("_");
 			acc_totaluse[index] = strTotalUse.SubString(1, posTotalNg - 1).ToIntDef(0);
+            if(acc_totaluse[index] >= 10000)
+                nTotalUseAlarmCount++;
 			strTotalUse.Delete(1, posTotalNg);
 		}
 	}
@@ -530,7 +532,7 @@ void __fastcall TTotalForm::WriteRemeasureInfo()	// Tray가 Vacancy 상태일때 기록
     strConsNg = "";
     strPrevNg = "";
 	int nRemeasureAlarmCount = 0;
-	config.remeasure_alarm_cnt = StringToInt(RemeasureForm->pcolor2->Caption, 3);
+	//config.remeasure_alarm_cnt = StringToInt(RemeasureForm->pcolor2->Caption, 3);
 
 	for(int index = 0; index < MAXCHANNEL; ++index){
 		strNg = strNg + acc_remeasure[index] + "_";

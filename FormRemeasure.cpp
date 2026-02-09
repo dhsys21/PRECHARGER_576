@@ -24,13 +24,21 @@ void __fastcall TRemeasureForm::RefreshForm()
 {
 	for(int i = 0; i < MAXCHANNEL; ++i){
         //* 총 누적 불량, 연속불량
-		pre[i]->Caption = IntToStr(acc_consng[i]) + " / " + IntToStr(acc_remeasure[i]);
-		if(acc_remeasure[i] < pcolor2->Caption.ToIntDef(3)){
-			pre[i]->Color = pcolor1->Color;
+		pre[i]->Caption = IntToStr(acc_consng[i]);
+//		if(acc_remeasure[i] < pcolor2->Caption.ToIntDef(3)){
+//			pre[i]->Color = pcolor1->Color;
+//			pre[i]->ParentBackground = false;
+//		}
+//		else{
+//			pre[i]->Color = pcolor2->Color;
+//			pre[i]->ParentBackground = false;
+//		}
+        if((acc_consng[i] > pcolor2->Caption.ToIntDef(3)) || (acc_totaluse[i] > 30000)){
+			pre[i]->Color = pcolor2->Color;
 			pre[i]->ParentBackground = false;
 		}
 		else{
-			pre[i]->Color = pcolor2->Color;
+			pre[i]->Color = pcolor1->Color;
 			pre[i]->ParentBackground = false;
 		}
 	}
