@@ -350,6 +350,7 @@ void __fastcall TRemeasureForm::SetOption(TPanel *pnl, int nx, int ny, int nw, i
     pnl->OnMouseLeave = ChInfoMouseLeave;
 
 	pnl->ShowHint = true;
+    pnl->OnClick = chInitClick;
 	pnl->OnDblClick = chInitdblClick;
 }
 //---------------------------------------------------------------------------
@@ -383,34 +384,21 @@ void __fastcall TRemeasureForm::chInitdblClick(TObject *Sender)
 	TPanel *pnl;
 	pnl = (TPanel*)Sender;
 	int ch = pnl->Tag;
-    int pairedch = GetPaired(stage, ch);
-	int nRemeasureAlarmCount = 0;
 
-    WideString message = Form_Language->msgDelEachChRecord + " ch: " + IntToStr(ch + 1) + ", " + IntToStr(pairedch);
-    UnicodeString str;
-	str = "Do you want to initialize the channel record? ch: " + IntToStr(ch+1);
-    if(MessageBox(Handle, message.c_bstr(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
-//    if(MessageBox(Handle, str.c_str(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
-		acc_remeasure[ch] = 0;
-        acc_totaluse[ch] = 0;
-        acc_consng[ch] = 0;
-        acc_prevng[ch] = 0;
+    chEdit->Text = IntToStr(ch + 1);
 
-        acc_remeasure[pairedch - 1] = 0;
-        acc_totaluse[pairedch - 1] = 0;
-        acc_consng[pairedch - 1] = 0;
-        acc_prevng[pairedch - 1] = 0;
-
-		for(int index=0; index<MAXCHANNEL; ++index){
-			if(acc_consng[index] >= pcolor2->Caption.ToIntDef(3))
-				nRemeasureAlarmCount++;
-		}
-		BaseForm->nForm[stage]->RemeasureAlarm(nRemeasureAlarmCount);
-		this->RefreshForm();
-	}
+    InitCh(ch);
 }
 //---------------------------------------------------------------------------
+void __fastcall TRemeasureForm::chInitClick(TObject *Sender)
+{
+	TPanel *pnl;
+	pnl = (TPanel*)Sender;
+	int ch = pnl->Tag;
 
+    chEdit->Text = IntToStr(ch + 1);
+}
+//---------------------------------------------------------------------------
 void __fastcall TRemeasureForm::AccInitBtnClick(TObject *Sender)
 {
 	WideString message = Form_Language->msgDelAllChRecord;
@@ -463,6 +451,39 @@ void __fastcall TRemeasureForm::ChInfoMouseLeave(TObject *Sender)
 void __fastcall TRemeasureForm::FormClose(TObject *Sender, TCloseAction &Action)
 {
     BaseForm->nForm[stage]->WriteRemeasureInfo();
+}
+//---------------------------------------------------------------------------
+void __fastcall TRemeasureForm::InitCh(int channel)
+{
+    int pairedch = GetPaired(stage, channel);
+	int nRemeasureAlarmCount = 0;
+
+    WideString message = Form_Language->msgDelEachChRecord + " channel: " + IntToStr(channel + 1) + ", " + IntToStr(pairedch);
+    if(MessageBox(Handle, message.c_bstr(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+		acc_remeasure[channel] = 0;
+        acc_totaluse[channel] = 0;
+        acc_consng[channel] = 0;
+        acc_prevng[channel] = 0;
+
+        acc_remeasure[pairedch - 1] = 0;
+        acc_totaluse[pairedch - 1] = 0;
+        acc_consng[pairedch - 1] = 0;
+        acc_prevng[pairedch - 1] = 0;
+
+		for(int index=0; index<MAXCHANNEL; ++index){
+			if(acc_consng[index] >= pcolor2->Caption.ToIntDef(3))
+				nRemeasureAlarmCount++;
+		}
+		BaseForm->nForm[stage]->RemeasureAlarm(nRemeasureAlarmCount);
+		this->RefreshForm();
+	}
+}
+
+void __fastcall TRemeasureForm::btnInitClick(TObject *Sender)
+{
+    int ch = StringToInt(chEdit->Text, 0) - 1;
+    if(ch >= 0)
+    	InitCh(ch);
 }
 //---------------------------------------------------------------------------
 

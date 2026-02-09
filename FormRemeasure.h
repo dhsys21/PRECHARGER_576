@@ -89,16 +89,17 @@ __published:	// IDE-managed Components
 	TPanel *pnlPrevNg;
 	TGroupBox *grbEachChannel;
 	TEdit *chEdit;
-	TAdvSmoothButton *btnOcv;
-	TAdvSmoothButton *btnIr;
+	TAdvSmoothButton *btnInit;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormHide(TObject *Sender);
 	void __fastcall chInitdblClick(TObject *Sender);
+    void __fastcall chInitClick(TObject *Sender);
 	void __fastcall AccInitBtnClick(TObject *Sender);
     void __fastcall ChInfoMouseEnter(TObject *Sender);
 	void __fastcall ChInfoMouseLeave(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall btnInitClick(TObject *Sender);
 private:	// User declarations
 	void __fastcall MakePanel(AnsiString type);
 	void __fastcall MakeUIPanel(AnsiString type);
@@ -112,6 +113,8 @@ private:	// User declarations
     int pnl_nh;
 
 public:		// User declarations
+    void __fastcall InitCh(int channel);
+
 	int *acc_remeasure;
     int *acc_totaluse;
     int *acc_consng;
