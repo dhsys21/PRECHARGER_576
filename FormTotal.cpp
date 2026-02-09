@@ -2792,7 +2792,8 @@ void __fastcall TTotalForm::Edit1KeyPress(TObject *Sender, System::WideChar &Key
 void __fastcall TTotalForm::PasswordBtnClick(TObject *Sender)
 {
     WideString message = Form_Language->msgInvalidPwd;
-	if(PassEdit->Text == "0000"){
+	//if(PassEdit->Text == "0000"){
+    if(PassEdit->Text == editPwd->Text){
         if(nPwdIndex == 1){
             ShowConfigPanel();
         } else if(nPwdIndex == 2){

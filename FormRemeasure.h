@@ -87,6 +87,10 @@ __published:	// IDE-managed Components
 	TPanel *pnlTotalNg;
 	TPanel *pnlTitlePrevNg;
 	TPanel *pnlPrevNg;
+	TGroupBox *grbEachChannel;
+	TEdit *chEdit;
+	TAdvSmoothButton *btnOcv;
+	TAdvSmoothButton *btnIr;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormHide(TObject *Sender);

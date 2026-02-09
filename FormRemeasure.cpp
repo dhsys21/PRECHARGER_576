@@ -394,10 +394,12 @@ void __fastcall TRemeasureForm::chInitdblClick(TObject *Sender)
 		acc_remeasure[ch] = 0;
         acc_totaluse[ch] = 0;
         acc_consng[ch] = 0;
+        acc_prevng[ch] = 0;
 
         acc_remeasure[pairedch - 1] = 0;
         acc_totaluse[pairedch - 1] = 0;
         acc_consng[pairedch - 1] = 0;
+        acc_prevng[pairedch - 1] = 0;
 
 		for(int index=0; index<MAXCHANNEL; ++index){
 			if(acc_consng[index] >= pcolor2->Caption.ToIntDef(3))
@@ -420,6 +422,7 @@ void __fastcall TRemeasureForm::AccInitBtnClick(TObject *Sender)
         	acc_remeasure[i] = 0;
             acc_totaluse[i] = 0;
             acc_consng[i] = 0;
+            acc_prevng[i] = 0;
         }
 
 		BaseForm->nForm[stage]->RemeasureAlarm(0);

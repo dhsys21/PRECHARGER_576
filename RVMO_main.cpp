@@ -376,7 +376,8 @@ void __fastcall TBaseForm::WriteSystemInfo()
 void __fastcall TBaseForm::PasswordBtnClick(TObject *Sender)
 {
     WideString message = Form_Language->msgInvalidPwd;
-	if(PassEdit->Text == "0000"){
+	//if(PassEdit->Text == "0000"){
+    if(PassEdit->Text == nForm[0]->editPwd->Text){
 		Application->Terminate();
 	}
 	else{

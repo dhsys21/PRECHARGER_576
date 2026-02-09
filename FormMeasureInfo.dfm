@@ -933,7 +933,7 @@ object MeasureInfoForm: TMeasureInfoForm
     Left = 1052
     Top = 0
     Width = 200
-    Height = 189
+    Height = 121
     Caption = 'CHANNEL INFOMATION'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -1023,170 +1023,20 @@ object MeasureInfoForm: TMeasureInfoForm
       TabOrder = 4
       OnClick = chkGraphClick
     end
-    object btnInit: TAdvSmoothButton
-      Left = 10
-      Top = 113
-      Width = 85
-      Height = 34
-      Appearance.Font.Charset = DEFAULT_CHARSET
-      Appearance.Font.Color = clWindowText
-      Appearance.Font.Height = -11
-      Appearance.Font.Name = 'Tahoma'
-      Appearance.Font.Style = [fsBold]
-      Appearance.Spacing = 0
-      Appearance.Rounding = 3
-      Appearance.WordWrapping = False
-      Status.Caption = '0'
-      Status.Appearance.Fill.Color = clRed
-      Status.Appearance.Fill.ColorMirror = clNone
-      Status.Appearance.Fill.ColorMirrorTo = clNone
-      Status.Appearance.Fill.GradientType = gtSolid
-      Status.Appearance.Fill.GradientMirrorType = gtSolid
-      Status.Appearance.Fill.BorderColor = clGray
-      Status.Appearance.Fill.Rounding = 0
-      Status.Appearance.Fill.ShadowOffset = 0
-      Status.Appearance.Fill.Glow = gmNone
-      Status.Appearance.Font.Charset = DEFAULT_CHARSET
-      Status.Appearance.Font.Color = clWhite
-      Status.Appearance.Font.Height = -11
-      Status.Appearance.Font.Name = 'Tahoma'
-      Status.Appearance.Font.Style = []
-      BevelColor = clMedGray
-      Caption = 'Initialization'
-      Color = clWhite
-      ParentFont = False
-      TabOrder = 5
-      Version = '2.1.1.5'
-      OnClick = btnInitClick
-      TMSStyle = 8
-    end
-    object btnSave: TAdvSmoothButton
-      Left = 105
-      Top = 113
-      Width = 85
-      Height = 34
-      Appearance.Font.Charset = DEFAULT_CHARSET
-      Appearance.Font.Color = clWindowText
-      Appearance.Font.Height = -11
-      Appearance.Font.Name = 'Tahoma'
-      Appearance.Font.Style = [fsBold]
-      Appearance.Spacing = 0
-      Appearance.Rounding = 3
-      Appearance.WordWrapping = False
-      Status.Caption = '0'
-      Status.Appearance.Fill.Color = clRed
-      Status.Appearance.Fill.ColorMirror = clNone
-      Status.Appearance.Fill.ColorMirrorTo = clNone
-      Status.Appearance.Fill.GradientType = gtSolid
-      Status.Appearance.Fill.GradientMirrorType = gtSolid
-      Status.Appearance.Fill.BorderColor = clGray
-      Status.Appearance.Fill.Rounding = 0
-      Status.Appearance.Fill.ShadowOffset = 0
-      Status.Appearance.Fill.Glow = gmNone
-      Status.Appearance.Font.Charset = DEFAULT_CHARSET
-      Status.Appearance.Font.Color = clWhite
-      Status.Appearance.Font.Height = -11
-      Status.Appearance.Font.Name = 'Tahoma'
-      Status.Appearance.Font.Style = []
-      BevelColor = clMedGray
-      Caption = 'SAVE'
-      Color = clWhite
-      ParentFont = False
-      TabOrder = 6
-      Version = '2.1.1.5'
-      OnClick = btnSaveClick
-      TMSStyle = 8
-    end
-    object btnInit1: TAdvSmoothButton
-      Tag = 1
-      Left = 10
-      Top = 149
-      Width = 85
-      Height = 34
-      Appearance.Font.Charset = DEFAULT_CHARSET
-      Appearance.Font.Color = clWindowText
-      Appearance.Font.Height = -11
-      Appearance.Font.Name = 'Tahoma'
-      Appearance.Font.Style = [fsBold]
-      Appearance.Spacing = 0
-      Appearance.Rounding = 3
-      Appearance.WordWrapping = False
-      Status.Caption = '0'
-      Status.Appearance.Fill.Color = clRed
-      Status.Appearance.Fill.ColorMirror = clNone
-      Status.Appearance.Fill.ColorMirrorTo = clNone
-      Status.Appearance.Fill.GradientType = gtSolid
-      Status.Appearance.Fill.GradientMirrorType = gtSolid
-      Status.Appearance.Fill.BorderColor = clGray
-      Status.Appearance.Fill.Rounding = 0
-      Status.Appearance.Fill.ShadowOffset = 0
-      Status.Appearance.Fill.Glow = gmNone
-      Status.Appearance.Font.Charset = DEFAULT_CHARSET
-      Status.Appearance.Font.Color = clWhite
-      Status.Appearance.Font.Height = -11
-      Status.Appearance.Font.Name = 'Tahoma'
-      Status.Appearance.Font.Style = []
-      BevelColor = clMedGray
-      Caption = 'Init 1'
-      Color = clWhite
-      ParentFont = False
-      TabOrder = 7
-      Version = '2.1.1.5'
-      OnClick = btnInit1Click
-      TMSStyle = 8
-    end
-    object btnInit2: TAdvSmoothButton
-      Tag = 2
-      Left = 105
-      Top = 149
-      Width = 85
-      Height = 34
-      Appearance.Font.Charset = DEFAULT_CHARSET
-      Appearance.Font.Color = clWindowText
-      Appearance.Font.Height = -11
-      Appearance.Font.Name = 'Tahoma'
-      Appearance.Font.Style = [fsBold]
-      Appearance.Spacing = 0
-      Appearance.Rounding = 3
-      Appearance.WordWrapping = False
-      Status.Caption = '0'
-      Status.Appearance.Fill.Color = clRed
-      Status.Appearance.Fill.ColorMirror = clNone
-      Status.Appearance.Fill.ColorMirrorTo = clNone
-      Status.Appearance.Fill.GradientType = gtSolid
-      Status.Appearance.Fill.GradientMirrorType = gtSolid
-      Status.Appearance.Fill.BorderColor = clGray
-      Status.Appearance.Fill.Rounding = 0
-      Status.Appearance.Fill.ShadowOffset = 0
-      Status.Appearance.Fill.Glow = gmNone
-      Status.Appearance.Font.Charset = DEFAULT_CHARSET
-      Status.Appearance.Font.Color = clWhite
-      Status.Appearance.Font.Height = -11
-      Status.Appearance.Font.Name = 'Tahoma'
-      Status.Appearance.Font.Style = []
-      BevelColor = clMedGray
-      Caption = 'Init 2'
-      Color = clWhite
-      ParentFont = False
-      TabOrder = 8
-      Version = '2.1.1.5'
-      OnClick = btnInit2Click
-      TMSStyle = 8
-    end
   end
   object pLocal: TPanel
     Left = 1052
-    Top = 264
+    Top = 151
     Width = 196
-    Height = 648
+    Height = 761
     BevelOuter = bvNone
     Color = clWhite
     TabOrder = 2
     object GroupBox3: TGroupBox
       Left = 0
-      Top = 166
+      Top = 299
       Width = 190
-      Height = 467
+      Height = 519
       Caption = 'PRE-CHARGE'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -1717,7 +1567,7 @@ object MeasureInfoForm: TMeasureInfoForm
     end
     object GroupBox1: TGroupBox
       Left = 5
-      Top = 10
+      Top = 114
       Width = 190
       Height = 150
       Caption = 'PROBE'
@@ -1803,6 +1653,156 @@ object MeasureInfoForm: TMeasureInfoForm
         TMSStyle = 8
       end
     end
+    object btnInit: TAdvSmoothButton
+      Left = 9
+      Top = 20
+      Width = 85
+      Height = 34
+      Appearance.Font.Charset = DEFAULT_CHARSET
+      Appearance.Font.Color = clWindowText
+      Appearance.Font.Height = -11
+      Appearance.Font.Name = 'Tahoma'
+      Appearance.Font.Style = [fsBold]
+      Appearance.Spacing = 0
+      Appearance.Rounding = 3
+      Appearance.WordWrapping = False
+      Status.Caption = '0'
+      Status.Appearance.Fill.Color = clRed
+      Status.Appearance.Fill.ColorMirror = clNone
+      Status.Appearance.Fill.ColorMirrorTo = clNone
+      Status.Appearance.Fill.GradientType = gtSolid
+      Status.Appearance.Fill.GradientMirrorType = gtSolid
+      Status.Appearance.Fill.BorderColor = clGray
+      Status.Appearance.Fill.Rounding = 0
+      Status.Appearance.Fill.ShadowOffset = 0
+      Status.Appearance.Fill.Glow = gmNone
+      Status.Appearance.Font.Charset = DEFAULT_CHARSET
+      Status.Appearance.Font.Color = clWhite
+      Status.Appearance.Font.Height = -11
+      Status.Appearance.Font.Name = 'Tahoma'
+      Status.Appearance.Font.Style = []
+      BevelColor = clMedGray
+      Caption = 'Initialization'
+      Color = clWhite
+      ParentFont = False
+      TabOrder = 2
+      Version = '2.1.1.5'
+      OnClick = btnInitClick
+      TMSStyle = 8
+    end
+    object btnSave: TAdvSmoothButton
+      Left = 104
+      Top = 20
+      Width = 85
+      Height = 34
+      Appearance.Font.Charset = DEFAULT_CHARSET
+      Appearance.Font.Color = clWindowText
+      Appearance.Font.Height = -11
+      Appearance.Font.Name = 'Tahoma'
+      Appearance.Font.Style = [fsBold]
+      Appearance.Spacing = 0
+      Appearance.Rounding = 3
+      Appearance.WordWrapping = False
+      Status.Caption = '0'
+      Status.Appearance.Fill.Color = clRed
+      Status.Appearance.Fill.ColorMirror = clNone
+      Status.Appearance.Fill.ColorMirrorTo = clNone
+      Status.Appearance.Fill.GradientType = gtSolid
+      Status.Appearance.Fill.GradientMirrorType = gtSolid
+      Status.Appearance.Fill.BorderColor = clGray
+      Status.Appearance.Fill.Rounding = 0
+      Status.Appearance.Fill.ShadowOffset = 0
+      Status.Appearance.Fill.Glow = gmNone
+      Status.Appearance.Font.Charset = DEFAULT_CHARSET
+      Status.Appearance.Font.Color = clWhite
+      Status.Appearance.Font.Height = -11
+      Status.Appearance.Font.Name = 'Tahoma'
+      Status.Appearance.Font.Style = []
+      BevelColor = clMedGray
+      Caption = 'SAVE'
+      Color = clWhite
+      ParentFont = False
+      TabOrder = 3
+      Version = '2.1.1.5'
+      OnClick = btnSaveClick
+      TMSStyle = 8
+    end
+    object btnInit1: TAdvSmoothButton
+      Tag = 1
+      Left = 9
+      Top = 56
+      Width = 85
+      Height = 34
+      Appearance.Font.Charset = DEFAULT_CHARSET
+      Appearance.Font.Color = clWindowText
+      Appearance.Font.Height = -11
+      Appearance.Font.Name = 'Tahoma'
+      Appearance.Font.Style = [fsBold]
+      Appearance.Spacing = 0
+      Appearance.Rounding = 3
+      Appearance.WordWrapping = False
+      Status.Caption = '0'
+      Status.Appearance.Fill.Color = clRed
+      Status.Appearance.Fill.ColorMirror = clNone
+      Status.Appearance.Fill.ColorMirrorTo = clNone
+      Status.Appearance.Fill.GradientType = gtSolid
+      Status.Appearance.Fill.GradientMirrorType = gtSolid
+      Status.Appearance.Fill.BorderColor = clGray
+      Status.Appearance.Fill.Rounding = 0
+      Status.Appearance.Fill.ShadowOffset = 0
+      Status.Appearance.Fill.Glow = gmNone
+      Status.Appearance.Font.Charset = DEFAULT_CHARSET
+      Status.Appearance.Font.Color = clWhite
+      Status.Appearance.Font.Height = -11
+      Status.Appearance.Font.Name = 'Tahoma'
+      Status.Appearance.Font.Style = []
+      BevelColor = clMedGray
+      Caption = 'Init 1'
+      Color = clWhite
+      ParentFont = False
+      TabOrder = 4
+      Version = '2.1.1.5'
+      OnClick = btnInit1Click
+      TMSStyle = 8
+    end
+    object btnInit2: TAdvSmoothButton
+      Tag = 2
+      Left = 104
+      Top = 56
+      Width = 85
+      Height = 34
+      Appearance.Font.Charset = DEFAULT_CHARSET
+      Appearance.Font.Color = clWindowText
+      Appearance.Font.Height = -11
+      Appearance.Font.Name = 'Tahoma'
+      Appearance.Font.Style = [fsBold]
+      Appearance.Spacing = 0
+      Appearance.Rounding = 3
+      Appearance.WordWrapping = False
+      Status.Caption = '0'
+      Status.Appearance.Fill.Color = clRed
+      Status.Appearance.Fill.ColorMirror = clNone
+      Status.Appearance.Fill.ColorMirrorTo = clNone
+      Status.Appearance.Fill.GradientType = gtSolid
+      Status.Appearance.Fill.GradientMirrorType = gtSolid
+      Status.Appearance.Fill.BorderColor = clGray
+      Status.Appearance.Fill.Rounding = 0
+      Status.Appearance.Fill.ShadowOffset = 0
+      Status.Appearance.Fill.Glow = gmNone
+      Status.Appearance.Font.Charset = DEFAULT_CHARSET
+      Status.Appearance.Font.Color = clWhite
+      Status.Appearance.Font.Height = -11
+      Status.Appearance.Font.Name = 'Tahoma'
+      Status.Appearance.Font.Style = []
+      BevelColor = clMedGray
+      Caption = 'Init 2'
+      Color = clWhite
+      ParentFont = False
+      TabOrder = 5
+      Version = '2.1.1.5'
+      OnClick = btnInit2Click
+      TMSStyle = 8
+    end
   end
   object pstage: TPanel
     Left = 8
@@ -1831,19 +1831,19 @@ object MeasureInfoForm: TMeasureInfoForm
   object probeTimer: TTimer
     Interval = 2000
     OnTimer = probeTimerTimer
-    Left = 1056
-    Top = 195
+    Left = 1064
+    Top = 123
   end
   object Timer_SetStep: TTimer
     Enabled = False
     OnTimer = Timer_SetStepTimer
-    Left = 1120
-    Top = 195
+    Left = 1128
+    Top = 123
   end
   object Timer_SetStep2: TTimer
     Enabled = False
     OnTimer = Timer_SetStep2Timer
-    Left = 1200
-    Top = 195
+    Left = 1192
+    Top = 123
   end
 end

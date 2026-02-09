@@ -1797,10 +1797,10 @@ object TotalForm: TTotalForm
       Caption.LineColor = clBlack
       Caption.Line = False
       Caption.TextAlignment = taCenter
-      Fill.Color = clRed
-      Fill.ColorTo = clRed
-      Fill.ColorMirror = clRed
-      Fill.ColorMirrorTo = clRed
+      Fill.Color = clWhite
+      Fill.ColorTo = clWhite
+      Fill.ColorMirror = clWhite
+      Fill.ColorMirrorTo = clWhite
       Fill.GradientType = gtVertical
       Fill.GradientMirrorType = gtVertical
       Fill.BorderColor = 14922381

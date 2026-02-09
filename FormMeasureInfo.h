@@ -83,9 +83,7 @@ __published:	// IDE-managed Components
 	TAdvSmoothButton *btnProbeClose;
 	TAdvSmoothButton *btnAuto;
 	TAdvSmoothButton *btnStop;
-	TAdvSmoothButton *btnSave;
 	TTimer *probeTimer;
-	TAdvSmoothButton *btnInit;
 	TCheckBox *chkGraph;
 	TChart *chartVoltage;
 	TLineSeries *Series1;
@@ -107,14 +105,16 @@ __published:	// IDE-managed Components
 	TAdvSmoothButton *btnIDN;
 	TTimer *Timer_SetStep;
 	TTimer *Timer_SetStep2;
-	TAdvSmoothButton *btnInit1;
-	TAdvSmoothButton *btnInit2;
 	TPanel *pnormal3;
 	TPanel *pnormal31;
 	TPanel *pnormal4;
 	TPanel *pnormal41;
 	TAdvSmoothButton *btnCheckStep;
 	TAdvSmoothButton *btnCLS;
+	TAdvSmoothButton *btnInit;
+	TAdvSmoothButton *btnSave;
+	TAdvSmoothButton *btnInit1;
+	TAdvSmoothButton *btnInit2;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall btnAutoClick(TObject *Sender);
 	void __fastcall btnProbeClick(TObject *Sender);
