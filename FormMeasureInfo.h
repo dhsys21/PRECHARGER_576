@@ -167,7 +167,7 @@ public:		// User declarations
     void __fastcall SetChannelInfo();
     void __fastcall SetChannelInfo(int traypos);
     bool n_bManualStart;
-    void __fastcall initChart(int volt, int curr);
+    void __fastcall InitChart();
 	__fastcall TMeasureInfoForm(TComponent* Owner);
 };
 //---------------------------------------------------------------------------

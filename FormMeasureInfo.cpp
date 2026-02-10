@@ -57,6 +57,8 @@ void __fastcall TMeasureInfoForm::FormShow(TObject *Sender)
     pnormal31->Color = clWhite;
     pnormal4->Color = (TColor)0x00FFE8D9;
     pnormal41->Color = (TColor)0x00FFE8D9;
+
+    InitChart();
 }
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -684,7 +686,7 @@ void __fastcall TMeasureInfoForm::btnInit2Click(TObject *Sender)
 //---------------------------------------------------------------------------
 // CHART
 //---------------------------------------------------------------------------
-void __fastcall TMeasureInfoForm::initChart(int volt, int curr)
+void __fastcall TMeasureInfoForm::InitChart()
 {
 	for(int i=0; i<3; ++i){
 		chartVoltage->Series[i]->Clear();
@@ -699,18 +701,27 @@ void __fastcall TMeasureInfoForm::initChart(int volt, int curr)
 	chartVoltage->LeftAxis->Maximum = 4200;
 	chartVoltage->LeftAxis->Minimum = 0;
 
-	chartCurrent->LeftAxis->Maximum = curr + 500;
+	chartCurrent->LeftAxis->Maximum = 2000;
 	chartCurrent->LeftAxis->Minimum = 0;
 
-	chartVoltage->Series[1]->AddXY(1, volt - 200);
-	chartVoltage->Series[1]->AddXY(400, volt - 200);
-	chartCurrent->Series[1]->AddXY(1, curr);
-	chartCurrent->Series[1]->AddXY(400, curr);
+	double volt_min = 1000;
+    double volt_max = 4000;
 
-	chartVoltage->Series[2]->AddXY(1, volt - 2000);
-	chartVoltage->Series[2]->AddXY(400, volt - 2000);
-	chartCurrent->Series[2]->AddXY(1, curr - 1000);
-	chartCurrent->Series[2]->AddXY(400, curr - 1000);
+    // XÃàÀº 1 ~ 576
+    chartVoltage->Series[1]->AddXY(1, volt_min);
+    chartVoltage->Series[1]->AddXY(MAXCHANNEL, volt_min);
+
+    chartVoltage->Series[2]->AddXY(1, volt_max);
+    chartVoltage->Series[2]->AddXY(MAXCHANNEL, volt_max);
+
+    double curr_min = BaseForm->nForm[stage]->config.curr - 500;
+    double curr_max = BaseForm->nForm[stage]->config.curr + 500;
+
+    chartCurrent->Series[1]->AddXY(1, curr_min);
+    chartCurrent->Series[1]->AddXY(MAXCHANNEL, curr_min);
+
+    chartCurrent->Series[2]->AddXY(1, curr_max);
+    chartCurrent->Series[2]->AddXY(MAXCHANNEL, curr_max);
 }
 //---------------------------------------------------------------------------
 
